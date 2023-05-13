@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import javafx.geometry.Insets?>
-<GridPane minHeight="100.0" BorderPane.alignment="CENTER" fx:controller="tourplanner.swen_tourplanner.views.LeftPaneController" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane minHeight="100.0" BorderPane.alignment="CENTER" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.14-internal" fx:controller="tourplanner.swen_tourplanner.views.LeftPaneController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.0" minWidth="10.0" prefWidth="105.0" />
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="121.0" minWidth="10.0" prefWidth="118.0" />
@@ -19,19 +16,19 @@
         <RowConstraints maxHeight="42.0" minHeight="42.0" prefHeight="42.0" vgrow="NEVER" />
     </rowConstraints>
     <children>
-        <TextField promptText="Search" GridPane.columnSpan="3" fx:id="toursSearchTextInput" />
-        <ListView minHeight="40.0" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" fx:id="toursListView">
+        <TextField fx:id="toursSearchTextInput" promptText="%Search_Tours_Placeholder" GridPane.columnSpan="3" />
+        <ListView fx:id="toursListView" minHeight="40.0" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
             <contextMenu>
                 <ContextMenu>
                     <items>
-                        <MenuItem mnemonicParsing="false" fx:id="cMenuNew" text="New" />
-                        <MenuItem mnemonicParsing="false" fx:id="cMenuDelete" text="Delete" />
-                        <MenuItem mnemonicParsing="false" fx:id="cMenuOpt" text="Options" />
+                        <MenuItem fx:id="cMenuNew" mnemonicParsing="false" text="%New" />
+                        <MenuItem fx:id="cMenuDelete" mnemonicParsing="false" text="%Delete" />
+                        <MenuItem fx:id="cMenuOpt" mnemonicParsing="false" text="%Options" />
                     </items>
                 </ContextMenu>
             </contextMenu>
         </ListView>
-        <Button fx:id="createNewTourBtn" mnemonicParsing="false" text="New" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.vgrow="NEVER">
+        <Button fx:id="createNewTourBtn" mnemonicParsing="false" text="%New" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.vgrow="NEVER">
             <GridPane.margin>
                 <Insets right="5.0" />
             </GridPane.margin>

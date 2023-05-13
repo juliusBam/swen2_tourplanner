@@ -2,7 +2,7 @@ package tourplanner.swen_tourplanner.views;
 
 import tourplanner.swen_tourplanner.viewModels.TourPlannerApplicationViewModel;
 
-public class TourPlannerApplicationController implements ITourPlannerController {
+public final class TourPlannerApplicationController implements ITourPlannerController {
 
     private final TourPlannerApplicationViewModel tourPlannerApplicationViewModel;
 

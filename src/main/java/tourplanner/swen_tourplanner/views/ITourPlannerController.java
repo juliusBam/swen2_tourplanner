@@ -1,7 +1,6 @@
 package tourplanner.swen_tourplanner.views;
 
-//interface is empty, since it is only needed to group the controllers for the factory
-//ensures that only controllers are created
+//interface ensures that the controllers implements the initialize method
 public interface ITourPlannerController {
     void initialize();
 }

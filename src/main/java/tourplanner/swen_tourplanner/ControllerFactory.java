@@ -26,27 +26,36 @@ public class ControllerFactory {
         );
     }
 
-    public Object create(Class<?> controllerClass) {
+    public ITourPlannerController create(Class<?> controllerClass) {
+
+        //injects the correct viewmodel into the controller
 
         if (controllerClass == TourPlannerApplicationController.class) {
+
             return new TourPlannerApplicationController(this.tourPlannerApplicationViewModel);
+
         } else if (controllerClass == BottomPaneController.class) {
-            return new BottomPaneController(bottomPaneViewModel);
+
+            return new BottomPaneController(this.bottomPaneViewModel);
+
         } else if (controllerClass == CenterPaneController.class) {
-            return new CenterPaneController(centerPaneViewModel);
+
+            return new CenterPaneController(this.centerPaneViewModel);
+
         } else if (controllerClass == LeftPaneController.class) {
-            return new LeftPaneController(leftPaneViewModel);
+
+            return new LeftPaneController(this.leftPaneViewModel);
+
         } else if (controllerClass == TopMenuController.class) {
-            return new TopMenuController(topMenuViewModel);
+
+            return new TopMenuController(this.topMenuViewModel);
+
         }
+
         throw new IllegalArgumentException("Unknown controller class: " + controllerClass);
     }
 
-
-    //
-    // Singleton-Pattern with early-binding
-    //
-    private static ControllerFactory instance = new ControllerFactory();
+    private static final ControllerFactory instance = new ControllerFactory();
 
     public static ControllerFactory getInstance() {
         return instance;
