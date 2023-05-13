@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<MenuBar BorderPane.alignment="CENTER" fx:controller="tourplanner.swen_tourplanner.view.TopMenuController" xmlns:fx="http://javafx.com/fxml/1">
+<MenuBar BorderPane.alignment="CENTER" fx:controller="tourplanner.swen_tourplanner.views.TopMenuController" xmlns:fx="http://javafx.com/fxml/1">
     <menus>
         <Menu mnemonicParsing="false" text="File">
             <items>
