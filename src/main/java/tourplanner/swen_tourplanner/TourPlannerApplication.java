@@ -15,7 +15,7 @@ public class TourPlannerApplication extends Application {
         final int defaultHeight = 602;
         final int defaultWidth = 673;
 
-        FXMLLoader fxmlLoader = new FXMLLoader(TourPlannerApplication.class.getResource("tourPlanner.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(TourPlannerApplication.class.getResource("tourPlanner_mainWindow.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), defaultWidth, defaultHeight);
 
         stage.setTitle(applicationTitle);

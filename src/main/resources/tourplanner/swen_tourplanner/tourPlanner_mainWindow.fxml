@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="602.0" prefWidth="673.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1">
+   <bottom>
+       <fx:include source="bottomPane.fxml" fx:id="bottomPane" />
+   </bottom>
+   <top>
+    <fx:include source="TourPlannerApplication.java" fx:id="topMenu" />
+    </top>
+   <left>
+    <fx:include source="leftPane.fxml" fx:id="leftPane" />
+   </left>
+   <center>
+    <fx:include source="centerPane.fxml" fx:id="centerPane" />
+   </center>
+</BorderPane>
