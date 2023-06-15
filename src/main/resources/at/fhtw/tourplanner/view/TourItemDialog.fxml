@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- fx:controller="at.fhtw.tourplanner.view.TourItemDialogController" -->
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<DialogPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="360.0" prefWidth="399.0"
+            xmlns="http://javafx.com/javafx/19">
+    <content>
+        <GridPane prefHeight="600.0" prefWidth="800.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints vgrow="ALWAYS"/>
+                <RowConstraints vgrow="ALWAYS"/>
+                <RowConstraints vgrow="ALWAYS"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS"/>
+            </rowConstraints>
+            <TextField fx:id="nameTextField" GridPane.columnIndex="1"/>
+            <TextField fx:id="fromTextField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+            <TextField fx:id="toTextField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+            <TextField fx:id="transportTypeTextField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+            <TextField fx:id="descriptionTextField" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+            <Label text="Name"/>
+            <Label text="From" GridPane.rowIndex="1"/>
+            <Label text="To" GridPane.rowIndex="2"/>
+            <Label text="Type" GridPane.rowIndex="3"/>
+            <Label text="Description" GridPane.rowIndex="4"/>
+            <Label text="Distance" GridPane.rowIndex="5"/>
+            <Label text="Time" GridPane.rowIndex="6"/>
+            <Label fx:id="distanceLabel" text="" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+            <Label fx:id="timeLabel" text="" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+        </GridPane>
+    </content>
+
+    <ButtonType fx:id="cancelButton" buttonData="CANCEL_CLOSE" text="Cancel"/>
+    <ButtonType fx:id="searchButton" text="Search"/>
+    <ButtonType fx:id="submitButton" buttonData="OK_DONE" text="Add Tour"/>
+</DialogPane>

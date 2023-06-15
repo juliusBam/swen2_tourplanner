@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="447.0"
+            prefWidth="862.0"
+            HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/19"
+            fx:controller="at.fhtw.tourplanner.view.TourPlannerApplicationController">
+    <bottom>
+        <fx:include fx:id="bottomPane" source="BottomPane.fxml"/>
+    </bottom>
+    <top>
+        <fx:include fx:id="topMenu" source="TopMenu.fxml"/>
+    </top>
+    <left>
+        <fx:include fx:id="leftPane" source="LeftPane.fxml"/>
+    </left>
+    <center>
+        <fx:include fx:id="centerPane" source="CenterPane.fxml" BorderPane.alignment="TOP_LEFT"/>
+    </center>
+</BorderPane>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<TabPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+         minWidth="-Infinity"
+         prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE"
+         xmlns="http://javafx.com/javafx/19"
+         fx:controller="at.fhtw.tourplanner.view.CenterPaneController">
+    <tabs>
+        <Tab text="Overview">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <children>
+                        <GridPane prefHeight="371.0" prefWidth="600.0">
+                            <columnConstraints>
+                                <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="500.0" minWidth="10.0"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="419.0" minWidth="10.0"
+                                                   prefWidth="419.0"/>
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                            </rowConstraints>
+                            <children>
+                                <Label text="Name"/>
+                                <Label text="Tour Description" GridPane.rowIndex="1"/>
+                                <Label text="From" GridPane.rowIndex="2"/>
+                                <Label text="To" GridPane.rowIndex="3"/>
+                                <Label text="Transport Type" GridPane.rowIndex="4"/>
+                                <Label text="Tour Distance" GridPane.rowIndex="5"/>
+                                <Label text="Estimated Time" GridPane.rowIndex="6"/>
+                                <Label text="Route Information" GridPane.rowIndex="7"/>
+                                <TextField fx:id="nameTextField" GridPane.columnIndex="1"/>
+                                <TextField fx:id="descriptionTextField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                <TextField fx:id="fromTextField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                                <TextField fx:id="toTextField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                                <TextField fx:id="transportTypeTextField" GridPane.columnIndex="1"
+                                           GridPane.rowIndex="4"/>
+                                <TextField fx:id="distanceTextField" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                                <TextField fx:id="estimatedTimeTextField" GridPane.columnIndex="1"
+                                           GridPane.rowIndex="6"/>
+                                <Button mnemonicParsing="false" text="Choose Image" GridPane.columnIndex="1"
+                                        GridPane.rowIndex="7"/>
+                            </children>
+                            <padding>
+                                <Insets left="10.0" right="10.0"/>
+                            </padding>
+                        </GridPane>
+                    </children>
+                </AnchorPane>
+            </content>
+        </Tab>
+        <Tab text="Tour Logs">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+            </content>
+        </Tab>
+        <Tab text="Statistics">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+            </content>
+        </Tab>
+    </tabs>
+</TabPane>
