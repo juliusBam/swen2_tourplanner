@@ -17,8 +17,8 @@ public class TourPlannerApplication extends Application {
     public void start(Stage stage) throws IOException {
 
         final String applicationTitle = "Tour Planner";
-        final int defaultHeight = 500;
-        final int defaultWidth = 865;
+        final int defaultHeight = 620;
+        final int defaultWidth = 1090;
 
         Parent root = FXMLDependencyInjection.load("TourPlanner_mainWindow.fxml", Locale.ENGLISH);
         Scene scene = new Scene(root, defaultWidth, defaultHeight);

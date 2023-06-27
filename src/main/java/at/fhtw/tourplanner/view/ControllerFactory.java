@@ -31,7 +31,7 @@ public class ControllerFactory {
         MapQuestService mapQuestService = new MapQuestService();
 
         this.bottomPaneViewModel = new BottomPaneViewModel();
-        this.centerPaneViewModel = new CenterPaneViewModel(tourItemService);
+        this.centerPaneViewModel = new CenterPaneViewModel(tourItemService, mapQuestService);
         this.leftPaneViewModel = new LeftPaneViewModel(tourItemService, mapQuestService);
         this.topMenuViewModel = new TopMenuViewModel();
         this.tourPlannerApplicationViewModel = new TourPlannerApplicationViewModel(this.bottomPaneViewModel, this.centerPaneViewModel, this.leftPaneViewModel, this.topMenuViewModel);

@@ -15,14 +15,13 @@ public interface TourPlannerAPI {
     Call<TourItemDto> getTour(@Path("id") Long id);
 
     @POST("tour")
-    @Multipart
-    Call<TourItemDto> postTour();
+    Call<TourItemDto> postTour(@Body TourItemDto tourItemDto);
 
-    @PUT("tour/{id}")
-    Call<TourItemDto> putTour(@Path("id") Long id, @Part TourItemDto tourItemDto, @Part Byte[] image);
+    @PUT("tour")
+    Call<TourItemDto> putTour(@Body TourItemDto tourItemDto);
 
     @DELETE("tour/{id}")
-    Call<TourItemDto> deleteTour(@Path("id") Long id);
+    Call<Void> deleteTour(@Path("id") Long id);
 
     @GET("tour/count")
     Call<Long> getTourCount();

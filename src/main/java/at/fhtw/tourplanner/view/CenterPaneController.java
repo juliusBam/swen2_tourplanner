@@ -2,40 +2,47 @@ package at.fhtw.tourplanner.view;
 
 import at.fhtw.tourplanner.viewModel.CenterPaneViewModel;
 import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 
 public final class CenterPaneController implements TourPlannerController {
 
     private final CenterPaneViewModel centerPaneViewModel;
     @FXML
-    public TextField nameTextField;
+    public Label nameLabel;
     @FXML
-    public TextField descriptionTextField;
+    public Label tourDescriptionLabel;
     @FXML
-    public TextField fromTextField;
+    public Label fromLabel;
     @FXML
-    public TextField toTextField;
+    public Label toLabel;
     @FXML
-    public TextField transportTypeTextField;
+    public Label transportTypeLabel;
     @FXML
-    public TextField distanceTextField;
+    public Label distanceLabel;
     @FXML
-    public TextField estimatedTimeTextField;
+    public Label estimatedTimeLabel;
+
+    @FXML
+    public ImageView routeImageView;
 
     public CenterPaneController(CenterPaneViewModel centerPaneViewModel) {
         this.centerPaneViewModel = centerPaneViewModel;
     }
 
-    public CenterPaneViewModel getCenterPaneViewModel() {
-        return centerPaneViewModel;
-    }
-
     @Override
     @FXML
     public void initialize() {
-        distanceTextField.textProperty().bindBidirectional(centerPaneViewModel.tourDistanceProperty());
-        estimatedTimeTextField.textProperty().bindBidirectional(centerPaneViewModel.estimatedTimeProperty());
+        nameLabel.textProperty().bind(centerPaneViewModel.getNameProperty());
+        tourDescriptionLabel.textProperty().bind(centerPaneViewModel.getTourDescriptionProperty());
+        fromLabel.textProperty().bind(centerPaneViewModel.getFromProperty());
+        toLabel.textProperty().bind(centerPaneViewModel.getToProperty());
+        transportTypeLabel.textProperty().bind(centerPaneViewModel.getTransportTypeProperty());
+        distanceLabel.textProperty().bind(centerPaneViewModel.getTourDistanceProperty());
+        estimatedTimeLabel.textProperty().bind(centerPaneViewModel.getEstimatedTimeProperty());
+        routeImageView.imageProperty().bind(centerPaneViewModel.getImageProperty());
     }
+
 
 
 }

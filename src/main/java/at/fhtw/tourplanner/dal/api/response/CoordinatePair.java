@@ -5,8 +5,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Info {
+public class CoordinatePair {
     @Getter
-    @JsonAlias({ "statuscode" })
-    private long statusCode;
+    @JsonAlias({ "lat" })
+    private String latitude;
+    @Getter
+    @JsonAlias({ "lng" })
+    private String longitude;
 }

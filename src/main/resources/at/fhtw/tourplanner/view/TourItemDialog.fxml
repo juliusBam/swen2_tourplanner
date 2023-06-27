@@ -1,44 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- fx:controller="at.fhtw.tourplanner.view.TourItemDialogController" -->
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<DialogPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="360.0" prefWidth="399.0"
-            xmlns="http://javafx.com/javafx/19">
+
+<?import javafx.scene.control.ButtonType?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<DialogPane prefHeight="360.0" prefWidth="399.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <content>
         <GridPane prefHeight="600.0" prefWidth="800.0">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints vgrow="ALWAYS"/>
-                <RowConstraints vgrow="ALWAYS"/>
-                <RowConstraints vgrow="ALWAYS"/>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS"/>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS"/>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS"/>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS"/>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS"/>
+                <RowConstraints vgrow="ALWAYS" />
+                <RowConstraints vgrow="ALWAYS" />
+                <RowConstraints vgrow="ALWAYS" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
             </rowConstraints>
-            <TextField fx:id="nameTextField" GridPane.columnIndex="1"/>
-            <TextField fx:id="fromTextField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-            <TextField fx:id="toTextField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-            <TextField fx:id="transportTypeTextField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-            <TextField fx:id="descriptionTextField" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
-            <Label text="Name"/>
-            <Label text="From" GridPane.rowIndex="1"/>
-            <Label text="To" GridPane.rowIndex="2"/>
-            <Label text="Type" GridPane.rowIndex="3"/>
-            <Label text="Description" GridPane.rowIndex="4"/>
-            <Label text="Distance" GridPane.rowIndex="5"/>
-            <Label text="Time" GridPane.rowIndex="6"/>
-            <Label fx:id="distanceLabel" text="" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
-            <Label fx:id="timeLabel" text="" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+            <TextField fx:id="nameTextField" GridPane.columnIndex="1" />
+            <TextField fx:id="fromTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="toTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <ComboBox fx:id="transportTypeComboBox" prefHeight="25.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="pedestrian"/>
+                        <String fx:value="bicycle"/>
+                        <String fx:value="car"/>
+                    </FXCollections>
+                </items>
+            </ComboBox>
+            <TextArea fx:id="descriptionTextArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.rowSpan="3" />
+            <Label text="Name" />
+            <Label text="Start" GridPane.rowIndex="1" />
+            <Label text="End" GridPane.rowIndex="2" />
+            <Label text="Type" GridPane.rowIndex="3" />
+            <Label text="Description" GridPane.rowIndex="4" />
+            <Label text="Distance" GridPane.rowIndex="7" />
+            <Label text="Time" GridPane.rowIndex="8" />
+            <Label fx:id="distanceLabel" text="" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <Label fx:id="timeLabel" text="" GridPane.columnIndex="1" GridPane.rowIndex="8" />
         </GridPane>
     </content>
 
-    <ButtonType fx:id="cancelButton" buttonData="CANCEL_CLOSE" text="Cancel"/>
-    <ButtonType fx:id="searchButton" text="Search"/>
-    <ButtonType fx:id="submitButton" buttonData="OK_DONE" text="Add Tour"/>
+    <ButtonType fx:id="cancelButton" buttonData="CANCEL_CLOSE" text="Cancel" />
+    <ButtonType fx:id="searchButton" text="Search" />
+    <ButtonType fx:id="submitButton" buttonData="OK_DONE" text="Save" />
 </DialogPane>

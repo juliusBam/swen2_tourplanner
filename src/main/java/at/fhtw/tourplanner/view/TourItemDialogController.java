@@ -11,6 +11,7 @@ import javafx.stage.Modality;
 import javafx.stage.Window;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 public class TourItemDialogController extends Dialog<TourItem> {
     private final TourItemDialogViewModel tourItemDialogViewModel;
@@ -19,13 +20,13 @@ public class TourItemDialogController extends Dialog<TourItem> {
     @FXML
     private TextField nameTextField = new TextField();
     @FXML
-    private TextField descriptionTextField = new TextField();
+    private TextArea descriptionTextArea = new TextArea();
     @FXML
     private TextField fromTextField = new TextField();
     @FXML
     private TextField toTextField = new TextField();
     @FXML
-    private TextField transportTypeTextField = new TextField();
+    private ComboBox<String> transportTypeComboBox = new ComboBox<>();
     @FXML
     private Label timeLabel = new Label();
     @FXML
@@ -34,12 +35,12 @@ public class TourItemDialogController extends Dialog<TourItem> {
     private ButtonType submitButton;
     private Boolean locationFound = false;
 
-    public TourItemDialogController(Window owner, TourItemDialogViewModel tourItemDialogViewModel) {
+    public TourItemDialogController(Window owner, TourItemDialogViewModel tourItemDialogViewModel, String title) {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/at/fhtw/tourplanner/view/TourItemDialog.fxml"));
         loader.setController(this);
 
-        DialogPane dialogPane = null;
+        DialogPane dialogPane;
         try {
             dialogPane = loader.load();
         } catch (IOException e) {
@@ -51,39 +52,42 @@ public class TourItemDialogController extends Dialog<TourItem> {
         initOwner(owner);
         initModality(Modality.APPLICATION_MODAL);
 
-        setTitle("Add Tour");
+        setTitle(title);
         setDialogPane(dialogPane);
 
         setResultConverter(buttonType -> {
-            if (buttonType.equals(ButtonType.OK)) {
+            if (buttonType.getButtonData().equals(ButtonType.OK.getButtonData())) {
                 return tourItemDialogViewModel.getTourItem();
             }
             return null;
         });
 
+        descriptionTextArea.setWrapText(true);
 
         this.tourItemDialogViewModel = tourItemDialogViewModel;
         nameTextField.textProperty().bindBidirectional(tourItemDialogViewModel.getNameProperty());
-        descriptionTextField.textProperty().bindBidirectional(tourItemDialogViewModel.getDescriptionProperty());
+        descriptionTextArea.textProperty().bindBidirectional(tourItemDialogViewModel.getDescriptionProperty());
         fromTextField.textProperty().bindBidirectional(tourItemDialogViewModel.getFromProperty());
         toTextField.textProperty().bindBidirectional(tourItemDialogViewModel.getToProperty());
-        transportTypeTextField.textProperty().bindBidirectional(tourItemDialogViewModel.getTransportTypeProperty());
+        transportTypeComboBox.valueProperty().bindBidirectional(tourItemDialogViewModel.getTransportTypeProperty());
+
     }
 
     private void onSearch(ActionEvent actionEvent) {
         RouteResponse routeResponse = tourItemDialogViewModel.searchRoute();
-        if (routeResponse == null || routeResponse.getInfo().getStatuscode() != 0) {
+        if (routeResponse == null || routeResponse.getInfo().getStatusCode() != 0) {
             locationFound = false;
             System.out.println("No route found");
         } else {
             locationFound = true;
             System.out.println("Route found");
+            String boundingBoxString = routeResponse.getRoute().getBoundingBox().toSearchString();
             double distance = routeResponse.getRoute().getDistance();
             long time = routeResponse.getRoute().getTime();
-            distanceLabel.setText(Double.toString(distance));
-            timeLabel.setText(Long.toString(time));
+            tourItemDialogViewModel.setRouteData(distance, time, boundingBoxString);
+            distanceLabel.setText(String.format("%.2f km", distance));
+            timeLabel.setText(String.format("%d:%02d:%02d", time / 3600, (time % 3600) / 60, (time % 60)));
         }
-
         actionEvent.consume();
     }
 

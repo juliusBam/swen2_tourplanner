@@ -23,10 +23,8 @@ public class TourItemService implements Service<TourItem> {
     }
 
     @Override
-    public TourItem create() {
-        TourItem newTourItem = new TourItem();
-        newTourItem.updateFields("New Tour", "", "", "0", "");
-        TourItemDto tourItemDto = tourItemRepository.save(tourItemModelToDto(newTourItem));
+    public TourItem create(TourItem tourItem) {
+        TourItemDto tourItemDto = tourItemRepository.save(tourItemModelToDto(tourItem));
         return tourItemDtoToModel(tourItemDto);
     }
 
@@ -42,16 +40,45 @@ public class TourItemService implements Service<TourItem> {
 
     private TourItem tourItemDtoToModel(TourItemDto tourItemDto) {
         return new TourItem(tourItemDto.getId(), tourItemDto.getName(), tourItemDto.getDescription(),
-                tourItemDto.getFrom(), tourItemDto.getTo(), tourItemDto.getTransportType(),
-                tourItemDto.getTourDistanceKilometers().toString(), tourItemDto.getEstimatedTimeSeconds().toString(),
-                tourItemDto.getTourLogs());
+                tourItemDto.getFrom(), tourItemDto.getTo(), deserializeTourType(tourItemDto.getTransportType()),
+                tourItemDto.getTourDistanceKilometers(), tourItemDto.getEstimatedTimeSeconds(),
+                tourItemDto.getRouteInformation(), tourItemDto.getTourLogs(), tourItemDto.getPopularity(),
+                tourItemDto.getChildFriendliness(), tourItemDto.getAverageTime(), tourItemDto.getAverageRating(),
+                tourItemDto.getAverageDifficulty());
     }
 
     private TourItemDto tourItemModelToDto(TourItem tourItem) {
         return new TourItemDto(tourItem.getId(), tourItem.getName(), tourItem.getDescription(), tourItem.getFrom(),
-                tourItem.getTo(), tourItem.getTransportType(), Double.parseDouble(tourItem.getTourDistanceKilometers()),
-                Long.parseLong(tourItem.getEstimatedTimeSeconds()), tourItem.getTourLogs());
+                tourItem.getTo(), serializeTourType(tourItem.getTransportType()), tourItem.getTourDistanceKilometers(),
+                tourItem.getEstimatedTimeSeconds(), tourItem.getBoundingBoxString(), tourItem.getTourLogs(),
+                tourItem.getPopularity(), tourItem.getChildFriendliness(), tourItem.getAverageTime(),
+                tourItem.getAverageRating(), tourItem.getAverageDifficulty());
     }
 
+    private String serializeTourType(String type) {
+        if (type == null) {
+            return "";
+        }
+        if (type.equals("fastest")) {
+            return "CAR";
+        }
+        if (type.equals("bicycle")) {
+            return "BIKE";
+        }
+        return "WALK";
+    }
+
+    private String deserializeTourType(String type) {
+        if (type == null) {
+            return "";
+        }
+        if (type.equals("CAR")) {
+            return "car";
+        }
+        if (type.equals("BIKE")) {
+            return "bicycle";
+        }
+        return "pedestrian";
+    }
 
 }

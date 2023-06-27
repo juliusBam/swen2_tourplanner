@@ -19,22 +19,18 @@ public final class LeftPaneController implements TourPlannerController {
     private final LeftPaneViewModel leftPaneViewModel;
     @FXML
     public ListView<TourItem> toursListView;
-    //region Fxml Elements
     @FXML
     public Button addTourBtn;
     @FXML
     public Button editTourBtn;
     @FXML
     public Button deleteTourBtn;
-    //region ContextMenuItems
     @FXML
     public MenuItem cMenuNew;
     @FXML
     public MenuItem cMenuDelete;
-    //endregion
     @FXML
     public MenuItem cMenuEdit;
-    //endregion
     @FXML
     public TextField toursSearchTextInput;
 
@@ -50,13 +46,23 @@ public final class LeftPaneController implements TourPlannerController {
     }
 
     public void onButtonAdd(ActionEvent actionEvent) {
-        Window window = toursListView.getScene().getWindow();
-        Stage stage = (Stage) window;
-        TourItemDialogViewModel tourItemDialogViewModel = new TourItemDialogViewModel(new TourItem(), leftPaneViewModel.getMapQuestService());
-        TourItemDialogController dialog = new TourItemDialogController(stage, tourItemDialogViewModel);
-        Optional<TourItem> tourItemOptional = dialog.showAndWait();
+        TourItem tourItem = new TourItem();
+        Optional<TourItem> tourItemOptional = editTourDialog(tourItem, "Add Tour");
         if (tourItemOptional.isPresent()) {
-            TourItem tourItem = tourItemOptional.get();
+            tourItem = tourItemOptional.get();
+            leftPaneViewModel.addNewTour(tourItem);
+        }
+    }
+
+    public void onButtonEdit(ActionEvent actionEvent) {
+        if (toursListView.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+        TourItem oldItem = toursListView.getSelectionModel().getSelectedItem();
+        Optional<TourItem> tourItemOptional = editTourDialog(oldItem, "Edit Tour");
+        if (tourItemOptional.isPresent()) {
+            TourItem newItem = tourItemOptional.get();
+            leftPaneViewModel.editTour(newItem, oldItem);
         }
     }
 
@@ -66,7 +72,12 @@ public final class LeftPaneController implements TourPlannerController {
         }
     }
 
-    public void onButtonEdit(ActionEvent actionEvent) {
+    private Optional<TourItem> editTourDialog(TourItem tourItem, String title) {
+        Window window = toursListView.getScene().getWindow();
+        Stage stage = (Stage) window;
+        TourItemDialogViewModel tourItemDialogViewModel = new TourItemDialogViewModel(tourItem, leftPaneViewModel.getMapQuestService());
+        TourItemDialogController dialog = new TourItemDialogController(stage, tourItemDialogViewModel, title);
+        return dialog.showAndWait();
     }
 
 }

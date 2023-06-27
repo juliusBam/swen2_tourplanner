@@ -4,6 +4,7 @@ import at.fhtw.tourplanner.dal.api.TourPlannerAPI;
 import at.fhtw.tourplanner.dal.dto.TourItemDto;
 import retrofit2.Response;
 
+import javax.sound.midi.Soundbank;
 import java.io.IOException;
 import java.util.List;
 
@@ -17,17 +18,17 @@ public class TourItemRepository implements Repository<TourItemDto, Long> {
 
     @Override
     public TourItemDto save(TourItemDto entity) {
+        System.out.println("help");
         if (entity.getId() == null) {
             try {
-                Response<TourItemDto> response = api.postTour().execute();
+                Response<TourItemDto> response = api.postTour(entity).execute();
                 return response.body();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         } else {
             try {
-                Byte[] image = new Byte[100];
-                Response<TourItemDto> response = api.putTour(entity.getId(), entity, image).execute();
+                Response<TourItemDto> response = api.putTour(entity).execute();
                 return response.body();
             } catch (IOException e) {
                 throw new RuntimeException(e);

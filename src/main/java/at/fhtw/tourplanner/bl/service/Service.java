@@ -6,7 +6,7 @@ public interface Service<T> {
 
     List<T> getAll();
 
-    T create();
+    T create(T item);
 
     void delete(T item);
 

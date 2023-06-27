@@ -53,9 +53,15 @@ public class LeftPaneViewModel {
         observableTourItems.addAll(tourItems);
     }
 
-    public void addNewTour() {
-        TourItem tour = tourItemService.create();
-        observableTourItems.add(tour);
+    public void addNewTour(TourItem tourItem) {
+        TourItem savedItem = tourItemService.create(tourItem);
+        observableTourItems.add(savedItem);
+    }
+
+    public void editTour(TourItem newItem, TourItem oldItem) {
+        tourItemService.update(newItem);
+        observableTourItems.remove(oldItem);
+        observableTourItems.add(newItem);
     }
 
     public void deleteTour(TourItem tourItem) {
