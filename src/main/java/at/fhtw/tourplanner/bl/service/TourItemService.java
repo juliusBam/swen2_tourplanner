@@ -2,7 +2,9 @@ package at.fhtw.tourplanner.bl.service;
 
 
 import at.fhtw.tourplanner.bl.model.TourItem;
+import at.fhtw.tourplanner.bl.model.TourLog;
 import at.fhtw.tourplanner.dal.dto.TourItemDto;
+import at.fhtw.tourplanner.dal.dto.TourLogDto;
 import at.fhtw.tourplanner.dal.repository.TourItemRepository;
 
 import java.util.List;
@@ -42,7 +44,7 @@ public class TourItemService implements Service<TourItem> {
         return new TourItem(tourItemDto.getId(), tourItemDto.getName(), tourItemDto.getDescription(),
                 tourItemDto.getFrom(), tourItemDto.getTo(), deserializeTourType(tourItemDto.getTransportType()),
                 tourItemDto.getTourDistanceKilometers(), tourItemDto.getEstimatedTimeSeconds(),
-                tourItemDto.getRouteInformation(), tourItemDto.getTourLogs(), tourItemDto.getPopularity(),
+                tourItemDto.getRouteInformation(), tourItemDto.getTourLogs().stream().map((TourLog::new)).toList(), tourItemDto.getPopularity(),
                 tourItemDto.getChildFriendliness(), tourItemDto.getAverageTime(), tourItemDto.getAverageRating(),
                 tourItemDto.getAverageDifficulty());
     }
@@ -50,7 +52,7 @@ public class TourItemService implements Service<TourItem> {
     private TourItemDto tourItemModelToDto(TourItem tourItem) {
         return new TourItemDto(tourItem.getId(), tourItem.getName(), tourItem.getDescription(), tourItem.getFrom(),
                 tourItem.getTo(), serializeTourType(tourItem.getTransportType()), tourItem.getTourDistanceKilometers(),
-                tourItem.getEstimatedTimeSeconds(), tourItem.getBoundingBoxString(), tourItem.getTourLogs(),
+                tourItem.getEstimatedTimeSeconds(), tourItem.getBoundingBoxString(), tourItem.getTourLogs().stream().map((tourLog) -> new TourLogDto(tourLog, tourItem.getId())).toList(),
                 tourItem.getPopularity(), tourItem.getChildFriendliness(), tourItem.getAverageTime(),
                 tourItem.getAverageRating(), tourItem.getAverageDifficulty());
     }

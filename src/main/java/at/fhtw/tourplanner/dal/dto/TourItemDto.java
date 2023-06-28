@@ -34,7 +34,7 @@ public class TourItemDto {
     private Long estimatedTimeSeconds;
     private String routeInformation;
     @JsonAlias("logs")
-    private List<TourLog> tourLogs;
+    private List<TourLogDto> tourLogs;
     private Integer popularity;
     private Double childFriendliness;
     @JsonAlias("avgTime")

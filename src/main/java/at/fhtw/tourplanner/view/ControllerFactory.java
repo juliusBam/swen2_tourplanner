@@ -2,6 +2,7 @@ package at.fhtw.tourplanner.view;
 
 import at.fhtw.tourplanner.bl.service.MapQuestService;
 import at.fhtw.tourplanner.bl.service.TourItemService;
+import at.fhtw.tourplanner.bl.service.TourLogService;
 import at.fhtw.tourplanner.dal.api.TourPlannerAPI;
 import at.fhtw.tourplanner.dal.repository.TourItemRepository;
 import at.fhtw.tourplanner.viewModel.*;
@@ -15,6 +16,10 @@ public class ControllerFactory {
     private final CenterPaneViewModel centerPaneViewModel;
     private final LeftPaneViewModel leftPaneViewModel;
     private final TopMenuViewModel topMenuViewModel;
+
+    private final TourLogsTabViewModel tourLogsTabViewModel;
+
+    private final TourLogCellViewModel tourLogCellViewModel;
     private final TourPlannerApplicationViewModel tourPlannerApplicationViewModel;
 
     public ControllerFactory() {
@@ -34,7 +39,10 @@ public class ControllerFactory {
         this.centerPaneViewModel = new CenterPaneViewModel(tourItemService, mapQuestService);
         this.leftPaneViewModel = new LeftPaneViewModel(tourItemService, mapQuestService);
         this.topMenuViewModel = new TopMenuViewModel();
-        this.tourPlannerApplicationViewModel = new TourPlannerApplicationViewModel(this.bottomPaneViewModel, this.centerPaneViewModel, this.leftPaneViewModel, this.topMenuViewModel);
+        this.tourLogsTabViewModel = new TourLogsTabViewModel(new TourLogService());
+        this.tourLogCellViewModel = new TourLogCellViewModel();
+        this.tourPlannerApplicationViewModel = new TourPlannerApplicationViewModel(this.bottomPaneViewModel, this.centerPaneViewModel, this.leftPaneViewModel,
+                                                                                    this.topMenuViewModel, this.tourLogsTabViewModel, this.tourLogCellViewModel);
     }
 
     public static ControllerFactory getInstance() {
@@ -64,6 +72,14 @@ public class ControllerFactory {
         } else if (controllerClass == TopMenuController.class) {
 
             return new TopMenuController(this.topMenuViewModel);
+
+        } else if (controllerClass == TourLogsTabController.class) {
+
+            return new TourLogsTabController(this.tourLogsTabViewModel);
+
+        } else if (controllerClass == TourLogCellController.class) {
+
+            return new TourLogCellController(this.tourLogCellViewModel);
 
         }
 

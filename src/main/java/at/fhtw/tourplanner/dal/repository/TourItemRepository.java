@@ -4,7 +4,6 @@ import at.fhtw.tourplanner.dal.api.TourPlannerAPI;
 import at.fhtw.tourplanner.dal.dto.TourItemDto;
 import retrofit2.Response;
 
-import javax.sound.midi.Soundbank;
 import java.io.IOException;
 import java.util.List;
 
