@@ -6,6 +6,7 @@ import at.fhtw.tourplanner.bl.model.TourLog;
 import at.fhtw.tourplanner.dal.dto.TourItemDto;
 import at.fhtw.tourplanner.dal.dto.TourLogDto;
 import at.fhtw.tourplanner.dal.repository.TourLogRepository;
+import retrofit2.Call;
 
 import java.util.List;
 
@@ -38,6 +39,10 @@ public class TourLogService {
     public TourItem delete(Long tourItemId) {
         TourItemDto tourItemDto = this.tourLogRepository.delete(tourItemId);
         return this.modelConverter.tourItemDtoToModel(tourItemDto);
+    }
+
+    public Call<List<TourLogDto>> getByTourIdAsync(Long tourId) {
+        return this.tourLogRepository.getAllByTourAsync(tourId);
     }
 
 }

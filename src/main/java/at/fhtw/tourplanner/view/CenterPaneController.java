@@ -1,11 +1,8 @@
 package at.fhtw.tourplanner.view;
 
 import at.fhtw.tourplanner.viewModel.CenterPaneViewModel;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
 
@@ -32,6 +29,9 @@ public final class CenterPaneController implements TourPlannerController {
 
     @FXML
     public TabPane centerPaneTabs;
+
+    @FXML
+    public Label loadingLabel;
 
     public CenterPaneController(CenterPaneViewModel centerPaneViewModel) {
         this.centerPaneViewModel = centerPaneViewModel;
@@ -64,7 +64,15 @@ public final class CenterPaneController implements TourPlannerController {
         transportTypeLabel.textProperty().bind(centerPaneViewModel.getTransportTypeProperty());
         distanceLabel.textProperty().bind(centerPaneViewModel.getTourDistanceProperty());
         estimatedTimeLabel.textProperty().bind(centerPaneViewModel.getEstimatedTimeProperty());
+
+        //binds the content of the image to the image "value"
         routeImageView.imageProperty().bind(centerPaneViewModel.getImageProperty());
+        //binds the visibility of the image to the showImageProp
+        routeImageView.visibleProperty().bind(this.centerPaneViewModel.getShowImage());
+
+        //binds the visibility of the loading label to the negation of the showImageProp
+        loadingLabel.visibleProperty().bind(this.centerPaneViewModel.getShowImage().not());
+
     }
 
 

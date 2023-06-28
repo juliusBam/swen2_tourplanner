@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SplitPane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
@@ -48,6 +49,11 @@ public class TourLogsTabController implements TourPlannerController {
     @FXML
     public Button newBtn;
 
+    @FXML
+    public Label loadingLabel;
+
+    @FXML
+    public SplitPane tourLogsSplitPane;
 
     @Override
     public void initialize() {
@@ -64,6 +70,11 @@ public class TourLogsTabController implements TourPlannerController {
         ratingLabel.textProperty().bind(this.tourLogsTabViewModel.getRatingProperty());
         difficultyLabel.textProperty().bind(this.tourLogsTabViewModel.getDifficultyProperty());
         timeLabel.textProperty().bind(this.tourLogsTabViewModel.getTimeProperty());
+
+        //the visibility of the split pane containing the stuff 4 the tour logs is bound to the loading
+        tourLogsSplitPane.visibleProperty().bind(this.tourLogsTabViewModel.getLoadingTourLogs().not());
+
+        loadingLabel.visibleProperty().bind(this.tourLogsTabViewModel.getLoadingTourLogs());
 
     }
 

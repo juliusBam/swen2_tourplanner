@@ -4,6 +4,7 @@ import at.fhtw.tourplanner.bl.model.TourItem;
 import at.fhtw.tourplanner.dal.api.TourPlannerAPI;
 import at.fhtw.tourplanner.dal.dto.TourItemDto;
 import at.fhtw.tourplanner.dal.dto.TourLogDto;
+import retrofit2.Call;
 import retrofit2.Response;
 
 import java.io.IOException;
@@ -51,5 +52,9 @@ public class TourLogRepository {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public Call<List<TourLogDto>> getAllByTourAsync(Long tourId) {
+        return api.getTourLogsByTourId(tourId);
     }
 }
