@@ -10,13 +10,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lombok.Getter;
 
-import java.util.List;
-
 public class TourLogsTabViewModel {
 
     private final TourLogService tourLogService;
+
     private ObservableList<TourLog> observableTourLogs = FXCollections.observableArrayList();
 
+    private TourItem selectedTourItem;
     private TourLog selectedTourLog;
 
     //region properties
@@ -43,9 +43,13 @@ public class TourLogsTabViewModel {
         return observableTourLogs;
     }
 
-    public void setObservableTourLogs(List<TourLog> observableTourLogs) {
+    public void setTourModel(TourItem selectedTour) {
+        this.selectedTourItem = selectedTour;
         this.observableTourLogs.clear();
-        this.observableTourLogs.addAll(observableTourLogs);
+        if (selectedTour != null) {
+            this.observableTourLogs.addAll(selectedTour.getTourLogs());
+        }
+
     }
 
     //todo implement via tourLogService
@@ -56,6 +60,13 @@ public class TourLogsTabViewModel {
 
     public void editTour() {
         System.out.println("Editing tour");
+        this.selectedTourItem.updateFields(
+                "New cool name",
+                selectedTourItem.getFrom(),
+                selectedTourItem.getTo(),
+                selectedTourItem.getDescription(),
+                selectedTourItem.getTransportType()
+        );
     }
 
     public void deleteTour(TourItem tourItem) {

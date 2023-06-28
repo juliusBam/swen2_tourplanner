@@ -44,7 +44,7 @@ public class TourItemService implements Service<TourItem> {
         return new TourItem(tourItemDto.getId(), tourItemDto.getName(), tourItemDto.getDescription(),
                 tourItemDto.getFrom(), tourItemDto.getTo(), deserializeTourType(tourItemDto.getTransportType()),
                 tourItemDto.getTourDistanceKilometers(), tourItemDto.getEstimatedTimeSeconds(),
-                tourItemDto.getRouteInformation(), tourItemDto.getTourLogs().stream().map((TourLog::new)).toList(), tourItemDto.getPopularity(),
+                tourItemDto.getRouteInformation(), tourItemDto.getTourLogs().stream().map(TourLogService::tourLogDtoToModel).toList(), tourItemDto.getPopularity(),
                 tourItemDto.getChildFriendliness(), tourItemDto.getAverageTime(), tourItemDto.getAverageRating(),
                 tourItemDto.getAverageDifficulty());
     }
@@ -52,7 +52,7 @@ public class TourItemService implements Service<TourItem> {
     private TourItemDto tourItemModelToDto(TourItem tourItem) {
         return new TourItemDto(tourItem.getId(), tourItem.getName(), tourItem.getDescription(), tourItem.getFrom(),
                 tourItem.getTo(), serializeTourType(tourItem.getTransportType()), tourItem.getTourDistanceKilometers(),
-                tourItem.getEstimatedTimeSeconds(), tourItem.getBoundingBoxString(), tourItem.getTourLogs().stream().map((tourLog) -> new TourLogDto(tourLog, tourItem.getId())).toList(),
+                tourItem.getEstimatedTimeSeconds(), tourItem.getBoundingBoxString(), tourItem.getTourLogs().stream().map((tourLog) -> TourLogService.tourLogModelToDto(tourItem.getId(), tourLog)).toList(),
                 tourItem.getPopularity(), tourItem.getChildFriendliness(), tourItem.getAverageTime(),
                 tourItem.getAverageRating(), tourItem.getAverageDifficulty());
     }

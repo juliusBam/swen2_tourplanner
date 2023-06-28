@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="825.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fhtw.tourplanner.view.TourLogsTabController">
    <VBox prefHeight="650.0" prefWidth="825.0">
       <children>
-             <Button fx:id="newBtn" style="-fx-background-color: green" text="New" />
+             <Button fx:id="newBtn" onAction="#onButtonAdd" style="-fx-background-color: green" text="New" />
           <SplitPane dividerPositions="0.29797979797979796" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="650.0" prefWidth="825.0">
               <items>
                     <ListView fx:id="tourLogsListView" layoutX="-1.0" layoutY="3.0" prefHeight="648.0" prefWidth="242.0" />
@@ -35,8 +36,23 @@
                            </children>
                         </GridPane>
                         <Label fx:id="commentLabel" />
-                            <Button fx:id="editBtn" style="-fx-background-color: yellow" text="Edit" />
-                            <Button fx:id="deleteBtn" style="-fx-background-color: red" text="Delete" />
+                     <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="SOMETIMES">
+                        <children>
+                                  <Button fx:id="editBtn" onAction="#onButtonEdit" style="-fx-background-color: yellow" text="Edit">
+                              <HBox.margin>
+                                 <Insets right="10.0" />
+                              </HBox.margin>
+                           </Button>
+                                  <Button fx:id="deleteBtn" onAction="#onButtonDelete" style="-fx-background-color: red" text="Delete">
+                              <HBox.margin>
+                                 <Insets right="10.0" />
+                              </HBox.margin>
+                           </Button>
+                        </children>
+                        <padding>
+                           <Insets top="15.0" />
+                        </padding>
+                     </HBox>
                      </children>
                   </VBox>
             </items>

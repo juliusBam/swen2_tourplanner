@@ -15,13 +15,12 @@ public class TourLog {
 
     private String rating;
 
-    public TourLog(TourLogDto tourLogDto) {
-        this.id = tourLogDto.getId();
-        this.timeStamp = tourLogDto.getTimeStamp();
-        this.comment = tourLogDto.getComment();
-        this.difficulty = tourLogDto.getDifficulty();
-        this.totalTimeMinutes = tourLogDto.getTotalTimeMinutes();
-        this.rating = tourLogDto.getRating();
+    public TourLog(Long id, Integer timeStamp, String comment, String difficulty, Long totalTimeMinutes, String rating) {
+        this.id = id;
+        this.timeStamp = timeStamp;
+        this.comment = comment;
+        this.difficulty = difficulty;
+        this.totalTimeMinutes = totalTimeMinutes;
+        this.rating = rating;
     }
-
 }
