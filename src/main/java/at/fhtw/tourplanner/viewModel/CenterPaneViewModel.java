@@ -31,7 +31,10 @@ public class CenterPaneViewModel {
     private final StringProperty estimatedTimeProperty = new SimpleStringProperty();
     @Getter
     private final ObjectProperty<Image> imageProperty = new SimpleObjectProperty<>();
+
     private TourItem tourItem;
+
+    @Getter
     private volatile boolean isInitValue = true;
 
     public CenterPaneViewModel(TourItemService tourItemService, MapQuestService mapQuestService) {
@@ -40,7 +43,7 @@ public class CenterPaneViewModel {
 
     }
 
-    public void setTourModel(TourItem tourItem) {
+    public void updateOverviewTab(TourItem tourItem) {
         isInitValue = true;
         if (tourItem == null) {
             // select the first in the list
@@ -63,6 +66,14 @@ public class CenterPaneViewModel {
         estimatedTimeProperty.setValue(String.format("%d:%02d:%02d", tourItem.getEstimatedTimeSeconds() / 3600, (tourItem.getEstimatedTimeSeconds() % 3600) / 60, (tourItem.getEstimatedTimeSeconds() % 60)));
         imageProperty.setValue(mapQuestService.fetchRouteImage(tourItem.getFrom(), tourItem.getTo(), tourItem.getBoundingBoxString()));
         isInitValue = false;
+    }
+
+    public void setTourStatistics() {
+        if (tourItem != null) {
+            //todo update the statistics of the tourItem
+            nameProperty.set(this.tourItem.getName());
+
+        }
     }
 
 }

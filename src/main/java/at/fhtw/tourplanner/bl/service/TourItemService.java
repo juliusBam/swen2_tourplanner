@@ -1,6 +1,7 @@
 package at.fhtw.tourplanner.bl.service;
 
 
+import at.fhtw.tourplanner.bl.ModelConverter;
 import at.fhtw.tourplanner.bl.model.TourItem;
 import at.fhtw.tourplanner.bl.model.TourLog;
 import at.fhtw.tourplanner.dal.dto.TourItemDto;
@@ -13,74 +14,34 @@ public class TourItemService implements Service<TourItem> {
 
     private final TourItemRepository tourItemRepository;
 
+    private final ModelConverter modelConverter;
+
     public TourItemService(TourItemRepository tourItemRepository) {
         this.tourItemRepository = tourItemRepository;
+        this.modelConverter = new ModelConverter();
     }
 
 
     @Override
     public List<TourItem> getAll() {
         List<TourItemDto> tourItemDtos = tourItemRepository.findAll();
-        return tourItemDtos.stream().map(this::tourItemDtoToModel).toList();
+        return tourItemDtos.stream().map(this.modelConverter::tourItemDtoToModel).toList();
     }
 
     @Override
     public TourItem create(TourItem tourItem) {
-        TourItemDto tourItemDto = tourItemRepository.save(tourItemModelToDto(tourItem));
-        return tourItemDtoToModel(tourItemDto);
+        TourItemDto tourItemDto = tourItemRepository.save(this.modelConverter.tourItemModelToDto(tourItem));
+        return this.modelConverter.tourItemDtoToModel(tourItemDto);
     }
 
     @Override
     public void delete(TourItem tourItem) {
-        tourItemRepository.delete(tourItemModelToDto(tourItem));
+        tourItemRepository.delete(this.modelConverter.tourItemModelToDto(tourItem));
     }
 
     @Override
     public void update(TourItem tourItem) {
-        tourItemRepository.save(tourItemModelToDto(tourItem));
-    }
-
-    private TourItem tourItemDtoToModel(TourItemDto tourItemDto) {
-        return new TourItem(tourItemDto.getId(), tourItemDto.getName(), tourItemDto.getDescription(),
-                tourItemDto.getFrom(), tourItemDto.getTo(), deserializeTourType(tourItemDto.getTransportType()),
-                tourItemDto.getTourDistanceKilometers(), tourItemDto.getEstimatedTimeSeconds(),
-                tourItemDto.getRouteInformation(), tourItemDto.getTourLogs().stream().map(TourLogService::tourLogDtoToModel).toList(), tourItemDto.getPopularity(),
-                tourItemDto.getChildFriendliness(), tourItemDto.getAverageTime(), tourItemDto.getAverageRating(),
-                tourItemDto.getAverageDifficulty());
-    }
-
-    private TourItemDto tourItemModelToDto(TourItem tourItem) {
-        return new TourItemDto(tourItem.getId(), tourItem.getName(), tourItem.getDescription(), tourItem.getFrom(),
-                tourItem.getTo(), serializeTourType(tourItem.getTransportType()), tourItem.getTourDistanceKilometers(),
-                tourItem.getEstimatedTimeSeconds(), tourItem.getBoundingBoxString(), tourItem.getTourLogs().stream().map((tourLog) -> TourLogService.tourLogModelToDto(tourItem.getId(), tourLog)).toList(),
-                tourItem.getPopularity(), tourItem.getChildFriendliness(), tourItem.getAverageTime(),
-                tourItem.getAverageRating(), tourItem.getAverageDifficulty());
-    }
-
-    private String serializeTourType(String type) {
-        if (type == null) {
-            return "";
-        }
-        if (type.equals("fastest")) {
-            return "CAR";
-        }
-        if (type.equals("bicycle")) {
-            return "BIKE";
-        }
-        return "WALK";
-    }
-
-    private String deserializeTourType(String type) {
-        if (type == null) {
-            return "";
-        }
-        if (type.equals("CAR")) {
-            return "car";
-        }
-        if (type.equals("BIKE")) {
-            return "bicycle";
-        }
-        return "pedestrian";
+        tourItemRepository.save(this.modelConverter.tourItemModelToDto(tourItem));
     }
 
 }

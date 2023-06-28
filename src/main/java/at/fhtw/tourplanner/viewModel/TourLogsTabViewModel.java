@@ -47,36 +47,31 @@ public class TourLogsTabViewModel {
         this.selectedTourItem = selectedTour;
         this.observableTourLogs.clear();
         if (selectedTour != null) {
-            this.observableTourLogs.addAll(selectedTour.getTourLogs());
+            this.observableTourLogs.addAll(this.tourLogService.getByTourId(selectedTour.getId()));
         }
 
     }
 
-    //todo implement via tourLogService
-    public void addNewTour(TourItem tourItem) {
-        //TourItem savedItem = tourItemService.create(tourItem);
-        //observableTourItems.add(savedItem);
+    public void addNewTourLog(TourLog tourLog) {
+        TourItem savedItem = tourLogService.create(tourLog, this.selectedTourItem.getId());
+        this.setTourModel(savedItem);
     }
 
-    public void editTour() {
-        System.out.println("Editing tour");
-        this.selectedTourItem.updateFields(
-                "New cool name",
-                selectedTourItem.getFrom(),
-                selectedTourItem.getTo(),
-                selectedTourItem.getDescription(),
-                selectedTourItem.getTransportType()
-        );
+    public void updateTourLog(TourLog updatedTourLog) {
+        TourItem savedItem = tourLogService.update(updatedTourLog, this.selectedTourItem.getId());
+        this.setTourModel(savedItem);
     }
 
-    public void deleteTour(TourItem tourItem) {
-        //tourItemService.delete(tourItem);
-        //observableTourItems.remove(tourItem);
+
+    public void deleteTourLog() {
+        TourItem savedItem = tourLogService.delete(this.selectedTourLog.getId());
+        this.setTourModel(savedItem);
     }
 
     public ChangeListener<TourLog> getChangeListener() {
         return (observableValue, oldValue, newValue) -> setSelectedTourLog(newValue);
     }
+
 
     private void setSelectedTourLog(TourLog tourLog) {
         this.selectedTourLog = tourLog;

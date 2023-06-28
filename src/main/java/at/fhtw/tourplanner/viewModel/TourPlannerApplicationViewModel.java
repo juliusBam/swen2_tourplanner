@@ -27,7 +27,7 @@ public class TourPlannerApplicationViewModel {
     }
 
     private void selectTour(TourItem selectedTourItem) {
-        centerPaneViewModel.setTourModel(selectedTourItem);
+        centerPaneViewModel.updateOverviewTab(selectedTourItem);
         this.tourLogsTabViewModel.setTourModel(selectedTourItem);
     }
 

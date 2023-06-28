@@ -24,18 +24,37 @@ public class TourLogDialogViewModel {
     private final StringProperty commentProperty = new SimpleStringProperty();
 
     public TourLogDialogViewModel(TourLog tourLog) {
-
+        super();
         this.tourLog = tourLog;
 
-        if (tourLog != null) {
+        this.ratingProperty.setValue(tourLog.getRating() == null ? "" : tourLog.getRating());
+        this.difficultyProperty.setValue(tourLog.getDifficulty() == null ? "" : tourLog.getDifficulty());
+        this.timeProperty.setValue(tourLog.getTotalTimeMinutes() == null ? "" : tourLog.getTotalTimeMinutes().toString());
+        this.commentProperty.setValue(tourLog.getComment() == null ? "" : tourLog.getComment());
 
-            this.ratingProperty.setValue(tourLog.getRating());
-            this.difficultyProperty.setValue(tourLog.getDifficulty());
-            this.timeProperty.setValue(tourLog.getTotalTimeMinutes().toString());
-            this.commentProperty.setValue(tourLog.getComment());
+        ratingProperty.addListener((arg, oldVal, newVal) -> {
+            this.updateTourLogModel();
+        });
+        difficultyProperty.addListener((arg, oldVal, newVal) -> {
+            this.updateTourLogModel();
+        });
+        timeProperty.addListener((arg, oldVal, newVal) -> {
+            this.updateTourLogModel();
+        });
+        commentProperty.addListener((arg, oldVal, newVal) -> {
+            this.updateTourLogModel();
+        });
 
-        }
+    }
 
+    private void updateTourLogModel() {
+        this.tourLog.updateFields(
+               ratingProperty.getValue(),
+                difficultyProperty.getValue(),
+                timeProperty.getValue(),
+                commentProperty.getValue(),
+                System.currentTimeMillis() / 1000L
+        );
     }
 
 }

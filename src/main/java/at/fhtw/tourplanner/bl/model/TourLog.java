@@ -1,9 +1,12 @@
 package at.fhtw.tourplanner.bl.model;
 
-import at.fhtw.tourplanner.dal.dto.TourLogDto;
 import lombok.Getter;
+import lombok.Setter;
+
+import static java.lang.Long.parseLong;
 
 @Getter
+@Setter
 public class TourLog {
 
     private Long id;
@@ -22,5 +25,17 @@ public class TourLog {
         this.difficulty = difficulty;
         this.totalTimeMinutes = totalTimeMinutes;
         this.rating = rating;
+    }
+
+    public TourLog() {
+
+    }
+
+    public void updateFields(String rating, String difficulty, String totalTimeMinutes, String comment, long timeStamp) {
+        this.rating = rating;
+        this.difficulty = difficulty;
+        this.totalTimeMinutes = parseLong(totalTimeMinutes);
+        this.comment = comment;
+        this.timeStamp = (int) timeStamp;
     }
 }

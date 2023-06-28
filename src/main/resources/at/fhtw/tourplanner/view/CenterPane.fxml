@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="825.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fhtw.tourplanner.view.CenterPaneController">
+<TabPane fx:id="centerPaneTabs" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="825.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fhtw.tourplanner.view.CenterPaneController">
     <tabs>
-        <Tab text="Overview">
+        <Tab text="Overview" fx:id="overviewTab">
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
@@ -60,7 +60,7 @@
                 </AnchorPane>
             </content>
         </Tab>
-      <Tab text="Route">
+      <Tab text="Route" fx:id="routeTab">
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="671.0" prefWidth="833.0">
                <children>
@@ -69,12 +69,12 @@
             </AnchorPane>
         </content>
       </Tab>
-        <Tab text="Tour Logs">
+        <Tab text="Tour Logs" fx:id="tourLogsTab">
             <content>
-                <fx:include source="TourLogsTab.fxml" fx:id="tourLogsTab"/>
+                <fx:include source="TourLogsTab.fxml" fx:id="tourLogsTabContent"/>
             </content>
         </Tab>
-        <Tab text="Statistics">
+        <Tab text="Statistics" fx:id="statisticsTab">
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
             </content>

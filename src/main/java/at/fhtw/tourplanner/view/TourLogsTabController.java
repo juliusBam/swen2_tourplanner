@@ -76,40 +76,47 @@ public class TourLogsTabController implements TourPlannerController {
             return;
         }
         TourLog oldItem = tourLogsListView.getSelectionModel().getSelectedItem();
-        Optional<TourItem> dialogResult = editTourLogDialog(oldItem, "Edit Tour Log");
+        Optional<TourLog> dialogResult = editTourLogDialog(oldItem, "Edit Tour Log");
         if (dialogResult.isPresent()) {
-            //todo check with Peter how
-            //TourItem newItem = tourItemOptional.get();
-            //leftPaneViewModel.editTour(newItem, oldItem);
+            TourLog newTourLog = dialogResult.get();
+            this.tourLogsTabViewModel.updateTourLog(newTourLog);
+            this.updateTourLogSelection(newTourLog);
         }
+    }
+
+    private void updateTourLogSelection(TourLog newTourLog) {
+        Optional<TourLog> tourLogToSelect = this.tourLogsTabViewModel.getObservableTourLogs().stream().filter((tourLog -> tourLog.getId().equals(newTourLog.getId()))).findFirst();
+        if (tourLogToSelect.isPresent()) {
+            //select it
+            int indexOfItem = this.tourLogsTabViewModel.getObservableTourLogs().indexOf(tourLogToSelect.get());
+
+            this.tourLogsListView.getSelectionModel().select(indexOfItem);
+            this.tourLogsListView.scrollTo(indexOfItem);
+            this.tourLogsListView.getFocusModel().focus(indexOfItem);
+
+        }
+
     }
 
     public void onButtonDelete() {
-        //todo send the request
-        //todo update tour
-        //todo check with Peter how
+        this.tourLogsTabViewModel.deleteTourLog();
     }
 
     public void onButtonAdd() {
-        Optional<TourItem> dialogResult = this.editTourLogDialog(null, "Create new Tour Log");
+        TourLog newTourLog = new TourLog();
+        Optional<TourLog> dialogResult = this.editTourLogDialog(newTourLog, "Create new Tour Log");
+        System.out.println(dialogResult);
         if (dialogResult.isPresent()) {
-            //todo check with Peter how
-            //TourItem newItem = tourItemOptional.get();
-            //leftPaneViewModel.editTour(newItem, oldItem);
+            newTourLog = dialogResult.get();
+            this.tourLogsTabViewModel.addNewTourLog(newTourLog);
         }
-        //todo send the request
-        //todo update tour
-        //todo check with Peter how
     }
 
-    public Optional<TourItem> editTourLogDialog(TourLog tourLog, String dialogTitle) {
+    public Optional<TourLog> editTourLogDialog(TourLog tourLog, String dialogTitle) {
         Window window = tourLogsListView.getScene().getWindow();
         Stage stage = (Stage) window;
         TourLogDialogViewModel tourLogDialogViewModel = new TourLogDialogViewModel(tourLog);
         TourLogDialogController dialog = new TourLogDialogController(stage, tourLogDialogViewModel, dialogTitle);
-        //todo open edit tour log dialog
-        //TourItemDialogController dialog = new TourItemDialogController(stage, tourItemDialogViewModel, title);
-        //return dialog.showAndWait();
         return dialog.showAndWait();
     }
 

@@ -5,6 +5,7 @@ import at.fhtw.tourplanner.bl.service.TourItemService;
 import at.fhtw.tourplanner.bl.service.TourLogService;
 import at.fhtw.tourplanner.dal.api.TourPlannerAPI;
 import at.fhtw.tourplanner.dal.repository.TourItemRepository;
+import at.fhtw.tourplanner.dal.repository.TourLogRepository;
 import at.fhtw.tourplanner.viewModel.*;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
@@ -32,13 +33,17 @@ public class ControllerFactory {
 
         TourItemRepository tourItemRepository = new TourItemRepository(tourPlannerAPI);
         TourItemService tourItemService = new TourItemService(tourItemRepository);
+
+        TourLogRepository tourLogRepository = new TourLogRepository(tourPlannerAPI);
+        TourLogService tourLogService = new TourLogService(tourLogRepository);
+
         MapQuestService mapQuestService = new MapQuestService();
 
         this.bottomPaneViewModel = new BottomPaneViewModel();
         this.centerPaneViewModel = new CenterPaneViewModel(tourItemService, mapQuestService);
         this.leftPaneViewModel = new LeftPaneViewModel(tourItemService, mapQuestService);
         this.topMenuViewModel = new TopMenuViewModel();
-        this.tourLogsTabViewModel = new TourLogsTabViewModel(new TourLogService());
+        this.tourLogsTabViewModel = new TourLogsTabViewModel(tourLogService);
         this.tourPlannerApplicationViewModel = new TourPlannerApplicationViewModel(this.bottomPaneViewModel, this.centerPaneViewModel, this.leftPaneViewModel,
                                                                                     this.topMenuViewModel, this.tourLogsTabViewModel);
     }

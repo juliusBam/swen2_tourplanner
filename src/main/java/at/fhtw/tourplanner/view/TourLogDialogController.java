@@ -1,6 +1,7 @@
 package at.fhtw.tourplanner.view;
 
 import at.fhtw.tourplanner.bl.model.TourItem;
+import at.fhtw.tourplanner.bl.model.TourLog;
 import at.fhtw.tourplanner.viewModel.TourLogDialogViewModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,7 +12,7 @@ import javafx.stage.Window;
 
 import java.io.IOException;
 
-public class TourLogDialogController extends Dialog<TourItem> {
+public class TourLogDialogController extends Dialog<TourLog> {
 
     private final TourLogDialogViewModel tourLogDialogViewModel;
 
@@ -52,6 +53,14 @@ public class TourLogDialogController extends Dialog<TourItem> {
         setTitle(title);
         setDialogPane(dialogPane);
 
+        this.setResultConverter(buttonType -> {
+            System.out.println("here");
+            if (buttonType.getButtonData().equals(ButtonType.OK.getButtonData())) {
+                return tourLogDialogViewModel.getTourLog();
+            }
+            return null;
+        });
+
         this.tourLogDialogViewModel = tourLogDialogViewModel;
         this.ratingComboBox.valueProperty().bindBidirectional(this.tourLogDialogViewModel.getRatingProperty());
         this.difficultyComboBox.valueProperty().bindBidirectional(this.tourLogDialogViewModel.getDifficultyProperty());
@@ -64,6 +73,9 @@ public class TourLogDialogController extends Dialog<TourItem> {
     }
 
     private void onSubmit(ActionEvent actionEvent) {
-        actionEvent.consume();
+        //todo add validation
+        //if (invalid) {
+        //    actionEvent.consume();
+        //}
     }
 }
