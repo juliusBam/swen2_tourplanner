@@ -19,7 +19,6 @@ public class ControllerFactory {
 
     private final TourLogsTabViewModel tourLogsTabViewModel;
 
-    private final TourLogCellViewModel tourLogCellViewModel;
     private final TourPlannerApplicationViewModel tourPlannerApplicationViewModel;
 
     public ControllerFactory() {
@@ -40,9 +39,8 @@ public class ControllerFactory {
         this.leftPaneViewModel = new LeftPaneViewModel(tourItemService, mapQuestService);
         this.topMenuViewModel = new TopMenuViewModel();
         this.tourLogsTabViewModel = new TourLogsTabViewModel(new TourLogService());
-        this.tourLogCellViewModel = new TourLogCellViewModel();
         this.tourPlannerApplicationViewModel = new TourPlannerApplicationViewModel(this.bottomPaneViewModel, this.centerPaneViewModel, this.leftPaneViewModel,
-                                                                                    this.topMenuViewModel, this.tourLogsTabViewModel, this.tourLogCellViewModel);
+                                                                                    this.topMenuViewModel, this.tourLogsTabViewModel);
     }
 
     public static ControllerFactory getInstance() {
@@ -76,10 +74,6 @@ public class ControllerFactory {
         } else if (controllerClass == TourLogsTabController.class) {
 
             return new TourLogsTabController(this.tourLogsTabViewModel);
-
-        } else if (controllerClass == TourLogCellController.class) {
-
-            return new TourLogCellController(this.tourLogCellViewModel);
 
         }
 
