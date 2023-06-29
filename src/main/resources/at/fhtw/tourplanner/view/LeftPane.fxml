@@ -3,8 +3,8 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<GridPane xmlns:fx="http://javafx.com/fxml/1" minHeight="100.0" BorderPane.alignment="CENTER"
-          xmlns="http://javafx.com/javafx/19" fx:controller="at.fhtw.tourplanner.view.LeftPaneController">
+<GridPane minHeight="100.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/19"
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fhtw.tourplanner.view.LeftPaneController">
     <columnConstraints>
         <ColumnConstraints maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="240.0"/>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="20.0"/>
@@ -28,6 +28,12 @@
         <Button fx:id="addTourBtn" mnemonicParsing="false" onAction="#onButtonAdd" text="%Common_New"/>
         <Button fx:id="deleteTourBtn" mnemonicParsing="false" onAction="#onButtonDelete" text="%Common_Delete"/>
         <Button fx:id="editTourBtn" mnemonicParsing="false" onAction="#onButtonEdit" text="%Common_Edit"/>
+        <Button fx:id="summaryReportBtn" mnemonicParsing="false" onAction="#onButtonSummaryReport"
+                text="Summary Report"/>
+        <Button fx:id="detailReportBtn" mnemonicParsing="false" onAction="#onButtonDetailReport"
+                text="Tour Report (Selection)"/>
+        <Button fx:id="importTourBtn" mnemonicParsing="false" onAction="#onButtonImportTour" text="Import Tour"/>
+        <Button fx:id="exportTourBtn" mnemonicParsing="false" onAction="#onButtonExportTour" text="Export Tour (Selection)"/>
     </ToolBar>
     <ListView fx:id="toursListView" minHeight="40.0" GridPane.columnSpan="3" GridPane.rowIndex="2"
               GridPane.vgrow="ALWAYS">

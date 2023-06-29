@@ -13,24 +13,24 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TourLogDto {
-        private Long id;
-        private Integer timeStamp;
-        private String comment;
+    private Long id;
+    private Integer timeStamp;
+    private String comment;
 
-        @JsonProperty("difficulty")
-        private String difficulty;
-        private Long totalTimeMinutes;
-        @JsonProperty("rating")
-        private String rating;
-        private Long tourId;
+    @JsonProperty("difficulty")
+    private String difficulty;
+    private Long totalTimeMinutes;
+    @JsonProperty("rating")
+    private String rating;
+    private Long tourId;
 
-        public TourLogDto(TourLog tourLog, Long tourId) {
-            this.id = tourLog.getId();
-            this.timeStamp = tourLog.getTimeStamp();
-            this.comment = tourLog.getComment();
-            this.difficulty = tourLog.getDifficulty();
-            this.totalTimeMinutes = tourLog.getTotalTimeMinutes();
-            this.rating = tourLog.getRating();
-            this.tourId = tourId;
-        }
+    public TourLogDto(TourLog tourLog, Long tourId) {
+        this.id = tourLog.getId();
+        this.timeStamp = tourLog.getTimeStamp();
+        this.comment = tourLog.getComment();
+        this.difficulty = tourLog.getDifficulty();
+        this.totalTimeMinutes = tourLog.getTotalTimeMinutes();
+        this.rating = tourLog.getRating();
+        this.tourId = tourId;
+    }
 }

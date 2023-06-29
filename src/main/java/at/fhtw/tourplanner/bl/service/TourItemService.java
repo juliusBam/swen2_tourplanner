@@ -3,9 +3,7 @@ package at.fhtw.tourplanner.bl.service;
 
 import at.fhtw.tourplanner.bl.ModelConverter;
 import at.fhtw.tourplanner.bl.model.TourItem;
-import at.fhtw.tourplanner.bl.model.TourLog;
 import at.fhtw.tourplanner.dal.dto.TourItemDto;
-import at.fhtw.tourplanner.dal.dto.TourLogDto;
 import at.fhtw.tourplanner.dal.repository.TourItemRepository;
 
 import java.util.List;

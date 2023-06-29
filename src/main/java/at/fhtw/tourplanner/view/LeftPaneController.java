@@ -1,6 +1,7 @@
 package at.fhtw.tourplanner.view;
 
 import at.fhtw.tourplanner.bl.model.TourItem;
+import at.fhtw.tourplanner.bl.model.TourLog;
 import at.fhtw.tourplanner.viewModel.LeftPaneViewModel;
 import at.fhtw.tourplanner.viewModel.TourItemDialogViewModel;
 import javafx.event.ActionEvent;
@@ -9,9 +10,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
+import java.io.File;
+import java.util.List;
 import java.util.Optional;
 
 public final class LeftPaneController implements TourPlannerController {
@@ -26,6 +30,14 @@ public final class LeftPaneController implements TourPlannerController {
     @FXML
     public Button deleteTourBtn;
     @FXML
+    public Button summaryReportBtn;
+    @FXML
+    public Button detailReportBtn;
+    @FXML
+    public Button importTourBtn;
+    @FXML
+    public Button exportTourBtn;
+    @FXML
     public MenuItem cMenuNew;
     @FXML
     public MenuItem cMenuDelete;
@@ -33,6 +45,8 @@ public final class LeftPaneController implements TourPlannerController {
     public MenuItem cMenuEdit;
     @FXML
     public TextField toursSearchTextInput;
+    private FileChooser pdfFileChooser;
+    private FileChooser jsonFileChooser;
 
     public LeftPaneController(LeftPaneViewModel leftPaneViewModel) {
         this.leftPaneViewModel = leftPaneViewModel;
@@ -43,6 +57,12 @@ public final class LeftPaneController implements TourPlannerController {
     public void initialize() {
         toursListView.setItems(leftPaneViewModel.getObservableTours());
         toursListView.getSelectionModel().selectedItemProperty().addListener(leftPaneViewModel.getChangeListener());
+        pdfFileChooser = new FileChooser();
+        pdfFileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        pdfFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF documents (*.pdf)", "*.pdf"));
+        jsonFileChooser = new FileChooser();
+        jsonFileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        jsonFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JavaScript Object Notation files (*.json)", "*.json"));
     }
 
     public void onButtonAdd(ActionEvent actionEvent) {
@@ -80,4 +100,54 @@ public final class LeftPaneController implements TourPlannerController {
         return dialog.showAndWait();
     }
 
+    public void onButtonSummaryReport(ActionEvent actionEvent) {
+        Window window = toursListView.getScene().getWindow();
+        Stage stage = (Stage) window;
+        pdfFileChooser.setInitialFileName("summary");
+        File selectedFile = pdfFileChooser.showSaveDialog(stage);
+        if (selectedFile != null) {
+            leftPaneViewModel.getReportService().downloadSummaryReport(selectedFile.getAbsolutePath());
+        }
+    }
+
+    public void onButtonDetailReport(ActionEvent actionEvent) {
+        TourItem tourItem = toursListView.getSelectionModel().getSelectedItem();
+        if (tourItem == null) {
+            return;
+        }
+        Window window = toursListView.getScene().getWindow();
+        Stage stage = (Stage) window;
+        pdfFileChooser.setInitialFileName(tourItem.getName().replace(" ", "-") + "_report");
+        File selectedFile = pdfFileChooser.showSaveDialog(stage);
+        if (selectedFile != null) {
+            leftPaneViewModel.getReportService().downloadDetailReport(tourItem.getId(), selectedFile.getAbsolutePath());
+        }
+    }
+
+    public void onButtonImportTour(ActionEvent actionEvent) {
+        Window window = toursListView.getScene().getWindow();
+        Stage stage = (Stage) window;
+
+        jsonFileChooser.setInitialFileName("");
+        File selectedFile = jsonFileChooser.showOpenDialog(stage);
+        if (selectedFile != null) {
+            TourItem tourItem = leftPaneViewModel.getImportExportService().importTour(selectedFile.getAbsolutePath());
+            leftPaneViewModel.importTour(tourItem);
+        }
+    }
+
+    public void onButtonExportTour(ActionEvent actionEvent) {
+        TourItem tourItem = toursListView.getSelectionModel().getSelectedItem();
+        if (tourItem == null) {
+            return;
+        }
+        Window window = toursListView.getScene().getWindow();
+        Stage stage = (Stage) window;
+
+        jsonFileChooser.setInitialFileName(tourItem.getName().replace(" ", "-") + "_export");
+        File selectedFile = jsonFileChooser.showSaveDialog(stage);
+        if (selectedFile != null) {
+            leftPaneViewModel.getImportExportService().exportTour(tourItem, selectedFile.getAbsolutePath());
+        }
+    }
 }

@@ -1,12 +1,16 @@
 package at.fhtw.tourplanner.view;
 
+import at.fhtw.tourplanner.bl.service.ImportExportService;
 import at.fhtw.tourplanner.bl.service.MapQuestService;
+import at.fhtw.tourplanner.bl.service.ReportService;
 import at.fhtw.tourplanner.bl.service.TourItemService;
 import at.fhtw.tourplanner.bl.service.TourLogService;
 import at.fhtw.tourplanner.dal.api.TourPlannerAPI;
+import at.fhtw.tourplanner.dal.repository.ReportRepository;
 import at.fhtw.tourplanner.dal.repository.TourItemRepository;
 import at.fhtw.tourplanner.dal.repository.TourLogRepository;
 import at.fhtw.tourplanner.viewModel.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
@@ -32,16 +36,20 @@ public class ControllerFactory {
                         .create(TourPlannerAPI.class);
 
         TourItemRepository tourItemRepository = new TourItemRepository(tourPlannerAPI);
+        ReportRepository reportRepository = new ReportRepository(tourPlannerAPI);
+
         TourItemService tourItemService = new TourItemService(tourItemRepository);
 
         TourLogRepository tourLogRepository = new TourLogRepository(tourPlannerAPI);
         TourLogService tourLogService = new TourLogService(tourLogRepository);
 
         MapQuestService mapQuestService = new MapQuestService();
+        ReportService reportService = new ReportService(reportRepository);
+        ImportExportService importExportService = new ImportExportService(new ObjectMapper());
 
         this.bottomPaneViewModel = new BottomPaneViewModel();
         this.centerPaneViewModel = new CenterPaneViewModel(tourItemService, mapQuestService);
-        this.leftPaneViewModel = new LeftPaneViewModel(tourItemService, mapQuestService);
+        this.leftPaneViewModel = new LeftPaneViewModel(tourItemService, mapQuestService, reportService, importExportService);
         this.topMenuViewModel = new TopMenuViewModel();
         this.tourLogsTabViewModel = new TourLogsTabViewModel(tourLogService);
         this.tourPlannerApplicationViewModel = new TourPlannerApplicationViewModel(this.bottomPaneViewModel, this.centerPaneViewModel, this.leftPaneViewModel,

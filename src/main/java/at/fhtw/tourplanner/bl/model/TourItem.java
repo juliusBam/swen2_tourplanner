@@ -1,6 +1,7 @@
 package at.fhtw.tourplanner.bl.model;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonFilter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
+@JsonFilter("tourItem_skip_id")
 public class TourItem implements Serializable {
 
     private Long id;

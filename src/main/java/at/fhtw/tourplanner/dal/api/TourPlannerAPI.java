@@ -1,10 +1,12 @@
 package at.fhtw.tourplanner.dal.api;
 
 import at.fhtw.tourplanner.dal.dto.TourItemDto;
+import okhttp3.ResponseBody;
 import at.fhtw.tourplanner.dal.dto.TourLogDto;
 import retrofit2.Call;
 import retrofit2.http.*;
 
+import java.io.File;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -27,6 +29,12 @@ public interface TourPlannerAPI {
 
     @GET("tour/count")
     Call<Long> getTourCount();
+
+    @GET("report/{id}")
+    Call<ResponseBody> getReport(@Path("id") Long id);
+
+    @GET("report/summarize")
+    Call<ResponseBody> getSummaryReport();
 
     @POST("tourlog")
     Call<TourItemDto> createTourLog(@Body TourLogDto tourLogDto);
