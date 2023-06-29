@@ -58,4 +58,11 @@ public class MapQuestService {
             throw new RuntimeException(e);
         }
     }
+
+    public Call<ResponseBody> fetchRouteImageAsync(String from, String to, String boundingBox) {
+
+            String markerLocations = from + "|marker-start" + "||" + to + "|marker-end";
+
+            return api.getImage(constantsMap, markerLocations, boundingBox);
+    }
 }
