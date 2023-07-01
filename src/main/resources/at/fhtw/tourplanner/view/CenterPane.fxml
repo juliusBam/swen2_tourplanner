@@ -60,7 +60,7 @@
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="671.0" prefWidth="833.0">
                <children>
                   <ImageView fx:id="routeImageView" fitHeight="600.0" fitWidth="800.0" layoutX="13.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" />
-                  <Label layoutX="396.0" layoutY="301.0" text="Loading..."  fx:id="loadingLabel"/>
+                  <Label layoutX="396.0" layoutY="301.0" text="No tour selected"  fx:id="loadingLabel"/>
                </children>
             </AnchorPane>
         </content>

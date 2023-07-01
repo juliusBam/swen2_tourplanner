@@ -39,12 +39,12 @@
                         <Label fx:id="commentLabel" />
                      <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="SOMETIMES">
                         <children>
-                                  <Button fx:id="editBtn" onAction="#onButtonEdit" style="-fx-background-color: yellow" text="Edit">
+                                  <Button fx:id="editBtn" onAction="#onButtonEdit" text="Edit">
                               <HBox.margin>
                                  <Insets right="10.0" />
                               </HBox.margin>
                            </Button>
-                                  <Button fx:id="deleteBtn" onAction="#onButtonDelete" style="-fx-background-color: red" text="Delete">
+                                  <Button fx:id="deleteBtn" onAction="#onButtonDelete" text="Delete">
                               <HBox.margin>
                                  <Insets right="10.0" />
                               </HBox.margin>

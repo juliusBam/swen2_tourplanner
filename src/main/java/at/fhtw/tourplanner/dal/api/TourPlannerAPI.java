@@ -1,6 +1,7 @@
 package at.fhtw.tourplanner.dal.api;
 
 import at.fhtw.tourplanner.dal.dto.TourItemDto;
+import at.fhtw.tourplanner.dal.dto.TourLogManipulationResponseDto;
 import okhttp3.ResponseBody;
 import at.fhtw.tourplanner.dal.dto.TourLogDto;
 import retrofit2.Call;
@@ -37,13 +38,13 @@ public interface TourPlannerAPI {
     Call<ResponseBody> getSummaryReport();
 
     @POST("tourlog")
-    Call<TourItemDto> createTourLog(@Body TourLogDto tourLogDto);
+    Call<TourLogManipulationResponseDto> createTourLog(@Body TourLogDto tourLogDto);
 
     @PUT("tourlog")
-    Call<TourItemDto> updateTourLog(@Body TourLogDto tourLogDto);
+    Call<TourLogManipulationResponseDto> updateTourLog(@Body TourLogDto tourLogDto);
 
     @DELETE("tourlog/{id}")
-    Call<TourItemDto> deleteTourLog(@Path("id") Long tourLogId);
+    Call<TourLogManipulationResponseDto> deleteTourLog(@Path("id") Long tourLogId);
 
     @GET("tourlog/{id}")
     Call<List<TourLogDto>> getTourLogsByTourId(@Path("id") Long tourId);

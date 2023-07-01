@@ -3,8 +3,10 @@ package at.fhtw.tourplanner.bl.service;
 import at.fhtw.tourplanner.bl.ModelConverter;
 import at.fhtw.tourplanner.bl.model.TourItem;
 import at.fhtw.tourplanner.bl.model.TourLog;
+import at.fhtw.tourplanner.bl.model.TourLogManipulationOutput;
 import at.fhtw.tourplanner.dal.dto.TourItemDto;
 import at.fhtw.tourplanner.dal.dto.TourLogDto;
+import at.fhtw.tourplanner.dal.dto.TourLogManipulationResponseDto;
 import at.fhtw.tourplanner.dal.repository.TourLogRepository;
 import retrofit2.Call;
 
@@ -26,19 +28,33 @@ public class TourLogService {
         return tourLogs.stream().map(this.modelConverter::tourLogDtoToModel).toList();
     }
 
-    public TourItem create(TourLog newTourLog, Long tourItemId) {
-        TourItemDto tourItemDto = this.tourLogRepository.save(this.modelConverter.tourLogModelToDto(tourItemId, newTourLog));
-        return this.modelConverter.tourItemDtoToModel(tourItemDto);
+    public TourLogManipulationOutput create(TourLog newTourLog, Long tourItemId) {
+        TourLogManipulationResponseDto tourLogManipulationResult = this.tourLogRepository.save(this.modelConverter.tourLogModelToDto(tourItemId, newTourLog));
+
+        return new TourLogManipulationOutput(
+                this.modelConverter.tourLogDtoToModel(tourLogManipulationResult.getTourLog()),
+                this.modelConverter.tourStatsDtoToModel(tourLogManipulationResult.getTourStats())
+        );
+        //return this.modelConverter.tourItemDtoToModel(tourItemDto);
     }
 
-    public TourItem update(TourLog newTourLog, Long tourItemId) {
-        TourItemDto tourItemDto = this.tourLogRepository.save(this.modelConverter.tourLogModelToDto(tourItemId, newTourLog));
-        return this.modelConverter.tourItemDtoToModel(tourItemDto);
+    public TourLogManipulationOutput update(TourLog newTourLog, Long tourItemId) {
+        TourLogManipulationResponseDto tourLogManipulationResult = this.tourLogRepository.save(this.modelConverter.tourLogModelToDto(tourItemId, newTourLog));
+        return new TourLogManipulationOutput(
+                this.modelConverter.tourLogDtoToModel(tourLogManipulationResult.getTourLog()),
+                        this.modelConverter.tourStatsDtoToModel(tourLogManipulationResult.getTourStats())
+        );
+        //return this.modelConverter.tourItemDtoToModel(tourItemDto);
     }
 
-    public TourItem delete(Long tourItemId) {
-        TourItemDto tourItemDto = this.tourLogRepository.delete(tourItemId);
-        return this.modelConverter.tourItemDtoToModel(tourItemDto);
+    public TourLogManipulationOutput delete(Long tourItemId) {
+        TourLogManipulationResponseDto tourLogManipulationResult = this.tourLogRepository.delete(tourItemId);
+
+        return new TourLogManipulationOutput(
+                this.modelConverter.tourLogDtoToModel(tourLogManipulationResult.getTourLog()),
+                this.modelConverter.tourStatsDtoToModel(tourLogManipulationResult.getTourStats())
+        );
+        //return this.modelConverter.tourItemDtoToModel(tourItemDto);
     }
 
     public Call<List<TourLogDto>> getByTourIdAsync(Long tourId) {

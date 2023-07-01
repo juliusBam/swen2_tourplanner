@@ -1,5 +1,6 @@
 package at.fhtw.tourplanner.view;
 
+import at.fhtw.tourplanner.bl.TimeConverter;
 import at.fhtw.tourplanner.bl.model.TourLog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -28,7 +29,8 @@ public class TourLogCell extends ListCell<TourLog> {
                 detail.setText(null);
                 setGraphic(null);
             } else {
-                title.setText(tourLog.getTimeStamp().toString());
+                title.setText(TimeConverter.convertTimeStampToString("dd-MM-yyyy HH:mm", tourLog.getTimeStamp()));
+
                 detail.setText(tourLog.getRating() + " | " + tourLog.getDifficulty());
                 setGraphic(layout);
             }

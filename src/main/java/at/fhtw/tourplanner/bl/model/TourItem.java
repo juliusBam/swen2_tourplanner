@@ -24,6 +24,7 @@ public class TourItem implements Serializable {
     private String boundingBoxString;
     private List<TourLog> tourLogs;
 
+    //todo convert field into tour stats
     private Integer popularity;
     private Double childFriendliness;
     private Double averageTime;
@@ -51,5 +52,13 @@ public class TourItem implements Serializable {
         this.tourDistanceKilometers = distance;
         this.estimatedTimeSeconds = time;
         this.boundingBoxString = boundingBoxString;
+    }
+
+    public void setTourStats(TourStats tourStats) {
+        this.popularity = tourStats.getPopularity();
+        this.childFriendliness = tourStats.getChildFriendliness();
+        this.averageDifficulty = tourStats.getAverageDifficulty();
+        this.averageRating = tourStats.getAverageRating();
+        this.averageTime = tourStats.getAverageTime();
     }
 }

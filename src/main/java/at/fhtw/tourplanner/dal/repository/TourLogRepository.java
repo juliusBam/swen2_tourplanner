@@ -4,6 +4,7 @@ import at.fhtw.tourplanner.bl.model.TourItem;
 import at.fhtw.tourplanner.dal.api.TourPlannerAPI;
 import at.fhtw.tourplanner.dal.dto.TourItemDto;
 import at.fhtw.tourplanner.dal.dto.TourLogDto;
+import at.fhtw.tourplanner.dal.dto.TourLogManipulationResponseDto;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -17,18 +18,18 @@ public class TourLogRepository {
         this.api = api;
     }
 
-    public TourItemDto save(TourLogDto tourLogDto) throws RuntimeException {
+    public TourLogManipulationResponseDto save(TourLogDto tourLogDto) throws RuntimeException {
         //here we distinguish between put and post
         if (tourLogDto.getId() == null) {
             try {
-                Response<TourItemDto> response = api.createTourLog(tourLogDto).execute();
+                Response<TourLogManipulationResponseDto> response = api.createTourLog(tourLogDto).execute();
                 return response.body();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         } else {
             try {
-                Response<TourItemDto> response = api.updateTourLog(tourLogDto).execute();
+                Response<TourLogManipulationResponseDto> response = api.updateTourLog(tourLogDto).execute();
                 return response.body();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -36,9 +37,9 @@ public class TourLogRepository {
         }
     }
 
-    public TourItemDto delete(Long tourLogId) {
+    public TourLogManipulationResponseDto delete(Long tourLogId) {
         try {
-            Response<TourItemDto> response = api.deleteTourLog(tourLogId).execute();
+            Response<TourLogManipulationResponseDto> response = api.deleteTourLog(tourLogId).execute();
             return response.body();
         } catch (IOException e) {
             throw new RuntimeException(e);

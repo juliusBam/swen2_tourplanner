@@ -70,6 +70,7 @@ public final class CenterPaneController implements TourPlannerController {
         //binds the visibility of the image to the showImageProp
         routeImageView.visibleProperty().bind(this.centerPaneViewModel.getShowImage());
 
+        loadingLabel.textProperty().bind(this.centerPaneViewModel.getLoadingLabelProperty());
         //binds the visibility of the loading label to the negation of the showImageProp
         loadingLabel.visibleProperty().bind(this.centerPaneViewModel.getShowImage().not());
 

@@ -2,9 +2,11 @@ package at.fhtw.tourplanner.bl;
 
 import at.fhtw.tourplanner.bl.model.TourItem;
 import at.fhtw.tourplanner.bl.model.TourLog;
+import at.fhtw.tourplanner.bl.model.TourStats;
 import at.fhtw.tourplanner.bl.service.TourLogService;
 import at.fhtw.tourplanner.dal.dto.TourItemDto;
 import at.fhtw.tourplanner.dal.dto.TourLogDto;
+import at.fhtw.tourplanner.dal.dto.TourStatsDto;
 
 public class ModelConverter {
 
@@ -92,9 +94,9 @@ public class ModelConverter {
                 tourItemDto.getTourDistanceKilometers(), tourItemDto.getEstimatedTimeSeconds(),
                 tourItemDto.getRouteInformation(),
                 tourItemDto.getTourLogs() == null ? null : tourItemDto.getTourLogs().stream().map(this::tourLogDtoToModel).toList(),
-                tourItemDto.getPopularity(),
-                tourItemDto.getChildFriendliness(), tourItemDto.getAverageTime(), tourItemDto.getAverageRating(),
-                tourItemDto.getAverageDifficulty());
+                tourItemDto.getTourStats().getPopularity(),
+                tourItemDto.getTourStats().getChildFriendliness(), tourItemDto.getTourStats().getAverageTime(), tourItemDto.getTourStats().getAverageRating(),
+                tourItemDto.getTourStats().getAverageDifficulty());
     }
 
     public TourItemDto tourItemModelToDto(TourItem tourItem) {
@@ -102,8 +104,9 @@ public class ModelConverter {
                 tourItem.getTo(), serializeTourType(tourItem.getTransportType()), tourItem.getTourDistanceKilometers(),
                 tourItem.getEstimatedTimeSeconds(), tourItem.getBoundingBoxString(),
                 tourItem.getTourLogs() == null ? null : tourItem.getTourLogs().stream().map((tourLog) -> this.tourLogModelToDto(tourItem.getId(), tourLog)).toList(),
-                tourItem.getPopularity(), tourItem.getChildFriendliness(), tourItem.getAverageTime(),
-                tourItem.getAverageRating(), tourItem.getAverageDifficulty());
+                new TourStatsDto(tourItem.getPopularity(), tourItem.getChildFriendliness(), tourItem.getAverageTime(),
+                        tourItem.getAverageRating(), tourItem.getAverageDifficulty())
+                );
     }
 
     private String serializeTourType(String type) {
@@ -132,6 +135,27 @@ public class ModelConverter {
         return "pedestrian";
     }
 
+    //endregion
+
+    //region tourStats
+    public TourStatsDto tourStatsModelToDto(TourStats tourStats) {
+
+        return new TourStatsDto(tourStats.getPopularity(), tourStats.getChildFriendliness(),
+                                tourStats.getAverageTime(), tourStats.getAverageRating(), tourStats.getAverageDifficulty());
+
+    }
+
+    public TourStats tourStatsDtoToModel(TourStatsDto tourStatsDto) {
+
+        return new TourStats(
+                tourStatsDto.getPopularity(),
+                tourStatsDto.getChildFriendliness(),
+                tourStatsDto.getAverageTime(),
+                tourStatsDto.getAverageRating(),
+                tourStatsDto.getAverageDifficulty()
+        );
+
+    }
     //endregion
 
 }

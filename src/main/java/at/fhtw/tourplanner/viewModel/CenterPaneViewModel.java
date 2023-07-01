@@ -41,6 +41,9 @@ public class CenterPaneViewModel {
     private final ObjectProperty<Image> imageProperty = new SimpleObjectProperty<>();
 
     @Getter
+    private final StringProperty loadingLabelProperty = new SimpleStringProperty();
+
+    @Getter
     private final BooleanProperty showImage = new SimpleBooleanProperty();
 
     private TourItem tourItem;
@@ -51,11 +54,13 @@ public class CenterPaneViewModel {
     public CenterPaneViewModel(TourItemService tourItemService, MapQuestService mapQuestService) {
         this.tourItemService = tourItemService;
         this.mapQuestService = mapQuestService;
-
+        loadingLabelProperty.set("No record available");
+        showImage.set(false);
     }
 
     public void updateOverviewTab(TourItem tourItem) {
         isInitValue = true;
+        this.showImage.set(false);
         if (tourItem == null) {
             // select the first in the list
             nameProperty.set("");
@@ -65,6 +70,7 @@ public class CenterPaneViewModel {
             transportTypeProperty.set("");
             tourDistanceProperty.set("");
             estimatedTimeProperty.set("");
+            loadingLabelProperty.set("No record available");
             return;
         }
         this.tourItem = tourItem;
@@ -75,6 +81,7 @@ public class CenterPaneViewModel {
         transportTypeProperty.setValue(tourItem.getTransportType());
         tourDistanceProperty.setValue(String.format("%.2f km", tourItem.getTourDistanceKilometers()));
         estimatedTimeProperty.setValue(String.format("%d:%02d:%02d", tourItem.getEstimatedTimeSeconds() / 3600, (tourItem.getEstimatedTimeSeconds() % 3600) / 60, (tourItem.getEstimatedTimeSeconds() % 60)));
+        this.loadingLabelProperty.set("Loading....");
         this.setImage();
         //imageProperty.setValue(mapQuestService.fetchRouteImage(tourItem.getFrom(), tourItem.getTo(), tourItem.getBoundingBoxString()));
         isInitValue = false;
@@ -91,7 +98,6 @@ public class CenterPaneViewModel {
     public void setImage() {
 
         //imageProperty.setValue(mapQuestService.fetchRouteImage(tourItem.getFrom(), tourItem.getTo(), tourItem.getBoundingBoxString()));
-        this.showImage.set(false);
         Call<ResponseBody> apiReq = this.mapQuestService.fetchRouteImageAsync(tourItem.getFrom(), tourItem.getTo(), tourItem.getBoundingBoxString());
 
         apiReq.enqueue(new Callback<ResponseBody>() {
@@ -113,13 +119,11 @@ public class CenterPaneViewModel {
                     imageProperty.setValue(new Image(inputStream));
                     showImage.set(true);
                 });
-
-                System.out.println("Image loaded");
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable throwable) {
-                System.out.println("Error loading img");
+                loadingLabelProperty.set("Error loading image");
             }
         });
 
