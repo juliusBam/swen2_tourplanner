@@ -94,9 +94,7 @@ public class ModelConverter {
                 tourItemDto.getTourDistanceKilometers(), tourItemDto.getEstimatedTimeSeconds(),
                 tourItemDto.getRouteInformation(),
                 tourItemDto.getTourLogs() == null ? null : tourItemDto.getTourLogs().stream().map(this::tourLogDtoToModel).toList(),
-                tourItemDto.getTourStats().getPopularity(),
-                tourItemDto.getTourStats().getChildFriendliness(), tourItemDto.getTourStats().getAverageTime(), tourItemDto.getTourStats().getAverageRating(),
-                tourItemDto.getTourStats().getAverageDifficulty());
+                this.tourStatsDtoToModel(tourItemDto.getTourStats()));
     }
 
     public TourItemDto tourItemModelToDto(TourItem tourItem) {
@@ -104,8 +102,7 @@ public class ModelConverter {
                 tourItem.getTo(), serializeTourType(tourItem.getTransportType()), tourItem.getTourDistanceKilometers(),
                 tourItem.getEstimatedTimeSeconds(), tourItem.getBoundingBoxString(),
                 tourItem.getTourLogs() == null ? null : tourItem.getTourLogs().stream().map((tourLog) -> this.tourLogModelToDto(tourItem.getId(), tourLog)).toList(),
-                new TourStatsDto(tourItem.getPopularity(), tourItem.getChildFriendliness(), tourItem.getAverageTime(),
-                        tourItem.getAverageRating(), tourItem.getAverageDifficulty())
+                this.tourStatsModelToDto(tourItem.getTourStats())
                 );
     }
 

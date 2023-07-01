@@ -1,6 +1,5 @@
 package at.fhtw.tourplanner.bl.model;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,15 +23,31 @@ public class TourItem implements Serializable {
     private String boundingBoxString;
     private List<TourLog> tourLogs;
 
+    private TourStats tourStats;
     //todo convert field into tour stats
+    /*
     private Integer popularity;
     private Double childFriendliness;
     private Double averageTime;
     private Double averageRating;
     private Double averageDifficulty;
+    */
 
 
     public TourItem() {
+    }
+
+    public TourItem(Long id, String name, String description, String from, String to, String transportType, Double tourDistanceKilometers, Long estimatedTimeSeconds, String boundingBoxString, List<TourLog> tourLogs) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.from = from;
+        this.to = to;
+        this.transportType = transportType;
+        this.tourDistanceKilometers = tourDistanceKilometers;
+        this.estimatedTimeSeconds = estimatedTimeSeconds;
+        this.boundingBoxString = boundingBoxString;
+        this.tourLogs = tourLogs;
     }
 
     @Override
@@ -55,10 +70,11 @@ public class TourItem implements Serializable {
     }
 
     public void setTourStats(TourStats tourStats) {
-        this.popularity = tourStats.getPopularity();
+        this.tourStats = tourStats;
+        /*this.popularity = tourStats.getPopularity();
         this.childFriendliness = tourStats.getChildFriendliness();
         this.averageDifficulty = tourStats.getAverageDifficulty();
         this.averageRating = tourStats.getAverageRating();
-        this.averageTime = tourStats.getAverageTime();
+        this.averageTime = tourStats.getAverageTime();*/
     }
 }
