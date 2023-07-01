@@ -137,6 +137,10 @@ public class ModelConverter {
     //region tourStats
     public TourStatsDto tourStatsModelToDto(TourStats tourStats) {
 
+        if (tourStats == null) {
+            return null;
+        }
+
         return new TourStatsDto(tourStats.getPopularity(), tourStats.getChildFriendliness(),
                                 tourStats.getAverageTime(), tourStats.getAverageRating(), tourStats.getAverageDifficulty());
 
