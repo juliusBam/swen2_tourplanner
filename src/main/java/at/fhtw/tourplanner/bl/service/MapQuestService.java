@@ -1,11 +1,13 @@
 package at.fhtw.tourplanner.bl.service;
 
+import at.fhtw.tourplanner.bl.model.TourItem;
 import at.fhtw.tourplanner.dal.api.MapQuestAPI;
 import at.fhtw.tourplanner.dal.api.response.RouteResponse;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.image.Image;
-import okhttp3.Request;
 import okhttp3.ResponseBody;
-import okio.Timeout;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -13,7 +15,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -24,48 +25,126 @@ public class MapQuestService {
 
     String key = "SECRET";
 
+    Map<String, Image> imageCache = new HashMap<>();
+    Map<String, RouteResponse> routeCache = new HashMap<>();
+
     Map<String, String> constantsMap = new HashMap<>();
 
     public MapQuestService() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://www.mapquestapi.com/")
-                .addConverterFactory(JacksonConverterFactory.create())
-                .build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://www.mapquestapi.com/").addConverterFactory(JacksonConverterFactory.create()).build();
         api = retrofit.create(MapQuestAPI.class);
         constantsMap.put("key", key);
         constantsMap.put("unit", "k");
         constantsMap.put("size", "600,400@2x");
     }
 
-    public RouteResponse searchRoute(String from, String to, String transportType) {
+    public RouteResponse searchRoute(TourItem tourItem) {
+        RouteResponse cachedRouteResponse = getRouteFromCache(tourItem);
+        if (cachedRouteResponse != null) {
+            return cachedRouteResponse;
+        }
         try {
-            Call<RouteResponse> call = api.getRoute(key, from, to, transportType);
+            Call<RouteResponse> call = api.getRoute(constantsMap, tourItem.getFrom(), tourItem.getTo(), tourItem.getTransportType());
             Response<RouteResponse> response = call.execute();
-            return response.body();
+            RouteResponse result = response.body();
+            putRouteInCache(tourItem, result);
+            return result;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public Image fetchRouteImage(String from, String to, String boundingBox) {
+    private Call<RouteResponse> searchRouteAsync(String from, String to, String transportType) {
+        return api.getRoute(constantsMap, from, to, transportType);
+    }
+
+    private Call<ResponseBody> fetchRouteImageAsync(String session, String transportType) {
+        String color = "255,0,0";
+        if (transportType.equals("bicycle")) {
+            color = "0,255,0";
+        } else if (transportType.equals("pedestrian")) {
+            color = "0,0,255";
+        }
+        return api.getImage(constantsMap, session, color);
+    }
+
+    public void setRouteImage(TourItem tourItem, StringProperty loadingLabelProperty, ObjectProperty<Image> imageProperty, BooleanProperty showImage, BooleanProperty requestingImage) {
+        requestingImage.set(true);
+        System.out.println("Setting image for tour " + tourItem.getName());
+        Image cachedImage = getImageFromCache(tourItem);
+        if (cachedImage != null) {
+            System.out.println("Image found in cache");
+            imageProperty.setValue(cachedImage);
+            showImage.set(true);
+            requestingImage.set(false);
+            return;
+        }
+        loadingLabelProperty.set("Loading...");
+        System.out.println("Image not found in cache, requesting");
+
+        Call<RouteResponse> callRoute = searchRouteAsync(tourItem.getFrom(), tourItem.getTo(), tourItem.getTransportType());
+        callRoute.enqueue(new Callback<>() {
+            @Override
+            public void onResponse(Call<RouteResponse> call, Response<RouteResponse> response) {
+                RouteResponse routeResponse = response.body();
+
+                Call<ResponseBody> callImage = fetchRouteImageAsync(routeResponse.getRoute().getSessionId(), tourItem.getTransportType());
+                callImage.enqueue(new Callback<>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        ResponseBody responseBody = response.body();
+
+                        byte[] bytes;
+                        try {
+                            bytes = responseBody.bytes();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        InputStream inputStream = new ByteArrayInputStream(bytes);
+                        Image image = new Image(inputStream);
+                        imageProperty.setValue(image);
+                        showImage.set(true);
+                        putImageInCache(tourItem, image);
+                        requestingImage.set(false);
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable throwable) {
+                        loadingLabelProperty.set("Error loading image");
+                        requestingImage.set(false);
+                    }
+                });
+            }
+            @Override
+            public void onFailure(Call<RouteResponse> call, Throwable throwable) {
+                loadingLabelProperty.set("Error loading image");
+                requestingImage.set(false);
+            }
+        });
+    }
+
+    private Image getImageFromCache(TourItem tourItem) {
+        return imageCache.get(tourItem.getFrom() + tourItem.getTo() + tourItem.getTransportType());
+    }
+
+    private void putImageInCache(TourItem tourItem, Image mapImage) {
+        imageCache.put(tourItem.getFrom() + tourItem.getTo() + tourItem.getTransportType(), mapImage);
+    }
+
+    private RouteResponse getRouteFromCache(TourItem tourItem) {
+        return routeCache.get(tourItem.getFrom() + tourItem.getTo() + tourItem.getTransportType());
+    }
+
+    private void putRouteInCache(TourItem tourItem, RouteResponse routeResponse) {
+        routeCache.put(tourItem.getFrom() + tourItem.getTo() + tourItem.getTransportType(), routeResponse);
+    }
+
+    public String getSessionId(TourItem tourItem) {
+        Call<RouteResponse> callRoute = searchRouteAsync(tourItem.getFrom(), tourItem.getTo(), tourItem.getTransportType());
         try {
-            String markerLocations = from + "|marker-start" + "||" + to + "|marker-end";
-
-            Call<ResponseBody> call = api.getImage(constantsMap, markerLocations, boundingBox);
-            Response<ResponseBody> response = call.execute();
-            ResponseBody responseBody = response.body();
-            byte[] bytes = responseBody.bytes();
-            InputStream inputStream = new ByteArrayInputStream(bytes);
-            return new Image(inputStream);
+            return callRoute.execute().body().getRoute().getSessionId();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public Call<ResponseBody> fetchRouteImageAsync(String from, String to, String boundingBox) {
-
-            String markerLocations = from + "|marker-start" + "||" + to + "|marker-end";
-
-            return api.getImage(constantsMap, markerLocations, boundingBox);
     }
 }

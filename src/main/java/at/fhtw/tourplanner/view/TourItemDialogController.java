@@ -11,7 +11,6 @@ import javafx.stage.Modality;
 import javafx.stage.Window;
 
 import java.io.IOException;
-import java.util.ResourceBundle;
 
 public class TourItemDialogController extends Dialog<TourItem> {
     private final TourItemDialogViewModel tourItemDialogViewModel;

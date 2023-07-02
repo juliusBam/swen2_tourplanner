@@ -120,7 +120,8 @@ public final class LeftPaneController implements TourPlannerController {
         pdfFileChooser.setInitialFileName(tourItem.getName().replace(" ", "-") + "_report");
         File selectedFile = pdfFileChooser.showSaveDialog(stage);
         if (selectedFile != null) {
-            leftPaneViewModel.getReportService().downloadDetailReport(tourItem.getId(), selectedFile.getAbsolutePath());
+            String sessionId = leftPaneViewModel.getMapQuestService().getSessionId(tourItem);
+            leftPaneViewModel.getReportService().downloadDetailReport(tourItem, sessionId, selectedFile.getAbsolutePath());
         }
     }
 

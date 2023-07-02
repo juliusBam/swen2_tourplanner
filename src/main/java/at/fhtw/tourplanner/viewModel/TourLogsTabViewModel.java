@@ -81,7 +81,6 @@ public class TourLogsTabViewModel {
                             }
                         });
                     }
-                    System.out.println("Fetched");
                 }
 
                 @Override

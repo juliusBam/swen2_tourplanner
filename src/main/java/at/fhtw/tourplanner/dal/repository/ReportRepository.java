@@ -18,23 +18,11 @@ public class ReportRepository {
         this.api = api;
     }
 
-    public byte[] getReport(Long id) {
-        try {
-            Response<ResponseBody> response = api.getReport(id).execute();
-            ResponseBody responseBody = response.body();
-            return responseBody.bytes();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public Call<ResponseBody> getReport(Long id, String sessionId) {
+        return api.getReport(id, sessionId);
     }
 
-    public byte[] getSummaryReport() {
-        try {
-            Response<ResponseBody> response = api.getSummaryReport().execute();
-            ResponseBody responseBody = response.body();
-            return responseBody.bytes();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public Call<ResponseBody> getSummaryReport() {
+        return api.getSummaryReport();
     }
 }

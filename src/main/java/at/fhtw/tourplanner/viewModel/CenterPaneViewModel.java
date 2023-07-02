@@ -3,20 +3,9 @@ package at.fhtw.tourplanner.viewModel;
 import at.fhtw.tourplanner.bl.model.TourItem;
 import at.fhtw.tourplanner.bl.service.MapQuestService;
 import at.fhtw.tourplanner.bl.service.TourItemService;
-import javafx.application.Platform;
 import javafx.beans.property.*;
-import javafx.beans.value.ObservableBooleanValue;
-import javafx.collections.FXCollections;
 import javafx.scene.image.Image;
 import lombok.Getter;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 public class CenterPaneViewModel {
 
@@ -45,6 +34,8 @@ public class CenterPaneViewModel {
 
     @Getter
     private final BooleanProperty showImage = new SimpleBooleanProperty();
+
+    private final BooleanProperty requestingImage = new SimpleBooleanProperty(false);
 
     private TourItem tourItem;
 
@@ -81,7 +72,7 @@ public class CenterPaneViewModel {
         transportTypeProperty.setValue(tourItem.getTransportType());
         tourDistanceProperty.setValue(String.format("%.2f km", tourItem.getTourDistanceKilometers()));
         estimatedTimeProperty.setValue(String.format("%d:%02d:%02d", tourItem.getEstimatedTimeSeconds() / 3600, (tourItem.getEstimatedTimeSeconds() % 3600) / 60, (tourItem.getEstimatedTimeSeconds() % 60)));
-        this.loadingLabelProperty.set("Loading....");
+//        this.loadingLabelProperty.set("Loading....");
         this.setImage();
         //imageProperty.setValue(mapQuestService.fetchRouteImage(tourItem.getFrom(), tourItem.getTo(), tourItem.getBoundingBoxString()));
         isInitValue = false;
@@ -96,37 +87,10 @@ public class CenterPaneViewModel {
     }
 
     public void setImage() {
-
-        //imageProperty.setValue(mapQuestService.fetchRouteImage(tourItem.getFrom(), tourItem.getTo(), tourItem.getBoundingBoxString()));
-        Call<ResponseBody> apiReq = this.mapQuestService.fetchRouteImageAsync(tourItem.getFrom(), tourItem.getTo(), tourItem.getBoundingBoxString());
-
-        apiReq.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                ResponseBody responseBody = response.body();
-
-                byte[] bytes = new byte[0];
-                try {
-                    bytes = responseBody.bytes();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                InputStream inputStream = new ByteArrayInputStream(bytes);
-
-                //needed when we want to interact with the UI from a different thread
-                Platform.runLater(() -> {
-                    //update application thread
-                    imageProperty.setValue(new Image(inputStream));
-                    showImage.set(true);
-                });
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable throwable) {
-                loadingLabelProperty.set("Error loading image");
-            }
-        });
-
+        if (requestingImage.get()) {
+            System.out.println("Image request cancelled; request already in progress");
+            return;
+        }
+        mapQuestService.setRouteImage(tourItem, loadingLabelProperty, imageProperty, showImage, requestingImage);
     }
-
 }

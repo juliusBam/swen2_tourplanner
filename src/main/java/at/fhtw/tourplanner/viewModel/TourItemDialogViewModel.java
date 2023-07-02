@@ -70,12 +70,7 @@ public class TourItemDialogViewModel {
     }
 
     public RouteResponse searchRoute() {
-        if (fromProperty.getValue() == null || toProperty.getValue() == null || transportTypeProperty.getValue() == null) {
-            System.out.println("At least one input is missing");
-            return null;
-        }
-        System.out.println("Route search from/to: " + fromProperty.getValue() + " " + toProperty.getValue());
-        return mapQuestService.searchRoute(fromProperty.getValue(), toProperty.getValue(), transportTypeProperty.getValue());
+        return mapQuestService.searchRoute(tourItem);
     }
 
     public void setRouteData(double distance, long time, String boundingBoxString) {

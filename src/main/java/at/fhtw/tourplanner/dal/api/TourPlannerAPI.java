@@ -32,7 +32,7 @@ public interface TourPlannerAPI {
     Call<Long> getTourCount();
 
     @GET("report/{id}")
-    Call<ResponseBody> getReport(@Path("id") Long id);
+    Call<ResponseBody> getReport(@Path("id") Long id, @Query("sessionId") String session);
 
     @GET("report/summarize")
     Call<ResponseBody> getSummaryReport();

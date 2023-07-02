@@ -11,9 +11,10 @@ import java.util.Map;
 
 public interface MapQuestAPI {
 
+    // TODO: use query map here!!!
     @GET("directions/v2/route")
-    Call<RouteResponse> getRoute(@Query("key") String key, @Query("from") String from, @Query("to") String to, @Query("routeType") String transportType);
+    Call<RouteResponse> getRoute(@QueryMap Map<String, String> constantValues, @Query("from") String from, @Query("to") String to, @Query("routeType") String transportType);
 
     @GET("staticmap/v5/map")
-    Call<ResponseBody> getImage(@QueryMap Map<String, String> constantValues, @Query("locations") String markerLocations, @Query("boundingBox") String boundingBox);
+    Call<ResponseBody> getImage(@QueryMap Map<String, String> constantValues, @Query("session") String session, @Query("routeColor") String routeColor);
 }

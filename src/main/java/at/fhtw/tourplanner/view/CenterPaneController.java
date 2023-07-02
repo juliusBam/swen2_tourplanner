@@ -46,15 +46,12 @@ public final class CenterPaneController implements TourPlannerController {
                     if (this.centerPaneViewModel.isInitValue()) {
                         return;
                     }
-                    //ov.getValue()
                     if (ov.getValue().getId().equals("routeTab")) {
-                        //todo load the img
-                        System.out.println("Opening routeTab, you have to load the img");
+                        this.centerPaneViewModel.setImage();
                     }
                     if (ov.getValue().getId().equals("statisticsTab")) {
                         this.centerPaneViewModel.setTourStatistics();
                     }
-
                 });
 
         nameLabel.textProperty().bind(centerPaneViewModel.getNameProperty());

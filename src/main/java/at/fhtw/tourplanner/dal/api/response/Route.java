@@ -10,4 +10,5 @@ public class Route {
     private double distance;
     private long time;
     private BoundingBox boundingBox;
+    private String sessionId;
 }
