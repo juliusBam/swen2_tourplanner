@@ -31,7 +31,7 @@ public class TourLogCell extends ListCell<TourLog> {
             } else {
                 title.setText(TimeConverter.convertTimeStampToString("dd-MM-yyyy HH:mm", tourLog.getTimeStamp()));
 
-                detail.setText(tourLog.getRating() + " | " + tourLog.getDifficulty());
+                detail.setText(String.format("Rating: %d | Difficulty: %d", tourLog.getRating(), tourLog.getDifficulty()));
                 setGraphic(layout);
             }
     }

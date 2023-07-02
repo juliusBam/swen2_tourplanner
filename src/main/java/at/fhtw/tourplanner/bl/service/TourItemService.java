@@ -3,8 +3,10 @@ package at.fhtw.tourplanner.bl.service;
 
 import at.fhtw.tourplanner.bl.ModelConverter;
 import at.fhtw.tourplanner.bl.model.TourItem;
+import at.fhtw.tourplanner.bl.model.TourLog;
 import at.fhtw.tourplanner.dal.dto.TourItemDto;
 import at.fhtw.tourplanner.dal.repository.TourItemRepository;
+import retrofit2.Call;
 
 import java.util.List;
 
@@ -42,4 +44,14 @@ public class TourItemService implements Service<TourItem> {
         tourItemRepository.save(this.modelConverter.tourItemModelToDto(tourItem));
     }
 
+    @Override
+    public TourItem findOne(Long tourId) {
+        TourItemDto tourItemDto = this.tourItemRepository.findOne(tourId);
+        return this.modelConverter.tourItemDtoToModel(tourItemDto);
+    }
+
+    @Override
+    public Call<TourItemDto> findOneAsync(Long tourId) {
+        return this.tourItemRepository.findOneAsync(tourId);
+    }
 }

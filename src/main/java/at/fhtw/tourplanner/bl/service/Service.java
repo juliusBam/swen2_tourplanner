@@ -1,5 +1,9 @@
 package at.fhtw.tourplanner.bl.service;
 
+import at.fhtw.tourplanner.bl.model.TourItem;
+import at.fhtw.tourplanner.dal.dto.TourItemDto;
+import retrofit2.Call;
+
 import java.util.List;
 
 public interface Service<T> {
@@ -12,4 +16,7 @@ public interface Service<T> {
 
     void update(T item);
 
+    T findOne(Long itemId);
+
+    Call<TourItemDto> findOneAsync(Long itemId);
 }

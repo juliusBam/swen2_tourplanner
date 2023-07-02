@@ -16,14 +16,14 @@ public class TourLog {
     private Integer timeStamp;
     private String comment;
 
-    private String difficulty;
+    private Integer difficulty;
     private Long totalTimeMinutes;
 
-    private String rating;
+    private Integer rating;
 
     // private Long tourId;
 
-    public TourLog(Long id, Integer timeStamp, String comment, String difficulty, Long totalTimeMinutes, String rating) {
+    public TourLog(Long id, Integer timeStamp, String comment, Integer difficulty, Long totalTimeMinutes, Integer rating) {
         this.id = id;
         this.timeStamp = timeStamp;
         this.comment = comment;
@@ -36,7 +36,7 @@ public class TourLog {
 
     }
 
-    public void updateFields(String rating, String difficulty, String totalTimeMinutes, String comment, long timeStamp) {
+    public void updateFields(Integer rating, Integer difficulty, String totalTimeMinutes, String comment, long timeStamp) {
         this.rating = rating;
         this.difficulty = difficulty;
         if (!totalTimeMinutes.isEmpty())

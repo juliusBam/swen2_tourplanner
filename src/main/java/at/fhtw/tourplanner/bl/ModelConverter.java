@@ -8,6 +8,9 @@ import at.fhtw.tourplanner.dal.dto.TourItemDto;
 import at.fhtw.tourplanner.dal.dto.TourLogDto;
 import at.fhtw.tourplanner.dal.dto.TourStatsDto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ModelConverter {
 
     //region tourLog Converting
@@ -16,9 +19,9 @@ public class ModelConverter {
                 tourLogDto.getId(),
                 tourLogDto.getTimeStamp(),
                 tourLogDto.getComment(),
-                this.deserializeDifficulty(tourLogDto.getDifficulty()),
+                tourLogDto.getDifficulty(),
                 tourLogDto.getTotalTimeMinutes(),
-                this.deserializeRating(tourLogDto.getRating())
+                tourLogDto.getRating()
         );
     }
 
@@ -27,13 +30,14 @@ public class ModelConverter {
                 tourLog.getId(),
                 tourLog.getTimeStamp(),
                 tourLog.getComment(),
-                this.serializeDifficulty(tourLog.getDifficulty()),
+                tourLog.getDifficulty(),
                 tourLog.getTotalTimeMinutes(),
-                this.serializeRating(tourLog.getRating()),
+                tourLog.getRating(),
                 tourId
         );
     }
 
+    /*
     private String deserializeDifficulty(String type) {
         if (type == null) {
             return "";
@@ -85,6 +89,7 @@ public class ModelConverter {
         }
         return "DECENT";
     }
+    */
     //endregion
 
     //region tourItem converting
@@ -93,7 +98,12 @@ public class ModelConverter {
                 tourItemDto.getFrom(), tourItemDto.getTo(), deserializeTourType(tourItemDto.getTransportType()),
                 tourItemDto.getTourDistanceKilometers(), tourItemDto.getEstimatedTimeSeconds(),
                 tourItemDto.getRouteInformation(),
-                tourItemDto.getTourLogs() == null ? null : tourItemDto.getTourLogs().stream().map(this::tourLogDtoToModel).toList(),
+                //tourItemDto.getTourLogs() == null ? null : tourItemDto.getTourLogs().stream().map(this::tourLogDtoToModel).toList(),
+                tourItemDto.getTourLogs() == null ? null : new ArrayList<>(
+                                tourItemDto.getTourLogs().stream().map(this::tourLogDtoToModel).toList()
+                ),
+
+                        //tourItemDto.getTourLogs().stream().map(this::tourLogDtoToModel).toList(),
                 this.tourStatsDtoToModel(tourItemDto.getTourStats()));
     }
 
