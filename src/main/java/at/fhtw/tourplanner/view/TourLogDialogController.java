@@ -31,6 +31,9 @@ public class TourLogDialogController extends Dialog<TourLog> {
     @FXML
     private TextArea commentInput = new TextArea();
 
+    @FXML
+    public DatePicker tourLogDateInput = new DatePicker();
+
 
 
     public TourLogDialogController(Window owner, TourLogDialogViewModel tourLogDialogViewModel, String title) {
@@ -62,12 +65,11 @@ public class TourLogDialogController extends Dialog<TourLog> {
         });
 
         this.tourLogDialogViewModel = tourLogDialogViewModel;
-        //this.ratingComboBox.valueProperty().bindBidirectional(this.tourLogDialogViewModel.getRatingProperty());
-        //this.difficultyComboBox.valueProperty().bindBidirectional(this.tourLogDialogViewModel.getDifficultyProperty());
         this.ratingInputSlider.valueProperty().bindBidirectional(this.tourLogDialogViewModel.getRatingProperty());
         this.difficultyInputSlider.valueProperty().bindBidirectional(this.tourLogDialogViewModel.getDifficultyProperty());
         this.timeInput.textProperty().bindBidirectional(this.tourLogDialogViewModel.getTimeProperty());
         this.commentInput.textProperty().bindBidirectional(this.tourLogDialogViewModel.getCommentProperty());
+        this.tourLogDateInput.valueProperty().bindBidirectional(this.tourLogDialogViewModel.getDatePickerProperty());
     }
 
     public void initialize() {

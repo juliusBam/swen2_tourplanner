@@ -2,11 +2,11 @@ package at.fhtw.tourplanner.viewModel;
 
 import at.fhtw.tourplanner.bl.model.TourLog;
 import at.fhtw.tourplanner.view.TourLogDialogController;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import lombok.Getter;
+
+import java.sql.Timestamp;
+import java.time.LocalDate;
 
 public class TourLogDialogViewModel {
 
@@ -24,6 +24,9 @@ public class TourLogDialogViewModel {
 
     @Getter
     private final StringProperty commentProperty = new SimpleStringProperty();
+
+    @Getter
+    private final SimpleObjectProperty<LocalDate> datePickerProperty = new SimpleObjectProperty<LocalDate>();
 
     public TourLogDialogViewModel(TourLog tourLog) {
         super();
@@ -48,16 +51,29 @@ public class TourLogDialogViewModel {
         commentProperty.addListener((arg, oldVal, newVal) -> {
             this.updateTourLogModel();
         });
+        datePickerProperty.addListener((arg, oldVal, newVal) -> {
+            this.updateTourLogModel();
+        });
 
     }
 
     private void updateTourLogModel() {
+
+        Long timeValue = 0L;
+        if (this.datePickerProperty.getValue() != null) {
+            timeValue = Timestamp.valueOf(this.datePickerProperty.getValue().atStartOfDay()).getTime();
+            timeValue = timeValue/1000;
+            System.out.println(timeValue);
+        }
+
+
         this.tourLog.updateFields(
                ratingProperty.getValue(),
                 difficultyProperty.getValue(),
                 timeProperty.getValue(),
                 commentProperty.getValue(),
-                System.currentTimeMillis() / 1000L
+                timeValue.intValue()
+                //todo convert date
         );
     }
 

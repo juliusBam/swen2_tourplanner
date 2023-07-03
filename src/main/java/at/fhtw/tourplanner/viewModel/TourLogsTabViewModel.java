@@ -12,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +26,6 @@ public class TourLogsTabViewModel {
     private TourItem selectedTourItem;
 
     private TourLog selectedTourLog;
-
     //region properties
     @Getter
     private final StringProperty dateProperty = new SimpleStringProperty();

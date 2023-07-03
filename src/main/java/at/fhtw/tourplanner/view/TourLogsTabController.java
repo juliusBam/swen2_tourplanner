@@ -8,10 +8,7 @@ import at.fhtw.tourplanner.viewModel.TourLogsTabViewModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SplitPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -141,7 +138,5 @@ public class TourLogsTabController implements TourPlannerController {
         TourLogDialogController dialog = new TourLogDialogController(stage, tourLogDialogViewModel, dialogTitle);
         return dialog.showAndWait();
     }
-
-
 
 }
