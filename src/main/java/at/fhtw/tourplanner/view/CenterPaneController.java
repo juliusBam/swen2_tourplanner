@@ -60,7 +60,7 @@ public final class CenterPaneController implements TourPlannerController {
                         this.centerPaneViewModel.setImage();
                     }
                     if (ov.getValue().getId().equals("statisticsTab")) {
-                        this.centerPaneViewModel.setTourStatsProperties();
+                        this.centerPaneViewModel.updateTourStatsProps();
                     }
                 });
 

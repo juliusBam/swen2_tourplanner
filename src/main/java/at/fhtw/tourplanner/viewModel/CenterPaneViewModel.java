@@ -1,21 +1,12 @@
 package at.fhtw.tourplanner.viewModel;
 
-import at.fhtw.tourplanner.bl.ModelConverter;
 import at.fhtw.tourplanner.bl.model.TourItem;
 import at.fhtw.tourplanner.bl.model.TourStats;
 import at.fhtw.tourplanner.bl.service.MapQuestService;
 import at.fhtw.tourplanner.bl.service.TourItemService;
-import at.fhtw.tourplanner.dal.dto.TourItemDto;
-import at.fhtw.tourplanner.dal.dto.TourLogDto;
-import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.scene.image.Image;
 import lombok.Getter;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import java.util.List;
 
 public class CenterPaneViewModel {
 
@@ -98,7 +89,7 @@ public class CenterPaneViewModel {
         tourDistanceProperty.setValue(String.format("%.2f km", tourItem.getTourDistanceKilometers()));
         estimatedTimeProperty.setValue(String.format("%d:%02d:%02d", tourItem.getEstimatedTimeSeconds() / 3600, (tourItem.getEstimatedTimeSeconds() % 3600) / 60, (tourItem.getEstimatedTimeSeconds() % 60)));
 //      this.loadingLabelProperty.set("Loading....");
-        this.setTourStatsProperties();
+        this.updateTourStatsProps();
 //        this.loadingLabelProperty.set("Loading....");
         if (requestingImage.get()) {
             System.out.println("Cancelling current call");
@@ -131,7 +122,8 @@ public class CenterPaneViewModel {
         }
     }
 
-    public void setTourStatsProperties() {
+    public void updateTourStatsProps() {
+
         if (this.tourItem == null || this.tourItem.getTourStats() == null) {
 
             this.popularityProperty.set("");
@@ -142,40 +134,19 @@ public class CenterPaneViewModel {
 
         } else {
 
-            Call<TourItemDto> apiCall = this.tourItemService.findOneAsync(this.tourItem.getId());
-
-            apiCall.enqueue(new Callback<TourItemDto>() {
-                @Override
-                public void onResponse(Call<TourItemDto> call, Response<TourItemDto> response) {
-                    if (response.body() != null) {
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                //update application thread
-                                TourStats fetchedTourStats = new ModelConverter().tourItemDtoToModel(response.body()).getTourStats();
-
-                                //todo fetch props from d
-
-                                popularityProperty.set(fetchedTourStats.getPopularity().toString());
-                                avgTimeProperty.set(fetchedTourStats.getAverageTime().toString());
-                                avgRatingProperty.set(fetchedTourStats.getAverageRating().toString());
-                                avgDifficultyProperty.set(fetchedTourStats.getAverageDifficulty().toString());
-                                childFriendlinessProperty.set(fetchedTourStats.getChildFriendliness().toString());
-
-
-                            }
-                        });
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<TourItemDto> call, Throwable throwable) {
-                    //todo print error
-                    System.out.println("Error");
-                }
-            });
+            this.tourItemService.setTourStats(this.tourItem.getId(), this::setTourStats);
 
         }
+    }
+
+    public void setTourStats(TourStats tourStats) {
+
+        popularityProperty.set(String.format("%d", tourStats.getPopularity()));
+        avgTimeProperty.set(String.format("%,.2f", tourStats.getAverageTime()));
+        avgRatingProperty.set(String.format("%,.2f", tourStats.getAverageRating()));
+        avgDifficultyProperty.set(String.format("%,.2f", tourStats.getAverageDifficulty()));
+        childFriendlinessProperty.set(String.format("%,.2f", tourStats.getChildFriendliness()));
+
     }
 
 }
