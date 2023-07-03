@@ -108,10 +108,10 @@ public class LeftPaneViewModel {
 
     private boolean searchInTourLog(TourLog tourLog, String searchText) {
         return tourLog.getComment().toLowerCase().contains(searchText.toLowerCase()) ||
-               tourLog.getRating().toLowerCase().contains(searchText.toLowerCase()) ||
-               tourLog.getDifficulty().toLowerCase().contains(searchText.toLowerCase()) ||
-               String.valueOf(tourLog.getTotalTimeMinutes()).toLowerCase().contains(searchText.toLowerCase()) ||
-               String.valueOf(tourLog.getTimeStamp()).toLowerCase().contains(searchText.toLowerCase());
+               String.valueOf(tourLog.getRating()).contains(searchText.toLowerCase()) ||
+               String.valueOf(tourLog.getDifficulty()).contains(searchText.toLowerCase()) ||
+               String.valueOf(tourLog.getTotalTimeMinutes()).contains(searchText.toLowerCase()) ||
+               String.valueOf(tourLog.getTimeStamp()).contains(searchText.toLowerCase());
     }
 
     public interface SelectionChangedListener {
