@@ -49,7 +49,7 @@ public class ControllerFactory {
 
         this.bottomPaneViewModel = new BottomPaneViewModel();
         this.centerPaneViewModel = new CenterPaneViewModel(tourItemService, mapQuestService);
-        this.leftPaneViewModel = new LeftPaneViewModel(tourItemService, mapQuestService, reportService, importExportService);
+        this.leftPaneViewModel = new LeftPaneViewModel(tourItemService, mapQuestService, reportService, importExportService, tourLogService);
         this.topMenuViewModel = new TopMenuViewModel();
         this.tourLogsTabViewModel = new TourLogsTabViewModel(tourLogService);
         this.tourPlannerApplicationViewModel = new TourPlannerApplicationViewModel(this.bottomPaneViewModel, this.centerPaneViewModel, this.leftPaneViewModel,

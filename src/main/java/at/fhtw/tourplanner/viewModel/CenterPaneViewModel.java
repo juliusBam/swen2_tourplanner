@@ -73,7 +73,12 @@ public class CenterPaneViewModel {
         tourDistanceProperty.setValue(String.format("%.2f km", tourItem.getTourDistanceKilometers()));
         estimatedTimeProperty.setValue(String.format("%d:%02d:%02d", tourItem.getEstimatedTimeSeconds() / 3600, (tourItem.getEstimatedTimeSeconds() % 3600) / 60, (tourItem.getEstimatedTimeSeconds() % 60)));
 //        this.loadingLabelProperty.set("Loading....");
-        this.setImage();
+        if (requestingImage.get()) {
+            System.out.println("Cancelling current call");
+            mapQuestService.cancelSetRouteImage();
+            requestingImage.set(false);
+        }
+        setImage();
         //imageProperty.setValue(mapQuestService.fetchRouteImage(tourItem.getFrom(), tourItem.getTo(), tourItem.getBoundingBoxString()));
         isInitValue = false;
     }
@@ -91,6 +96,19 @@ public class CenterPaneViewModel {
             System.out.println("Image request cancelled; request already in progress");
             return;
         }
-        mapQuestService.setRouteImage(tourItem, loadingLabelProperty, imageProperty, showImage, requestingImage);
+        requestingImage.set(true);
+        mapQuestService.setRouteImage(tourItem, this::updateImage);
+    }
+
+    private void updateImage(Image routeImage) {
+        requestingImage.set(false);
+        if (routeImage == null) {
+            showImage.set(false);
+        }
+        else {
+            imageProperty.setValue(routeImage);
+            showImage.set(true);
+            requestingImage.set(false);
+        }
     }
 }

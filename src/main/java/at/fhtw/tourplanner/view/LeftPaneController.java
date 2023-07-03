@@ -1,7 +1,6 @@
 package at.fhtw.tourplanner.view;
 
 import at.fhtw.tourplanner.bl.model.TourItem;
-import at.fhtw.tourplanner.bl.model.TourLog;
 import at.fhtw.tourplanner.viewModel.LeftPaneViewModel;
 import at.fhtw.tourplanner.viewModel.TourItemDialogViewModel;
 import javafx.event.ActionEvent;
@@ -15,7 +14,6 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.io.File;
-import java.util.List;
 import java.util.Optional;
 
 public final class LeftPaneController implements TourPlannerController {
@@ -63,6 +61,16 @@ public final class LeftPaneController implements TourPlannerController {
         jsonFileChooser = new FileChooser();
         jsonFileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         jsonFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JavaScript Object Notation files (*.json)", "*.json"));
+        // use button action instead of listener
+        // fetch all tours from BE before search
+        // performSearch()
+        toursSearchTextInput.textProperty().addListener((observable, oldValue, newValue) -> {
+            performSearch(newValue);
+        });
+    }
+
+    private void performSearch(String searchString) {
+        toursListView.setItems(leftPaneViewModel.handleSearch(searchString));
     }
 
     public void onButtonAdd(ActionEvent actionEvent) {
@@ -71,6 +79,13 @@ public final class LeftPaneController implements TourPlannerController {
         if (tourItemOptional.isPresent()) {
             tourItem = tourItemOptional.get();
             leftPaneViewModel.addNewTour(tourItem);
+            reapplySearchIfNecessary();
+        }
+    }
+
+    private void reapplySearchIfNecessary() {
+        if (!toursSearchTextInput.getText().isEmpty()) {
+            performSearch(toursSearchTextInput.getText());
         }
     }
 
@@ -83,12 +98,14 @@ public final class LeftPaneController implements TourPlannerController {
         if (tourItemOptional.isPresent()) {
             TourItem newItem = tourItemOptional.get();
             leftPaneViewModel.editTour(newItem, oldItem);
+            reapplySearchIfNecessary();
         }
     }
 
     public void onButtonDelete(ActionEvent actionEvent) {
         if (toursListView.getSelectionModel().getSelectedItem() != null) {
             leftPaneViewModel.deleteTour(toursListView.getSelectionModel().getSelectedItem());
+            reapplySearchIfNecessary();
         }
     }
 

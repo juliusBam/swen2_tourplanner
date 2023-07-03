@@ -12,15 +12,11 @@ public class ImportExportService {
 
     private final ObjectMapper objectMapper;
 
-    // TODO: add handling of tour logs to import/export
-
     public ImportExportService(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
         final SimpleFilterProvider filter = new SimpleFilterProvider();
-        filter.addFilter("tourItem_skip_id",
-                SimpleBeanPropertyFilter.serializeAllExcept("id"));
-        filter.addFilter("tourLog_skip_id",
-                SimpleBeanPropertyFilter.serializeAllExcept("id", "tourId"));
+        filter.addFilter("tourItem_skip_id", SimpleBeanPropertyFilter.serializeAllExcept("id"));
+        filter.addFilter("tourLog_skip_id", SimpleBeanPropertyFilter.serializeAllExcept("id", "tourId"));
         objectMapper.setFilterProvider(filter);
     }
 

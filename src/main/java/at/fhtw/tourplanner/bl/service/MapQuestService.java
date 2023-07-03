@@ -3,9 +3,6 @@ package at.fhtw.tourplanner.bl.service;
 import at.fhtw.tourplanner.bl.model.TourItem;
 import at.fhtw.tourplanner.dal.api.MapQuestAPI;
 import at.fhtw.tourplanner.dal.api.response.RouteResponse;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.StringProperty;
 import javafx.scene.image.Image;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -21,14 +18,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MapQuestService {
-    MapQuestAPI api;
+    private final MapQuestAPI api;
+    private final String key = "Vg5MvjVijd5lRe6xqUXDdJR1SKcuce0h";
+    private final Map<String, Image> imageCache = new HashMap<>();
+    private final Map<String, RouteResponse> routeCache = new HashMap<>();
+    private final Map<String, String> constantsMap = new HashMap<>();
+    private Call<RouteResponse> setImageCall;
 
-    String key = "SECRET";
-
-    Map<String, Image> imageCache = new HashMap<>();
-    Map<String, RouteResponse> routeCache = new HashMap<>();
-
-    Map<String, String> constantsMap = new HashMap<>();
+    public interface MapListener {
+        void updateMap(Image routeImage);
+    }
 
     public MapQuestService() {
         Retrofit retrofit = new Retrofit.Builder().baseUrl("https://www.mapquestapi.com/").addConverterFactory(JacksonConverterFactory.create()).build();
@@ -68,22 +67,17 @@ public class MapQuestService {
         return api.getImage(constantsMap, session, color);
     }
 
-    public void setRouteImage(TourItem tourItem, StringProperty loadingLabelProperty, ObjectProperty<Image> imageProperty, BooleanProperty showImage, BooleanProperty requestingImage) {
-        requestingImage.set(true);
+    public void setRouteImage(TourItem tourItem, MapListener mapListener) {
         System.out.println("Setting image for tour " + tourItem.getName());
         Image cachedImage = getImageFromCache(tourItem);
         if (cachedImage != null) {
-            System.out.println("Image found in cache");
-            imageProperty.setValue(cachedImage);
-            showImage.set(true);
-            requestingImage.set(false);
+            mapListener.updateMap(cachedImage);
             return;
         }
-        loadingLabelProperty.set("Loading...");
         System.out.println("Image not found in cache, requesting");
 
-        Call<RouteResponse> callRoute = searchRouteAsync(tourItem.getFrom(), tourItem.getTo(), tourItem.getTransportType());
-        callRoute.enqueue(new Callback<>() {
+        setImageCall = searchRouteAsync(tourItem.getFrom(), tourItem.getTo(), tourItem.getTransportType());
+        setImageCall.enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<RouteResponse> call, Response<RouteResponse> response) {
                 RouteResponse routeResponse = response.body();
@@ -102,25 +96,26 @@ public class MapQuestService {
                         }
                         InputStream inputStream = new ByteArrayInputStream(bytes);
                         Image image = new Image(inputStream);
-                        imageProperty.setValue(image);
-                        showImage.set(true);
                         putImageInCache(tourItem, image);
-                        requestingImage.set(false);
+                        mapListener.updateMap(image);
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable throwable) {
-                        loadingLabelProperty.set("Error loading image");
-                        requestingImage.set(false);
                     }
                 });
             }
+
             @Override
             public void onFailure(Call<RouteResponse> call, Throwable throwable) {
-                loadingLabelProperty.set("Error loading image");
-                requestingImage.set(false);
             }
         });
+    }
+
+    public void cancelSetRouteImage() {
+        if (setImageCall != null) {
+            setImageCall.cancel();
+        }
     }
 
     private Image getImageFromCache(TourItem tourItem) {
