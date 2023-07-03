@@ -9,10 +9,7 @@ import at.fhtw.tourplanner.bl.model.TourStats;
 import at.fhtw.tourplanner.bl.service.TourLogService;
 import at.fhtw.tourplanner.dal.dto.TourLogDto;
 import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,7 +27,9 @@ public class TourLogsTabViewModel {
 
     private final ObservableList<TourLog> observableTourLogs = FXCollections.observableArrayList();
 
+    @Getter
     private TourItem selectedTourItem;
+
     private TourLog selectedTourLog;
 
     //region properties
@@ -41,16 +40,19 @@ public class TourLogsTabViewModel {
     private final StringProperty commentProperty = new SimpleStringProperty();
 
     @Getter
-    private final StringProperty ratingProperty = new SimpleStringProperty();
+    private final IntegerProperty ratingProperty = new SimpleIntegerProperty();
 
     @Getter
-    private final StringProperty difficultyProperty = new SimpleStringProperty();
+    private final IntegerProperty difficultyProperty = new SimpleIntegerProperty();
 
     @Getter
     private final StringProperty timeProperty = new SimpleStringProperty();
 
     @Getter
     private final BooleanProperty loadingTourLogs = new SimpleBooleanProperty();
+
+    @Getter
+    private final BooleanProperty tourLogSelected = new SimpleBooleanProperty(false);
     //endregion
     public TourLogsTabViewModel(TourLogService tourLogService) {
         this.tourLogService = tourLogService;
@@ -98,6 +100,7 @@ public class TourLogsTabViewModel {
 
         this.updateTourStatistics(manipulationResponse.tourStats());
         this.observableTourLogs.add(manipulationResponse.tourLog());
+        this.selectedTourItem.addNewTourLog(manipulationResponse.tourLog());
 
     }
 
@@ -116,14 +119,17 @@ public class TourLogsTabViewModel {
             this.observableTourLogs.add(manipulationResponse.tourLog());
 
         }
+        this.selectedTourItem.updateTourLog(manipulationResponse.tourLog());
     }
 
 
     public void deleteTourLog() {
         TourLogManipulationOutput manipulationResponse = tourLogService.delete(this.selectedTourLog.getId());
 
+        this.selectedTourItem.removeTourLog(this.selectedTourLog);
         this.updateTourStatistics(manipulationResponse.tourStats());
         this.observableTourLogs.remove(this.selectedTourLog);
+
     }
 
     public ChangeListener<TourLog> getChangeListener() {
@@ -133,15 +139,17 @@ public class TourLogsTabViewModel {
     private void setSelectedTourLog(TourLog tourLog) {
         this.selectedTourLog = tourLog;
         if (tourLog == null) {
+            this.tourLogSelected.set(false);
             this.dateProperty.set("");
             this.commentProperty.set("");
-            this.difficultyProperty.set("");
-            this.ratingProperty.set("");
+            this.difficultyProperty.set(0);
+            this.ratingProperty.set(0);
             this.timeProperty.set("");
         } else {
             this.dateProperty.set(
                     TimeConverter.convertTimeStampToString("dd-MM-yyyy HH:mm", tourLog.getTimeStamp())
             );
+            this.tourLogSelected.set(true);
             this.commentProperty.set(tourLog.getComment());
             this.difficultyProperty.set(tourLog.getDifficulty());
             this.ratingProperty.set(tourLog.getRating());

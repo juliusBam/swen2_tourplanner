@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 @AllArgsConstructor
@@ -78,5 +79,25 @@ public class TourItem implements Serializable {
         this.averageDifficulty = tourStats.getAverageDifficulty();
         this.averageRating = tourStats.getAverageRating();
         this.averageTime = tourStats.getAverageTime();*/
+    }
+
+    public void addNewTourLog(TourLog tourLog) {
+        this.tourLogs.add(tourLog);
+    }
+
+    public void removeTourLog(TourLog tourLog) {
+        Optional<TourLog> tourLogToDelete = this.tourLogs.stream().filter((tourLogInList -> tourLogInList.getId().equals(tourLog.getId()))).findFirst();
+        if (tourLogToDelete.isPresent()) {
+            this.tourLogs.remove(tourLogToDelete.get());
+        }
+    }
+
+    public void updateTourLog(TourLog tourLog) {
+        Optional<TourLog> tourLogToUpdate = this.tourLogs.stream().filter((tourLogInList -> tourLogInList.getId().equals(tourLog.getId()))).findFirst();
+        if (tourLogToUpdate.isPresent()) {
+            int indexOfItem = this.tourLogs.indexOf(tourLogToUpdate.get());
+
+            this.tourLogs.set(indexOfItem, tourLog);
+        }
     }
 }

@@ -1,7 +1,9 @@
 package at.fhtw.tourplanner.dal.repository;
 
+import at.fhtw.tourplanner.bl.model.TourItem;
 import at.fhtw.tourplanner.dal.api.TourPlannerAPI;
 import at.fhtw.tourplanner.dal.dto.TourItemDto;
+import retrofit2.Call;
 import retrofit2.Response;
 
 import java.io.IOException;
@@ -78,5 +80,10 @@ public class TourItemRepository implements Repository<TourItemDto, Long> {
     public boolean exists(Long primaryKey) {
         TourItemDto tourItemDto = findOne(primaryKey);
         return tourItemDto != null;
+    }
+
+    @Override
+    public Call<TourItemDto> findOneAsync(Long tourId) {
+        return api.getTour(tourId);
     }
 }

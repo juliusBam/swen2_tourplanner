@@ -15,11 +15,11 @@ public class TourLogDto {
     private Integer timeStamp;
     private String comment;
 
-    @JsonProperty("difficulty")
-    private String difficulty;
+    //@JsonProperty("difficulty")
+    private Integer difficulty;
     private Long totalTimeMinutes;
-    @JsonProperty("rating")
-    private String rating;
+    //@JsonProperty("rating")
+    private Integer rating;
     private Long tourId;
 
 }

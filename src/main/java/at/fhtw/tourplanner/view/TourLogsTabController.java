@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SplitPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
@@ -55,6 +56,9 @@ public class TourLogsTabController implements TourPlannerController {
     @FXML
     public SplitPane tourLogsSplitPane;
 
+    @FXML
+    public VBox tourLogDetailsContainer = new VBox();
+
     @Override
     public void initialize() {
         //binding of list and change listener
@@ -67,8 +71,8 @@ public class TourLogsTabController implements TourPlannerController {
         //props binding
         dateLabel.textProperty().bind(this.tourLogsTabViewModel.getDateProperty());
         commentLabel.textProperty().bind(this.tourLogsTabViewModel.getCommentProperty());
-        ratingLabel.textProperty().bind(this.tourLogsTabViewModel.getRatingProperty());
-        difficultyLabel.textProperty().bind(this.tourLogsTabViewModel.getDifficultyProperty());
+        ratingLabel.textProperty().bind(this.tourLogsTabViewModel.getRatingProperty().asString());
+        difficultyLabel.textProperty().bind(this.tourLogsTabViewModel.getDifficultyProperty().asString());
         timeLabel.textProperty().bind(this.tourLogsTabViewModel.getTimeProperty());
 
         //the visibility of the split pane containing the stuff 4 the tour logs is bound to the loading
@@ -76,6 +80,7 @@ public class TourLogsTabController implements TourPlannerController {
 
         loadingLabel.visibleProperty().bind(this.tourLogsTabViewModel.getLoadingTourLogs());
 
+        this.tourLogDetailsContainer.visibleProperty().bind(this.tourLogsTabViewModel.getTourLogSelected());
     }
 
     public TourLogsTabController(TourLogsTabViewModel tourLogsTabViewModel) {
@@ -110,10 +115,16 @@ public class TourLogsTabController implements TourPlannerController {
     }
 
     public void onButtonDelete() {
+        if (tourLogsListView.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
         this.tourLogsTabViewModel.deleteTourLog();
     }
 
     public void onButtonAdd() {
+        if (this.tourLogsTabViewModel.getSelectedTourItem() == null) {
+            return;
+        }
         TourLog newTourLog = new TourLog();
         Optional<TourLog> dialogResult = this.editTourLogDialog(newTourLog, "Create new Tour Log");
         System.out.println(dialogResult);

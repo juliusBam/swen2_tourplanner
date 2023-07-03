@@ -32,6 +32,16 @@ public final class CenterPaneController implements TourPlannerController {
 
     @FXML
     public Label loadingLabel;
+    @FXML
+    public Label popularityLabel;
+    @FXML
+    public Label avgTimeLabel;
+    @FXML
+    public Label avgRatingLabel;
+    @FXML
+    public Label avgDifficultyLabel;
+    @FXML
+    public Label childFriendlinessLabel;
 
     public CenterPaneController(CenterPaneViewModel centerPaneViewModel) {
         this.centerPaneViewModel = centerPaneViewModel;
@@ -50,7 +60,7 @@ public final class CenterPaneController implements TourPlannerController {
                         this.centerPaneViewModel.setImage();
                     }
                     if (ov.getValue().getId().equals("statisticsTab")) {
-                        this.centerPaneViewModel.setTourStatistics();
+                        this.centerPaneViewModel.setTourStatsProperties();
                     }
                 });
 
@@ -71,6 +81,11 @@ public final class CenterPaneController implements TourPlannerController {
         //binds the visibility of the loading label to the negation of the showImageProp
         loadingLabel.visibleProperty().bind(this.centerPaneViewModel.getShowImage().not());
 
+        this.popularityLabel.textProperty().bind(this.centerPaneViewModel.getPopularityProperty());
+        this.avgTimeLabel.textProperty().bind(this.centerPaneViewModel.getAvgTimeProperty());
+        this.avgRatingLabel.textProperty().bind(this.centerPaneViewModel.getAvgRatingProperty());
+        this.avgDifficultyLabel.textProperty().bind(this.centerPaneViewModel.getAvgDifficultyProperty());
+        this.childFriendlinessLabel.textProperty().bind(this.centerPaneViewModel.getChildFriendlinessProperty());
     }
 
 

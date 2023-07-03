@@ -2,6 +2,8 @@ package at.fhtw.tourplanner.viewModel;
 
 import at.fhtw.tourplanner.bl.model.TourLog;
 import at.fhtw.tourplanner.view.TourLogDialogController;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import lombok.Getter;
@@ -12,10 +14,10 @@ public class TourLogDialogViewModel {
     private final TourLog tourLog;
 
     @Getter
-    private final StringProperty ratingProperty = new SimpleStringProperty();
+    private final IntegerProperty ratingProperty = new SimpleIntegerProperty();
 
     @Getter
-    private final StringProperty difficultyProperty = new SimpleStringProperty();
+    private final IntegerProperty difficultyProperty = new SimpleIntegerProperty();
 
     @Getter
     private final StringProperty timeProperty = new SimpleStringProperty();
@@ -27,8 +29,10 @@ public class TourLogDialogViewModel {
         super();
         this.tourLog = tourLog;
 
-        this.ratingProperty.setValue(tourLog.getRating() == null ? "" : tourLog.getRating());
-        this.difficultyProperty.setValue(tourLog.getDifficulty() == null ? "" : tourLog.getDifficulty());
+        //this.ratingProperty.setValue(tourLog.getRating() == null ? "" : tourLog.getRating());
+        this.ratingProperty.setValue(tourLog.getRating());
+        //this.difficultyProperty.setValue(tourLog.getDifficulty() == null ? "" : tourLog.getDifficulty());
+        this.difficultyProperty.setValue(tourLog.getDifficulty());
         this.timeProperty.setValue(tourLog.getTotalTimeMinutes() == null ? "" : tourLog.getTotalTimeMinutes().toString());
         this.commentProperty.setValue(tourLog.getComment() == null ? "" : tourLog.getComment());
 

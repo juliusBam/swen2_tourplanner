@@ -20,10 +20,10 @@ public class TourLogDialogController extends Dialog<TourLog> {
     private ButtonType submitBtn;
 
     @FXML
-    private ComboBox<String> ratingComboBox = new ComboBox<>();
+    private Slider difficultyInputSlider = new Slider();
 
     @FXML
-    private ComboBox<String> difficultyComboBox = new ComboBox<>();
+    private Slider ratingInputSlider = new Slider();
 
     @FXML
     private TextField timeInput = new TextField();
@@ -62,8 +62,10 @@ public class TourLogDialogController extends Dialog<TourLog> {
         });
 
         this.tourLogDialogViewModel = tourLogDialogViewModel;
-        this.ratingComboBox.valueProperty().bindBidirectional(this.tourLogDialogViewModel.getRatingProperty());
-        this.difficultyComboBox.valueProperty().bindBidirectional(this.tourLogDialogViewModel.getDifficultyProperty());
+        //this.ratingComboBox.valueProperty().bindBidirectional(this.tourLogDialogViewModel.getRatingProperty());
+        //this.difficultyComboBox.valueProperty().bindBidirectional(this.tourLogDialogViewModel.getDifficultyProperty());
+        this.ratingInputSlider.valueProperty().bindBidirectional(this.tourLogDialogViewModel.getRatingProperty());
+        this.difficultyInputSlider.valueProperty().bindBidirectional(this.tourLogDialogViewModel.getDifficultyProperty());
         this.timeInput.textProperty().bindBidirectional(this.tourLogDialogViewModel.getTimeProperty());
         this.commentInput.textProperty().bindBidirectional(this.tourLogDialogViewModel.getCommentProperty());
     }
