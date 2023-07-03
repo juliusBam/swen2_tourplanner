@@ -1,22 +1,16 @@
 package at.fhtw.tourplanner.viewModel;
 
-import at.fhtw.tourplanner.bl.ModelConverter;
 import at.fhtw.tourplanner.bl.TimeConverter;
 import at.fhtw.tourplanner.bl.model.TourItem;
 import at.fhtw.tourplanner.bl.model.TourLog;
 import at.fhtw.tourplanner.bl.model.TourLogManipulationOutput;
 import at.fhtw.tourplanner.bl.model.TourStats;
 import at.fhtw.tourplanner.bl.service.TourLogService;
-import at.fhtw.tourplanner.dal.dto.TourLogDto;
-import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lombok.Getter;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import java.util.List;
 import java.util.Optional;
@@ -63,36 +57,21 @@ public class TourLogsTabViewModel {
     }
 
     public void setTourModel(TourItem selectedTour) {
+
         this.loadingTourLogs.set(true);
         this.selectedTourItem = selectedTour;
         this.observableTourLogs.clear();
         if (selectedTour != null) {
-            Call<List<TourLogDto>> apiCall = this.tourLogService.getByTourIdAsync(selectedTour.getId());
-            apiCall.enqueue(new Callback<List<TourLogDto>>() {
-                @Override
-                public void onResponse(Call<List<TourLogDto>> call, Response<List<TourLogDto>> response) {
-                    ModelConverter modelConverter = new ModelConverter();
 
-                    if (response.body() != null) {
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                //update application thread
-                                loadingTourLogs.set(false);
-                                observableTourLogs.addAll(response.body().stream().map(modelConverter::tourLogDtoToModel).toList());
-                            }
-                        });
-                    }
-                }
+            this.tourLogService.updateTourLogsAsync(selectedTour.getId(), this::setTourLogs);
 
-                @Override
-                public void onFailure(Call<List<TourLogDto>> call, Throwable throwable) {
-                    System.out.println("Error");
-                }
-            });
-            //this.observableTourLogs.addAll(this.tourLogService.getByTourId(selectedTour.getId()));
         }
 
+    }
+
+    public void setTourLogs(List<TourLog> tourLogs) {
+        loadingTourLogs.set(false);
+        observableTourLogs.addAll(tourLogs);
     }
 
     public void addNewTourLog(TourLog tourLog) {

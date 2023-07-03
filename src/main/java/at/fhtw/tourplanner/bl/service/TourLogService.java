@@ -1,14 +1,15 @@
 package at.fhtw.tourplanner.bl.service;
 
 import at.fhtw.tourplanner.bl.ModelConverter;
-import at.fhtw.tourplanner.bl.model.TourItem;
 import at.fhtw.tourplanner.bl.model.TourLog;
 import at.fhtw.tourplanner.bl.model.TourLogManipulationOutput;
-import at.fhtw.tourplanner.dal.dto.TourItemDto;
 import at.fhtw.tourplanner.dal.dto.TourLogDto;
 import at.fhtw.tourplanner.dal.dto.TourLogManipulationResponseDto;
 import at.fhtw.tourplanner.dal.repository.TourLogRepository;
+import javafx.application.Platform;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import java.util.List;
 
@@ -17,6 +18,10 @@ public class TourLogService {
     private final ModelConverter modelConverter;
 
     private final TourLogRepository tourLogRepository;
+
+    public interface TourLogsListener {
+        public void setTourLogs(List<TourLog> tourLogs);
+    }
 
     public TourLogService(TourLogRepository tourLogRepository) {
         this.tourLogRepository = tourLogRepository;
@@ -57,8 +62,27 @@ public class TourLogService {
         //return this.modelConverter.tourItemDtoToModel(tourItemDto);
     }
 
-    public Call<List<TourLogDto>> getByTourIdAsync(Long tourId) {
-        return this.tourLogRepository.getAllByTourAsync(tourId);
+    public void updateTourLogsAsync(Long tourId, TourLogsListener tourLogsListener) {
+
+        Call<List<TourLogDto>> apiCall = this.tourLogRepository.getAllByTourAsync(tourId);
+        apiCall.enqueue(new Callback<List<TourLogDto>>() {
+            @Override
+            public void onResponse(Call<List<TourLogDto>> call, Response<List<TourLogDto>> response) {
+                ModelConverter modelConverter = new ModelConverter();
+
+                if (response.body() != null) {
+                    Platform.runLater(() -> {
+                        //update application thread
+                        tourLogsListener.setTourLogs(response.body().stream().map(modelConverter::tourLogDtoToModel).toList());
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<TourLogDto>> call, Throwable throwable) {
+                System.out.println("Error");
+            }
+        });
     }
 
 }
