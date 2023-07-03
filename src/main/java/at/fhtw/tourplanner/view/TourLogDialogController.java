@@ -32,9 +32,21 @@ public class TourLogDialogController extends Dialog<TourLog> {
     private TextArea commentInput = new TextArea();
 
     @FXML
-    public DatePicker tourLogDateInput = new DatePicker();
+    private DatePicker tourLogDateInput = new DatePicker();
 
+    @FXML
+    private Label errorRatingLabel = new Label();
+    @FXML
+    private Label errorCommentLabel = new Label();
 
+    @FXML
+    private Label errorDifficultyLabel = new Label();
+
+    @FXML
+    private Label errorTimeLabel = new Label();
+
+    @FXML
+    private Label errorDateLabel = new Label();
 
     public TourLogDialogController(Window owner, TourLogDialogViewModel tourLogDialogViewModel, String title) {
         FXMLLoader loader = new FXMLLoader();
@@ -70,6 +82,12 @@ public class TourLogDialogController extends Dialog<TourLog> {
         this.timeInput.textProperty().bindBidirectional(this.tourLogDialogViewModel.getTimeProperty());
         this.commentInput.textProperty().bindBidirectional(this.tourLogDialogViewModel.getCommentProperty());
         this.tourLogDateInput.valueProperty().bindBidirectional(this.tourLogDialogViewModel.getDatePickerProperty());
+
+        this.errorCommentLabel.visibleProperty().bind(this.tourLogDialogViewModel.getCommentValidity().not());
+        this.errorDifficultyLabel.visibleProperty().bind(this.tourLogDialogViewModel.getDifficultyValidity().not());
+        this.errorRatingLabel.visibleProperty().bind(this.tourLogDialogViewModel.getRatingValidity().not());
+        this.errorTimeLabel.visibleProperty().bind(this.tourLogDialogViewModel.getTimeValidity().not());
+        this.errorDateLabel.visibleProperty().bind(this.tourLogDialogViewModel.getDateValidity().not());
     }
 
     public void initialize() {
@@ -77,6 +95,10 @@ public class TourLogDialogController extends Dialog<TourLog> {
     }
 
     private void onSubmit(ActionEvent actionEvent) {
+        if (!this.tourLogDialogViewModel.validate()) {
+            actionEvent.consume();
+            return;
+        }
         //todo add validation
         //if (invalid) {
         //    actionEvent.consume();

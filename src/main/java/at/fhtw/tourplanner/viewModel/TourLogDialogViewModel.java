@@ -28,10 +28,25 @@ public class TourLogDialogViewModel {
     @Getter
     private final SimpleObjectProperty<LocalDate> datePickerProperty = new SimpleObjectProperty<LocalDate>();
 
+    @Getter
+    private final BooleanProperty ratingValidity = new SimpleBooleanProperty();
+
+    @Getter
+    private final BooleanProperty difficultyValidity = new SimpleBooleanProperty();
+
+    @Getter
+    private final BooleanProperty timeValidity = new SimpleBooleanProperty();
+
+    @Getter
+    private final BooleanProperty commentValidity = new SimpleBooleanProperty();
+
+    @Getter
+    private final BooleanProperty dateValidity = new SimpleBooleanProperty();
+
     public TourLogDialogViewModel(TourLog tourLog) {
         super();
         this.tourLog = tourLog;
-
+        this.resetErrorLabels();
         //this.ratingProperty.setValue(tourLog.getRating() == null ? "" : tourLog.getRating());
         this.ratingProperty.setValue(tourLog.getRating());
         //this.difficultyProperty.setValue(tourLog.getDifficulty() == null ? "" : tourLog.getDifficulty());
@@ -57,6 +72,14 @@ public class TourLogDialogViewModel {
 
     }
 
+    private void resetErrorLabels() {
+        this.ratingValidity.set(true);
+        this.difficultyValidity.set(true);
+        this.timeValidity.set(true);
+        this.commentValidity.set(true);
+        this.dateValidity.set(true);
+    }
+
     private void updateTourLogModel() {
 
         Long timeValue = 0L;
@@ -77,4 +100,46 @@ public class TourLogDialogViewModel {
         );
     }
 
+    public boolean validate() {
+
+        boolean valid = true;
+        //todo validate if date is in the past
+        if (this.datePickerProperty.getValue() == null) {
+            valid = false;
+            this.dateValidity.set(false);
+        } else {
+            this.dateValidity.set(true);
+        }
+
+        //validate if comment length is between 5 and 500
+        if (this.commentProperty.getValue().isEmpty() || this.commentProperty.getValue().length() > 500 || this.commentProperty.getValue().length() < 5) {
+            valid = false;
+            this.commentValidity.set(false);
+        } else {
+            this.commentValidity.set(true);
+        }
+
+        //validate if difficulty is between 0 and 10
+        if (this.difficultyProperty.getValue() == null || this.difficultyProperty.getValue() > 10 || this.difficultyProperty.getValue() < 0) {
+            valid = false;
+            this.difficultyValidity.set(false);
+        } else {
+            this.difficultyValidity.set(true);
+        }
+
+        if (this.ratingProperty.getValue() == null || this.ratingProperty.getValue() > 10 || this.ratingProperty.getValue() < 0) {
+            valid = false;
+            this.ratingValidity.set(false);
+        } else {
+            this.ratingValidity.set(true);
+        }
+
+        if (this.timeProperty.getValue() == null || this.timeProperty.getValue().isEmpty()) {
+            valid = false;
+            this.timeValidity.set(false);
+        } else {
+            this.timeValidity.set(true);
+        }
+        return valid;
+    }
 }
