@@ -3,6 +3,7 @@ package at.fhtw.tourplanner.bl.service;
 import at.fhtw.tourplanner.bl.model.TourItem;
 import at.fhtw.tourplanner.dal.api.MapQuestAPI;
 import at.fhtw.tourplanner.dal.api.response.RouteResponse;
+import javafx.application.Platform;
 import javafx.scene.image.Image;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -27,6 +28,10 @@ public class MapQuestService {
 
     public interface MapListener {
         void updateMap(Image routeImage);
+    }
+
+    public interface ErrorListener {
+        void onError(String errorMsg);
     }
 
     public MapQuestService() {
@@ -67,7 +72,7 @@ public class MapQuestService {
         return api.getImage(constantsMap, session, color);
     }
 
-    public void setRouteImage(TourItem tourItem, MapListener mapListener) {
+    public void setRouteImage(TourItem tourItem, MapListener mapListener, ErrorListener errorListener) {
         System.out.println("Setting image for tour " + tourItem.getName());
         Image cachedImage = getImageFromCache(tourItem);
         if (cachedImage != null) {
@@ -80,34 +85,74 @@ public class MapQuestService {
         setImageCall.enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<RouteResponse> call, Response<RouteResponse> response) {
+
+                if (response.body() == null) {
+                    Platform.runLater(() -> {
+                        //update application thread
+                        try {
+                            errorListener.onError(response.errorBody().string());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                    });
+                    return;
+                }
+
                 RouteResponse routeResponse = response.body();
 
                 Call<ResponseBody> callImage = fetchRouteImageAsync(routeResponse.getRoute().getSessionId(), tourItem.getTransportType());
                 callImage.enqueue(new Callback<>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        ResponseBody responseBody = response.body();
 
-                        byte[] bytes;
-                        try {
-                            bytes = responseBody.bytes();
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
+                        if (response != null && response.body() != null) {
+                            ResponseBody responseBody = response.body();
+
+                            byte[] bytes;
+                            try {
+                                bytes = responseBody.bytes();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            InputStream inputStream = new ByteArrayInputStream(bytes);
+                            Image image = new Image(inputStream);
+                            putImageInCache(tourItem, image);
+                            mapListener.updateMap(image);
+                        } else {
+
+                            Platform.runLater(() -> {
+                                //update application thread
+                                try {
+                                    errorListener.onError(response.errorBody().string());
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+
+                            });
+
                         }
-                        InputStream inputStream = new ByteArrayInputStream(bytes);
-                        Image image = new Image(inputStream);
-                        putImageInCache(tourItem, image);
-                        mapListener.updateMap(image);
+
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable throwable) {
+                        Platform.runLater(() -> {
+                            //update application thread
+                            errorListener.onError(throwable.getMessage());
+
+                        });
                     }
                 });
             }
 
             @Override
             public void onFailure(Call<RouteResponse> call, Throwable throwable) {
+                Platform.runLater(() -> {
+                    //update application thread
+                    errorListener.onError(throwable.getMessage());
+
+                });
             }
         });
     }

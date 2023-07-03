@@ -12,6 +12,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import java.io.IOException;
 import java.util.List;
 
 public class TourItemService implements Service<TourItem> {
@@ -22,6 +23,10 @@ public class TourItemService implements Service<TourItem> {
 
     public interface TourStatsListener {
         void updateStats(TourStats tourStats);
+    }
+
+    public interface ErrorListener {
+        void onError(String errorMsg);
     }
 
     public TourItemService(TourItemRepository tourItemRepository) {
@@ -63,30 +68,44 @@ public class TourItemService implements Service<TourItem> {
         return this.tourItemRepository.findOneAsync(tourId);
     }
 
-    public void setTourStats(Long id, TourStatsListener tourStatsListener) {
+    public void setTourStats(Long id, TourStatsListener tourStatsListener, ErrorListener errorListener) {
 
         Call<TourItemDto> apiCall = findOneAsync(id);
         apiCall.enqueue(new Callback<TourItemDto>() {
             @Override
             public void onResponse(Call<TourItemDto> call, Response<TourItemDto> response) {
                 if (response.body() != null) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            //update application thread
-                            TourStats fetchedTourStats = new ModelConverter().tourItemDtoToModel(response.body()).getTourStats();
+                    Platform.runLater(() -> {
+                        //update application thread
+                        TourStats fetchedTourStats = new ModelConverter().tourItemDtoToModel(response.body()).getTourStats();
 
-                            tourStatsListener.updateStats(fetchedTourStats);
+                        tourStatsListener.updateStats(fetchedTourStats);
 
-                        }
                     });
+                } else {
+
+                    Platform.runLater(() -> {
+                        //update application thread
+                        try {
+                            errorListener.onError(response.errorBody().string());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                    });
+
                 }
             }
 
             @Override
             public void onFailure(Call<TourItemDto> call, Throwable throwable) {
                 //todo print error
-                System.out.println("Error");
+                Platform.runLater(() -> {
+                    //update application thread
+                    errorListener.onError(throwable.getMessage());
+
+                });
+
             }
         });
 

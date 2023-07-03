@@ -5,6 +5,7 @@ import at.fhtw.tourplanner.bl.model.TourStats;
 import at.fhtw.tourplanner.bl.service.MapQuestService;
 import at.fhtw.tourplanner.bl.service.TourItemService;
 import javafx.beans.property.*;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import lombok.Getter;
 
@@ -107,7 +108,13 @@ public class CenterPaneViewModel {
             return;
         }
         requestingImage.set(true);
-        mapQuestService.setRouteImage(tourItem, this::updateImage);
+        mapQuestService.setRouteImage(tourItem, this::updateImage, this::onErrorFetchImage);
+    }
+
+    public void onErrorFetchImage(String msg) {
+        Alert alert = new Alert(Alert.AlertType.ERROR, msg);
+        alert.setHeaderText("Error loading route information for tour: " + tourItem.getName());
+        alert.showAndWait();
     }
 
     private void updateImage(Image routeImage) {
@@ -134,7 +141,7 @@ public class CenterPaneViewModel {
 
         } else {
 
-            this.tourItemService.setTourStats(this.tourItem.getId(), this::setTourStats);
+            this.tourItemService.setTourStats(this.tourItem.getId(), this::setTourStats, this::handleReqError);
 
         }
     }
@@ -147,6 +154,12 @@ public class CenterPaneViewModel {
         avgDifficultyProperty.set(String.format("%,.2f", tourStats.getAverageDifficulty()));
         childFriendlinessProperty.set(String.format("%,.2f", tourStats.getChildFriendliness()));
 
+    }
+
+    public void handleReqError(String msg) {
+        Alert alert = new Alert(Alert.AlertType.ERROR, msg);
+        alert.setHeaderText("Error loading tour stats for tour: " + tourItem.getName());
+        alert.showAndWait();
     }
 
 }
