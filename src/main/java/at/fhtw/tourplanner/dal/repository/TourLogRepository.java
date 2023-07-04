@@ -37,6 +37,16 @@ public class TourLogRepository {
         }
     }
 
+    public Call<TourLogManipulationResponseDto> saveAsync(TourLogDto tourLogDto) {
+
+        if (tourLogDto.getId() == null) {
+            return this.api.createTourLog(tourLogDto);
+        }
+
+        return this.api.updateTourLog(tourLogDto);
+
+    }
+
     public TourLogManipulationResponseDto delete(Long tourLogId) {
         try {
             Response<TourLogManipulationResponseDto> response = api.deleteTourLog(tourLogId).execute();
@@ -44,6 +54,10 @@ public class TourLogRepository {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public Call<TourLogManipulationResponseDto> deleteAsync(Long tourLogId) {
+        return this.api.deleteTourLog(tourLogId);
     }
 
     public List<TourLogDto> getAllByTour(Long tourId) {
@@ -58,4 +72,5 @@ public class TourLogRepository {
     public Call<List<TourLogDto>> getAllByTourAsync(Long tourId) {
         return api.getTourLogsByTourId(tourId);
     }
+
 }

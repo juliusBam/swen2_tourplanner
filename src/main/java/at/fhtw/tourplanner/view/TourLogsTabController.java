@@ -79,6 +79,9 @@ public class TourLogsTabController implements TourPlannerController {
         loadingLabel.visibleProperty().bind(this.tourLogsTabViewModel.getLoadingTourLogs());
 
         this.tourLogDetailsContainer.visibleProperty().bind(this.tourLogsTabViewModel.getTourLogSelected());
+
+        this.tourLogsTabViewModel.addSelectionChangedListener(this::updateTourLogSelection);
+
     }
 
     public TourLogsTabController(TourLogsTabViewModel tourLogsTabViewModel) {
@@ -94,7 +97,7 @@ public class TourLogsTabController implements TourPlannerController {
         if (dialogResult.isPresent()) {
             TourLog newTourLog = dialogResult.get();
             this.tourLogsTabViewModel.updateTourLog(newTourLog);
-            this.updateTourLogSelection(newTourLog);
+            //this.updateTourLogSelection(newTourLog); //todo move it to a listener on finished update
         }
     }
 

@@ -10,9 +10,10 @@ import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import lombok.Getter;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +27,8 @@ public class TourLogsTabViewModel {
     private TourItem selectedTourItem;
 
     private TourLog selectedTourLog;
+
+    private List<UpdateSelectedTourLogListener> listeners = new ArrayList<>();
     //region properties
     @Getter
     private final StringProperty dateProperty = new SimpleStringProperty();
@@ -47,6 +50,9 @@ public class TourLogsTabViewModel {
 
     @Getter
     private final BooleanProperty tourLogSelected = new SimpleBooleanProperty(false);
+
+    @Getter
+    private final ObjectProperty<TourLog> toggleTourLogSelection = new SimpleObjectProperty<>();
     //endregion
     public TourLogsTabViewModel(TourLogService tourLogService) {
         this.tourLogService = tourLogService;
@@ -63,7 +69,7 @@ public class TourLogsTabViewModel {
         this.observableTourLogs.clear();
         if (selectedTour != null) {
 
-            this.tourLogService.updateTourLogsAsync(selectedTour.getId(), this::setTourLogs);
+            this.tourLogService.updateTourLogsAsync(selectedTour.getId(), this::setTourLogs, this::handleRequestError);
 
         }
 
@@ -75,22 +81,31 @@ public class TourLogsTabViewModel {
     }
 
     public void addNewTourLog(TourLog tourLog) {
-        TourLogManipulationOutput manipulationResponse = tourLogService.create(tourLog, this.selectedTourItem.getId());
 
-        this.updateTourStatistics(manipulationResponse.tourStats());
-        this.observableTourLogs.add(manipulationResponse.tourLog());
-        this.selectedTourItem.addNewTourLog(manipulationResponse.tourLog());
+        this.tourLogService.saveAsync(tourLog, this.selectedTourItem.getId(), "Error creating the new tour log",  this::handleTourLogCreation, this::handleRequestError);
 
     }
 
+    private void handleTourLogCreation(TourLogManipulationOutput manipulationResponse) {
+        this.updateTourStatistics(manipulationResponse.tourStats());
+        this.observableTourLogs.add(manipulationResponse.tourLog());
+        this.selectedTourItem.addNewTourLog(manipulationResponse.tourLog());
+        this.notifyUpdateSelectionListeners(manipulationResponse.tourLog());
+    }
+
     public void updateTourLog(TourLog updatedTourLog) {
-        TourLogManipulationOutput manipulationResponse = tourLogService.update(updatedTourLog, this.selectedTourItem.getId());
+
+        this.tourLogService.saveAsync(updatedTourLog, this.selectedTourItem.getId(), "Error updating the new tour log", this::handleTourLogEdit, this::handleRequestError);
+
+    }
+
+    public void handleTourLogEdit(TourLogManipulationOutput manipulationResponse) {
 
         this.updateTourStatistics(manipulationResponse.tourStats());
         this.selectedTourLog = manipulationResponse.tourLog();
         this.setSelectedTourLog(selectedTourLog);
 
-        Optional<TourLog> tourLogToSelect = this.getObservableTourLogs().stream().filter((tourLog -> tourLog.getId().equals(updatedTourLog.getId()))).findFirst();
+        Optional<TourLog> tourLogToSelect = this.getObservableTourLogs().stream().filter((tourLog -> tourLog.getId().equals(selectedTourLog.getId()))).findFirst();
         if (tourLogToSelect.isPresent()) {
             int indexOfItem = this.getObservableTourLogs().indexOf(tourLogToSelect.get());
 
@@ -99,16 +114,25 @@ public class TourLogsTabViewModel {
 
         }
         this.selectedTourItem.updateTourLog(manipulationResponse.tourLog());
+
+        //triggers the listener in the controller
+        /*this.toggleTourLogSelection.set(manipulationResponse.tourLog());
+        this.toggleTourLogSelection.notifyAll();*/
+        this.notifyUpdateSelectionListeners(manipulationResponse.tourLog());
+
     }
 
 
     public void deleteTourLog() {
-        TourLogManipulationOutput manipulationResponse = tourLogService.delete(this.selectedTourLog.getId());
 
+        tourLogService.deleteAsync(this.selectedTourLog.getId(), this::handleTourLogDelete, this::handleRequestError);
+
+    }
+
+    public void handleTourLogDelete(TourLogManipulationOutput manipulationResponse) {
         this.selectedTourItem.removeTourLog(this.selectedTourLog);
         this.updateTourStatistics(manipulationResponse.tourStats());
         this.observableTourLogs.remove(this.selectedTourLog);
-
     }
 
     public ChangeListener<TourLog> getChangeListener() {
@@ -140,6 +164,26 @@ public class TourLogsTabViewModel {
 
     private void updateTourStatistics(TourStats tourStats) {
         this.selectedTourItem.setTourStats(tourStats);
+    }
+
+    private void handleRequestError(String title, String msg) {
+        Alert alert = new Alert(Alert.AlertType.ERROR, msg);
+        alert.setHeaderText(title);
+        alert.showAndWait();
+    }
+
+    public void addSelectionChangedListener(UpdateSelectedTourLogListener listener) {
+        listeners.add(listener);
+    }
+
+    private void notifyUpdateSelectionListeners(TourLog newVal) {
+        for (var listener : listeners) {
+            listener.changeSelection(newVal);
+        }
+    }
+
+    public interface UpdateSelectedTourLogListener {
+        void changeSelection(TourLog tourLog);
     }
 
 }
