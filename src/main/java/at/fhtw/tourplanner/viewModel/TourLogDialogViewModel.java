@@ -35,9 +35,6 @@ public class TourLogDialogViewModel {
     @Getter
     private final StringProperty commentProperty = new SimpleStringProperty();
 
-    @Getter
-    private final SimpleObjectProperty<LocalDate> datePickerProperty = new SimpleObjectProperty<LocalDate>();
-
     //region validity props
     @Getter
     private final BooleanProperty ratingValidity = new SimpleBooleanProperty();

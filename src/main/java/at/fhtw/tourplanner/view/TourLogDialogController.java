@@ -44,12 +44,19 @@ public class TourLogDialogController extends Dialog<TourLog> {
     private DatePicker tourLogDateInput = new DatePicker();
 
     @FXML
-    private Label errorRatingLabel = new Label();
-    @FXML
-    private Label errorCommentLabel = new Label();
+    private Label difficultyLabel;
 
     @FXML
-    private Label difficultyLabel;
+    private DatePicker datePicker;
+
+
+    //region error labels
+    @FXML
+    private Label errorDateLabel = new Label();
+
+    @FXML
+    private Label errorRatingLabel = new Label();
+
     @FXML
     private Label errorDifficultyLabel = new Label();
 
@@ -57,10 +64,8 @@ public class TourLogDialogController extends Dialog<TourLog> {
     private Label errorTimeLabel = new Label();
 
     @FXML
-    private Label errorDateLabel = new Label();
-
-    @FXML
-    private DatePicker datePicker;
+    private Label errorCommentLabel = new Label();
+    //endregion
 
     public TourLogDialogController(TourLog tourLog, Window owner, TourLogDialogViewModel tourLogDialogViewModel, String title) {
         FXMLLoader loader = new FXMLLoader();
@@ -106,6 +111,12 @@ public class TourLogDialogController extends Dialog<TourLog> {
         datePicker.valueProperty().bindBidirectional(this.tourLogDialogViewModel.getLocalDateProperty());
         timePickerMinutesTextField.textProperty().bindBidirectional(this.tourLogDialogViewModel.getMinutesProperty());
         timePickerHoursTextField.textProperty().bindBidirectional(this.tourLogDialogViewModel.getHoursProperty());
+
+        this.errorDateLabel.visibleProperty().bind(this.tourLogDialogViewModel.getDateValidity().not());
+        this.errorRatingLabel.visibleProperty().bind(this.tourLogDialogViewModel.getRatingValidity().not());
+        this.errorDifficultyLabel.visibleProperty().bind(this.tourLogDialogViewModel.getDifficultyValidity().not());
+        this.errorTimeLabel.visibleProperty().bind(this.tourLogDialogViewModel.getTimeValidity().not());
+        this.errorCommentLabel.visibleProperty().bind(this.tourLogDialogViewModel.getCommentValidity().not());
     }
 
     public void initialize() {

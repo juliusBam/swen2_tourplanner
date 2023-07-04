@@ -70,6 +70,7 @@ public class TourItemDialogController extends Dialog<TourItem> {
         toTextField.textProperty().bindBidirectional(tourItemDialogViewModel.getToProperty());
         transportTypeComboBox.valueProperty().bindBidirectional(tourItemDialogViewModel.getTransportTypeProperty());
 
+
     }
 
     private void onSearch(ActionEvent actionEvent) {
