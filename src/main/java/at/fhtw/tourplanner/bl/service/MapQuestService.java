@@ -2,6 +2,7 @@ package at.fhtw.tourplanner.bl.service;
 
 import at.fhtw.tourplanner.bl.model.TourItem;
 import at.fhtw.tourplanner.dal.api.MapQuestAPI;
+import at.fhtw.tourplanner.dal.api.response.Route;
 import at.fhtw.tourplanner.dal.api.response.RouteResponse;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
@@ -31,7 +32,11 @@ public class MapQuestService {
     }
 
     public interface ErrorListener {
-        void onError(String errorMsg);
+        void onError(String title, String errorMsg);
+    }
+
+    public interface RouteListener {
+        void setRoute(RouteResponse routeResponse);
     }
 
     public MapQuestService() {
@@ -42,20 +47,51 @@ public class MapQuestService {
         constantsMap.put("size", "600,400@2x");
     }
 
-    public RouteResponse searchRoute(TourItem tourItem) {
+    public void searchRoute(TourItem tourItem, RouteListener routeListener, ErrorListener errorListener) {
         RouteResponse cachedRouteResponse = getRouteFromCache(tourItem);
         if (cachedRouteResponse != null) {
-            return cachedRouteResponse;
+            routeListener.setRoute(cachedRouteResponse);
+            //return cachedRouteResponse;
+        } else {
+
+            Call<RouteResponse> apiCall = api.getRoute(constantsMap, tourItem.getFrom(), tourItem.getTo(), tourItem.getTransportType());
+            apiCall.enqueue(new Callback<RouteResponse>() {
+                @Override
+                public void onResponse(Call<RouteResponse> call, Response<RouteResponse> response) {
+
+                    if (response.body() != null) {
+                        Platform.runLater(() -> {
+
+                            routeListener.setRoute(response.body());
+
+                        });
+                    } else {
+
+                        Platform.runLater(() -> {
+                            //update application thread
+                            try {
+                                errorListener.onError("Error fetching the route", response.errorBody().string());
+                            } catch (IOException | NullPointerException e) {
+                                errorListener.onError("Unknown error", e.getMessage());
+                            }
+
+                        });
+
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<RouteResponse> call, Throwable throwable) {
+                    Platform.runLater(() -> {
+                        //update application thread
+                        errorListener.onError("Error fetching route", throwable.getMessage());
+
+                    });
+                }
+            });
         }
-        try {
-            Call<RouteResponse> call = api.getRoute(constantsMap, tourItem.getFrom(), tourItem.getTo(), tourItem.getTransportType());
-            Response<RouteResponse> response = call.execute();
-            RouteResponse result = response.body();
-            putRouteInCache(tourItem, result);
-            return result;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
     }
 
     private Call<RouteResponse> searchRouteAsync(String from, String to, String transportType) {
@@ -90,9 +126,9 @@ public class MapQuestService {
                     Platform.runLater(() -> {
                         //update application thread
                         try {
-                            errorListener.onError(response.errorBody().string());
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
+                            errorListener.onError("Error loading route information for tour: ", response.errorBody().string());
+                        } catch (IOException | NullPointerException e) {
+                            errorListener.onError("Unknown error", e.getMessage());
                         }
 
                     });
@@ -124,7 +160,7 @@ public class MapQuestService {
                             Platform.runLater(() -> {
                                 //update application thread
                                 try {
-                                    errorListener.onError(response.errorBody().string());
+                                    errorListener.onError("Error loading route information for tour: ", response.errorBody().string());
                                 } catch (IOException e) {
                                     throw new RuntimeException(e);
                                 }
@@ -139,7 +175,7 @@ public class MapQuestService {
                     public void onFailure(Call<ResponseBody> call, Throwable throwable) {
                         Platform.runLater(() -> {
                             //update application thread
-                            errorListener.onError(throwable.getMessage());
+                            errorListener.onError("Error loading route information for tour: ", throwable.getMessage());
 
                         });
                     }
@@ -150,7 +186,7 @@ public class MapQuestService {
             public void onFailure(Call<RouteResponse> call, Throwable throwable) {
                 Platform.runLater(() -> {
                     //update application thread
-                    errorListener.onError(throwable.getMessage());
+                    errorListener.onError("Error loading route information for tour: ", throwable.getMessage());
 
                 });
             }

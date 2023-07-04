@@ -111,9 +111,9 @@ public class CenterPaneViewModel {
         mapQuestService.setRouteImage(tourItem, this::updateImage, this::onErrorFetchImage);
     }
 
-    public void onErrorFetchImage(String msg) {
+    public void onErrorFetchImage(String title, String msg) {
         Alert alert = new Alert(Alert.AlertType.ERROR, msg);
-        alert.setHeaderText("Error loading route information for tour: " + tourItem.getName());
+        alert.setHeaderText(title + tourItem.getName());
         alert.showAndWait();
     }
 

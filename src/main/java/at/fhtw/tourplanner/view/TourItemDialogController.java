@@ -11,6 +11,7 @@ import javafx.stage.Modality;
 import javafx.stage.Window;
 
 import java.io.IOException;
+import java.util.Calendar;
 
 public class TourItemDialogController extends Dialog<TourItem> {
     private final TourItemDialogViewModel tourItemDialogViewModel;
@@ -58,6 +59,9 @@ public class TourItemDialogController extends Dialog<TourItem> {
     @FXML
     private Label errorRouteInfoLabel = new Label();
 
+    @FXML
+    private Label errorRouteFetchLabel = new Label();
+
     public TourItemDialogController(Window owner, TourItemDialogViewModel tourItemDialogViewModel, String title) {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/at/fhtw/tourplanner/view/TourItemDialog.fxml"));
@@ -103,31 +107,35 @@ public class TourItemDialogController extends Dialog<TourItem> {
         this.errorTimeLabel.visibleProperty().bind(this.tourItemDialogViewModel.getTimeValidity().not());
         this.errorRouteInfoLabel.visibleProperty().bind(this.tourItemDialogViewModel.getRouteInfoValidity().not());
 
+        this.tourItemDialogViewModel.addListenerToUpdateRoute(this::handleRouteResponse);
     }
 
     private void onSearch(ActionEvent actionEvent) {
         if(this.tourItemDialogViewModel.validateSearch())  {
-            RouteResponse routeResponse = tourItemDialogViewModel.searchRoute();
-            if (routeResponse == null || routeResponse.getInfo().getStatusCode() != 0) {
-                locationFound = false;
-                System.out.println("No route found");
-            } else {
-                locationFound = true;
-                System.out.println("Route found");
-                String boundingBoxString = routeResponse.getRoute().getBoundingBox().toSearchString();
-                double distance = routeResponse.getRoute().getDistance();
-                long time = routeResponse.getRoute().getTime();
-                tourItemDialogViewModel.setRouteData(distance, time, boundingBoxString);
-                distanceLabel.setText(String.format("%.2f km", distance));
-                timeLabel.setText(String.format("%d:%02d:%02d", time / 3600, (time % 3600) / 60, (time % 60)));
-            }
+            this.tourItemDialogViewModel.searchRoute();
         }
-
         actionEvent.consume();
     }
 
+    public void handleRouteResponse(RouteResponse routeResponse) {
+        if (routeResponse == null || routeResponse.getInfo().getStatusCode() != 0) {
+            locationFound = false;
+            Alert alert = new Alert(Alert.AlertType.WARNING, "No route could be found for the chosen locations");
+            alert.setHeaderText("No route");
+            alert.showAndWait();
+        } else {
+            locationFound = true;
+            String boundingBoxString = routeResponse.getRoute().getBoundingBox().toSearchString();
+            double distance = routeResponse.getRoute().getDistance();
+            long time = routeResponse.getRoute().getTime();
+            tourItemDialogViewModel.setRouteData(distance, time, boundingBoxString);
+            distanceLabel.setText(String.format("%.2f km", distance));
+            timeLabel.setText(String.format("%d:%02d:%02d", time / 3600, (time % 3600) / 60, (time % 60)));
+        }
+    }
+
     private void onSubmit(ActionEvent actionEvent) {
-        if (!this.tourItemDialogViewModel.validateSearch() || !this.tourItemDialogViewModel.validate() || !locationFound) {
+        if (!this.tourItemDialogViewModel.validateSearch() || !this.tourItemDialogViewModel.validate()) {
             actionEvent.consume();
         }
     }

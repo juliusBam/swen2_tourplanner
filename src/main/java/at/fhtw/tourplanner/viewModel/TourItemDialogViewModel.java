@@ -7,7 +7,11 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.control.Alert;
 import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class TourItemDialogViewModel {
@@ -49,6 +53,8 @@ public class TourItemDialogViewModel {
     private final BooleanProperty timeValidity = new SimpleBooleanProperty(true);
 
     private final MapQuestService mapQuestService;
+
+    private final List<UpdateRouteListener> updateRouteListeners = new ArrayList<>();
 
     public TourItemDialogViewModel(TourItem tourItem, MapQuestService mapQuestService) {
         super();
@@ -95,19 +101,40 @@ public class TourItemDialogViewModel {
         return "fastest";
     }
 
-    public RouteResponse searchRoute() {
-        RouteResponse routeResponse = mapQuestService.searchRoute(tourItem);
+    public void searchRoute() {
+
+        this.mapQuestService.searchRoute(tourItem, this::handleRouteResult, this::handleReqError);
+        //return routeResponse;
+    }
+
+    public void handleRouteResult(RouteResponse routeResponse) {
+        this.notifyListeners(routeResponse);
         this.validateSearch();
-        return routeResponse;
+    }
+
+    public void handleReqError(String title, String msg) {
+        Alert alert = new Alert(Alert.AlertType.ERROR, msg);
+        alert.setHeaderText(title);
+        alert.showAndWait();
     }
 
     public void setRouteData(double distance, long time, String boundingBoxString) {
         tourItem.setRouteData(distance, time, boundingBoxString);
     }
 
+    public void addListenerToUpdateRoute(UpdateRouteListener updateRouteListener) {
+        this.updateRouteListeners.add(updateRouteListener);
+    }
+
+    private void notifyListeners(RouteResponse routeResponse) {
+        for (var listener : updateRouteListeners) {
+            listener.updateRoute(routeResponse);
+        }
+    }
+
     public boolean validateSearch() {
 
-        boolean valid = true;
+         boolean valid = true;
 
         if (this.tourItem.getTo() == null || this.tourItem.getTo().isEmpty() || this.tourItem.getTo().length() > 50) {
             valid = false;
@@ -178,5 +205,9 @@ public class TourItemDialogViewModel {
 
         return valid;
 
+    }
+
+    public interface UpdateRouteListener {
+        void updateRoute(RouteResponse routeResponse);
     }
 }
