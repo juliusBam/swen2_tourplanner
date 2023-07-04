@@ -118,7 +118,7 @@ public class TourItemService implements Service<TourItem> {
     public void setTourStats(Long id, TourStatsListener tourStatsListener, ErrorListener errorListener) {
 
         Call<TourItemDto> apiCall = findOneAsync(id);
-        apiCall.enqueue(new Callback<TourItemDto>() {
+        apiCall.enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<TourItemDto> call, Response<TourItemDto> response) {
                 if (response.body() != null) {

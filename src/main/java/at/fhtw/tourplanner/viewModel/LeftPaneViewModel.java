@@ -21,7 +21,6 @@ public class LeftPaneViewModel {
     private final ReportService reportService;
     @Getter
     private final ImportExportService importExportService;
-
     private final List<SelectionChangedListener> listeners = new ArrayList<>();
     private final ObservableList<TourItem> observableTourItems = FXCollections.observableArrayList();
 
@@ -66,6 +65,11 @@ public class LeftPaneViewModel {
 
         //TourItem savedItem = tourItemService.create(tourItem);
         //observableTourItems.add(savedItem);
+    }
+
+    public void handleTourAdded(TourItem tourItem) {
+        observableTourItems.add(tourItem);
+        //manipulate property
     }
 
     public void handleCreateTourErr(String msg) {
