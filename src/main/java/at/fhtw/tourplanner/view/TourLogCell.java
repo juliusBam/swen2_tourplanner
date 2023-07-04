@@ -29,7 +29,7 @@ public class TourLogCell extends ListCell<TourLog> {
                 detail.setText(null);
                 setGraphic(null);
             } else {
-                title.setText(TimeConverter.convertTimeStampToString("dd-MM-yyyy", tourLog.getTimeStamp()));
+                title.setText(TimeConverter.convertTimeStampToString("dd/MM/yyyy", tourLog.getTimeStamp()));
 
                 detail.setText(String.format("Rating: %d | Difficulty: %d", tourLog.getRating(), tourLog.getDifficulty()));
                 setGraphic(layout);

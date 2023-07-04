@@ -4,9 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFilter;
 import lombok.Setter;
 import lombok.Getter;
 
-import static java.lang.Long.parseLong;
-
-
 @Getter
 @Setter
 @JsonFilter("tourLog_skip_id")
@@ -36,14 +33,13 @@ public class TourLog {
 
     }
 
-    public void updateFields(Integer rating, Integer difficulty, String totalTimeMinutes, String comment, int timeStamp) {
+    public void updateFields(Integer rating, Integer difficulty, Long totalTimeMinutes, String comment, Long timeStamp) {
         this.rating = rating;
         this.difficulty = difficulty;
-        if (!totalTimeMinutes.isEmpty())
-        {
-            this.totalTimeMinutes = parseLong(totalTimeMinutes);
-        }
+        this.totalTimeMinutes = totalTimeMinutes;
         this.comment = comment;
-        this.timeStamp = timeStamp;
+        if (timeStamp != null) {
+            this.timeStamp = timeStamp.intValue();
+        }
     }
 }
