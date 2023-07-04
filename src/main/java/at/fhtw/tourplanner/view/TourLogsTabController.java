@@ -75,6 +75,7 @@ public class TourLogsTabController implements TourPlannerController {
         difficultyLabel.textProperty().bind(this.tourLogsTabViewModel.getDifficultyProperty().asString());
         timeLabel.textProperty().bind(this.tourLogsTabViewModel.getTimeProperty());
 
+
         //the visibility of the split pane containing the stuff 4 the tour logs is bound to the loading
         tourLogsSplitPane.visibleProperty().bind(this.tourLogsTabViewModel.getLoadingTourLogs().not());
 
@@ -138,7 +139,7 @@ public class TourLogsTabController implements TourPlannerController {
         Window window = tourLogsListView.getScene().getWindow();
         Stage stage = (Stage) window;
         TourLogDialogViewModel tourLogDialogViewModel = new TourLogDialogViewModel(tourLog);
-        TourLogDialogController dialog = new TourLogDialogController(stage, tourLogDialogViewModel, dialogTitle);
+        TourLogDialogController dialog = new TourLogDialogController(tourLog, stage, tourLogDialogViewModel, dialogTitle);
         return dialog.showAndWait();
     }
 

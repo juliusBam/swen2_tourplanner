@@ -36,14 +36,13 @@ public class TourLog {
 
     }
 
-    public void updateFields(Integer rating, Integer difficulty, String totalTimeMinutes, String comment, long timeStamp) {
+    public void updateFields(Integer rating, Integer difficulty, Long totalTimeMinutes, String comment, Long timeStamp) {
         this.rating = rating;
         this.difficulty = difficulty;
-        if (!totalTimeMinutes.isEmpty())
-        {
-            this.totalTimeMinutes = parseLong(totalTimeMinutes);
-        }
+        this.totalTimeMinutes = totalTimeMinutes;
         this.comment = comment;
-        this.timeStamp = (int) timeStamp;
+        if (timeStamp != null) {
+            this.timeStamp = timeStamp.intValue();
+        }
     }
 }

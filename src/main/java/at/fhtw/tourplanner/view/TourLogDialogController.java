@@ -1,6 +1,5 @@
 package at.fhtw.tourplanner.view;
 
-import at.fhtw.tourplanner.bl.model.TourItem;
 import at.fhtw.tourplanner.bl.model.TourLog;
 import at.fhtw.tourplanner.viewModel.TourLogDialogViewModel;
 import javafx.event.ActionEvent;
@@ -9,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Window;
+import lombok.Getter;
 
 import java.io.IOException;
 
@@ -31,9 +31,23 @@ public class TourLogDialogController extends Dialog<TourLog> {
     @FXML
     private TextArea commentInput = new TextArea();
 
+    @FXML
+    @Getter
+    private TextField timePickerHoursTextField;
+    @FXML
+    @Getter
+    private TextField timePickerMinutesTextField;
 
+    @FXML
+    private Label ratingLabel;
 
-    public TourLogDialogController(Window owner, TourLogDialogViewModel tourLogDialogViewModel, String title) {
+    @FXML
+    private Label difficultyLabel;
+
+    @FXML
+    private DatePicker datePicker;
+
+    public TourLogDialogController(TourLog tourLog, Window owner, TourLogDialogViewModel tourLogDialogViewModel, String title) {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/at/fhtw/tourplanner/view/TourLogDialog.fxml"));
         loader.setController(this);
@@ -54,7 +68,6 @@ public class TourLogDialogController extends Dialog<TourLog> {
         setDialogPane(dialogPane);
 
         this.setResultConverter(buttonType -> {
-            System.out.println("here");
             if (buttonType.getButtonData().equals(ButtonType.OK.getButtonData())) {
                 return tourLogDialogViewModel.getTourLog();
             }
@@ -62,22 +75,70 @@ public class TourLogDialogController extends Dialog<TourLog> {
         });
 
         this.tourLogDialogViewModel = tourLogDialogViewModel;
-        //this.ratingComboBox.valueProperty().bindBidirectional(this.tourLogDialogViewModel.getRatingProperty());
-        //this.difficultyComboBox.valueProperty().bindBidirectional(this.tourLogDialogViewModel.getDifficultyProperty());
-        this.ratingInputSlider.valueProperty().bindBidirectional(this.tourLogDialogViewModel.getRatingProperty());
-        this.difficultyInputSlider.valueProperty().bindBidirectional(this.tourLogDialogViewModel.getDifficultyProperty());
-        this.timeInput.textProperty().bindBidirectional(this.tourLogDialogViewModel.getTimeProperty());
-        this.commentInput.textProperty().bindBidirectional(this.tourLogDialogViewModel.getCommentProperty());
+        ratingInputSlider.setMajorTickUnit(1);
+        difficultyInputSlider.setMajorTickUnit(1);
+        ratingInputSlider.setMinorTickCount(0);
+        difficultyInputSlider.setMinorTickCount(0);
+        ratingInputSlider.snapToTicksProperty().set(true);
+        difficultyInputSlider.snapToTicksProperty().set(true);
+
+        ratingInputSlider.valueProperty().bindBidirectional(this.tourLogDialogViewModel.getRatingProperty());
+        ratingLabel.textProperty().bind(ratingInputSlider.valueProperty().asString("%.0f"));
+        difficultyInputSlider.valueProperty().bindBidirectional(this.tourLogDialogViewModel.getDifficultyProperty());
+        timeInput.textProperty().bindBidirectional(this.tourLogDialogViewModel.getTimeProperty());
+        difficultyLabel.textProperty().bind(difficultyInputSlider.valueProperty().asString("%.0f"));
+        commentInput.textProperty().bindBidirectional(this.tourLogDialogViewModel.getCommentProperty());
+        datePicker.valueProperty().bindBidirectional(this.tourLogDialogViewModel.getLocalDateProperty());
+        timePickerMinutesTextField.textProperty().bindBidirectional(this.tourLogDialogViewModel.getMinutesProperty());
+        timePickerHoursTextField.textProperty().bindBidirectional(this.tourLogDialogViewModel.getHoursProperty());
     }
 
     public void initialize() {
-
+        timePickerHoursTextField.setPromptText("HH");
+        timePickerMinutesTextField.setPromptText("MM");
+        TextFormatter<String> hoursTextFormatter = getNumericFormatter();
+        TextFormatter<String> minutesTextFormatter = getNumericFormatter();
+        timePickerHoursTextField.setTextFormatter(hoursTextFormatter);
+        timePickerMinutesTextField.setTextFormatter(minutesTextFormatter);
     }
 
     private void onSubmit(ActionEvent actionEvent) {
-        //todo add validation
-        //if (invalid) {
-        //    actionEvent.consume();
-        //}
+        if (!validateInput()) {
+            actionEvent.consume();
+        }
+    }
+
+    private boolean validateInput() {
+        return true;
+    }
+
+    private TextFormatter<String> getNumericFormatter() {
+        return new TextFormatter<>(change -> {
+            if (!change.isContentChange()) {
+                return change;
+            }
+
+            String text = change.getControlNewText();
+
+            if (text.isEmpty()) {
+                return change;
+            }
+            if (text.length() > 2 || !isNumeric(text)) {
+                return null;
+            }
+            return change;
+        });
+    }
+
+    private boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
     }
 }
