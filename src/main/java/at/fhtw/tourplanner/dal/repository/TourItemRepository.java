@@ -86,4 +86,8 @@ public class TourItemRepository implements Repository<TourItemDto, Long> {
     public Call<TourItemDto> findOneAsync(Long tourId) {
         return api.getTour(tourId);
     }
+
+    public Call<TourItemDto> createAsync(TourItemDto tourItem) {
+        return api.postTour(tourItem);
+    }
 }

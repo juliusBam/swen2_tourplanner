@@ -28,6 +28,7 @@ public class TourLogDialogViewModel {
     @Getter
     private final SimpleObjectProperty<LocalDate> datePickerProperty = new SimpleObjectProperty<LocalDate>();
 
+    //region validity props
     @Getter
     private final BooleanProperty ratingValidity = new SimpleBooleanProperty();
 
@@ -42,6 +43,7 @@ public class TourLogDialogViewModel {
 
     @Getter
     private final BooleanProperty dateValidity = new SimpleBooleanProperty();
+    //endregion
 
     public TourLogDialogViewModel(TourLog tourLog) {
         super();
@@ -104,7 +106,7 @@ public class TourLogDialogViewModel {
 
         boolean valid = true;
         //todo validate if date is in the past
-        if (this.datePickerProperty.getValue() == null) {
+        if (this.tourLog.getTimeStamp() == null) {
             valid = false;
             this.dateValidity.set(false);
         } else {
@@ -112,7 +114,7 @@ public class TourLogDialogViewModel {
         }
 
         //validate if comment length is between 5 and 500
-        if (this.commentProperty.getValue().isEmpty() || this.commentProperty.getValue().length() > 500 || this.commentProperty.getValue().length() < 5) {
+        if (this.tourLog.getComment() == null || this.tourLog.getComment().length() > 500 || this.tourLog.getComment().length() < 5) {
             valid = false;
             this.commentValidity.set(false);
         } else {
@@ -120,21 +122,21 @@ public class TourLogDialogViewModel {
         }
 
         //validate if difficulty is between 0 and 10
-        if (this.difficultyProperty.getValue() == null || this.difficultyProperty.getValue() > 10 || this.difficultyProperty.getValue() < 0) {
+        if (this.tourLog.getDifficulty() == null || this.tourLog.getDifficulty() > 10 || this.tourLog.getDifficulty() < 0) {
             valid = false;
             this.difficultyValidity.set(false);
         } else {
             this.difficultyValidity.set(true);
         }
 
-        if (this.ratingProperty.getValue() == null || this.ratingProperty.getValue() > 10 || this.ratingProperty.getValue() < 0) {
+        if (this.tourLog.getRating() == null || this.tourLog.getRating() > 10 || this.tourLog.getRating() < 0) {
             valid = false;
             this.ratingValidity.set(false);
         } else {
             this.ratingValidity.set(true);
         }
 
-        if (this.timeProperty.getValue() == null || this.timeProperty.getValue().isEmpty()) {
+        if (this.tourLog.getTotalTimeMinutes() == null) {
             valid = false;
             this.timeValidity.set(false);
         } else {

@@ -91,7 +91,7 @@ public class TourItemDialogController extends Dialog<TourItem> {
     }
 
     private void onSubmit(ActionEvent actionEvent) {
-        if (!locationFound) {
+        if (!locationFound || !this.tourItemDialogViewModel.validate()) {
             actionEvent.consume();
         }
     }

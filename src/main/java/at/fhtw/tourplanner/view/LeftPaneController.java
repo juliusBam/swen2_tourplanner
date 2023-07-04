@@ -73,6 +73,7 @@ public final class LeftPaneController implements TourPlannerController {
         toursListView.setItems(leftPaneViewModel.handleSearch(searchString));
     }
 
+    //todo check with peter how we can execute the reapply search if necessary
     public void onButtonAdd(ActionEvent actionEvent) {
         TourItem tourItem = new TourItem();
         Optional<TourItem> tourItemOptional = editTourDialog(tourItem, "Add Tour");

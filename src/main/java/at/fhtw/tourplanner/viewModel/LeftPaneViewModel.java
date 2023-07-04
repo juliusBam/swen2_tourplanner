@@ -6,6 +6,7 @@ import at.fhtw.tourplanner.bl.service.*;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -61,8 +62,22 @@ public class LeftPaneViewModel {
     }
 
     public void addNewTour(TourItem tourItem) {
-        TourItem savedItem = tourItemService.create(tourItem);
-        observableTourItems.add(savedItem);
+        this.tourItemService.createTourAsync(tourItem, observableTourItems::add, this::handleCreateTourErr);
+
+        //TourItem savedItem = tourItemService.create(tourItem);
+        //observableTourItems.add(savedItem);
+    }
+
+    public void handleCreateTourErr(String msg) {
+        Alert alert = new Alert(Alert.AlertType.ERROR, msg);
+        alert.setHeaderText("Error saving the new tour");
+        alert.showAndWait();
+    }
+
+    public void handleUpdateTourErr(String msg) {
+        Alert alert = new Alert(Alert.AlertType.ERROR, msg);
+        alert.setHeaderText("Error saving the updated tour");
+        alert.showAndWait();
     }
 
     public void editTour(TourItem newItem, TourItem oldItem) {

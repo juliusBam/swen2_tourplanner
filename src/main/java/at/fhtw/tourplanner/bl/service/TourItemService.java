@@ -3,7 +3,6 @@ package at.fhtw.tourplanner.bl.service;
 
 import at.fhtw.tourplanner.bl.ModelConverter;
 import at.fhtw.tourplanner.bl.model.TourItem;
-import at.fhtw.tourplanner.bl.model.TourLog;
 import at.fhtw.tourplanner.bl.model.TourStats;
 import at.fhtw.tourplanner.dal.dto.TourItemDto;
 import at.fhtw.tourplanner.dal.repository.TourItemRepository;
@@ -29,6 +28,10 @@ public class TourItemService implements Service<TourItem> {
         void onError(String errorMsg);
     }
 
+    public interface TourItemCreationListener {
+        void addTour(TourItem tourItem);
+    }
+
     public TourItemService(TourItemRepository tourItemRepository) {
         this.tourItemRepository = tourItemRepository;
         this.modelConverter = new ModelConverter();
@@ -45,6 +48,50 @@ public class TourItemService implements Service<TourItem> {
     public TourItem create(TourItem tourItem) {
         TourItemDto tourItemDto = tourItemRepository.save(this.modelConverter.tourItemModelToDto(tourItem));
         return this.modelConverter.tourItemDtoToModel(tourItemDto);
+    }
+
+    public void createTourAsync(TourItem tourItem, TourItemCreationListener tourItemCreationListener, ErrorListener errorListener) {
+
+        Call<TourItemDto> tourItemDtoCall = tourItemRepository.createAsync(this.modelConverter.tourItemModelToDto(tourItem));
+
+        tourItemDtoCall.enqueue(new Callback<TourItemDto>() {
+            @Override
+            public void onResponse(Call<TourItemDto> call, Response<TourItemDto> response) {
+
+                if (response.body() == null) {
+
+                    Platform.runLater(() -> {
+                        //update application thread
+                        try {
+                            errorListener.onError(response.errorBody().string());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                    });
+
+                } else {
+
+                    TourItem createdTourItem = modelConverter.tourItemDtoToModel(response.body());
+
+                    Platform.runLater(() -> {
+                        //update application thread
+                        tourItemCreationListener.addTour(createdTourItem);
+
+                    });
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<TourItemDto> call, Throwable throwable) {
+                Platform.runLater(() -> {
+                    //update application thread
+                        errorListener.onError(throwable.getMessage());
+                });
+            }
+        });
     }
 
     @Override
