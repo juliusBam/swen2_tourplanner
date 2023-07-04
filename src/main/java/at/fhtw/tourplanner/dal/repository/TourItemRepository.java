@@ -37,6 +37,10 @@ public class TourItemRepository implements Repository<TourItemDto, Long> {
         }
     }
 
+    public Call<TourItemDto> updateAsync(TourItemDto tourItemDto) {
+        return api.putTour(tourItemDto);
+    }
+
     @Override
     public TourItemDto findOne(Long primaryKey) {
         try {
@@ -89,5 +93,12 @@ public class TourItemRepository implements Repository<TourItemDto, Long> {
 
     public Call<TourItemDto> createAsync(TourItemDto tourItem) {
         return api.postTour(tourItem);
+    }
+
+
+    public Call<Void> deleteAsync(TourItemDto tourItemDto) {
+
+        return this.api.deleteTour(tourItemDto.getId());
+
     }
 }

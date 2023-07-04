@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
-<DialogPane prefHeight="400.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<DialogPane prefHeight="400.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" stylesheets="@customStyle.css">
    <content>
       <GridPane prefHeight="600.0" prefWidth="800.0">
         <columnConstraints>
@@ -35,17 +35,17 @@
         </rowConstraints>
           <Label text="Date" GridPane.rowIndex="0" />
           <DatePicker fx:id="datePicker" GridPane.rowIndex="0"  GridPane.columnIndex="1" />
-          <Label fx:id="errorDateLabel" text="Date should be in the past" style="-fx-text-fill: #ff4500;" GridPane.rowIndex="1" GridPane.columnSpan="3"/>
+          <Label fx:id="errorDateLabel" text="Date should be in the past" styleClass="errorLabel" GridPane.rowIndex="1" GridPane.columnSpan="3"/>
 
           <Label text="Rating" GridPane.rowIndex="2"  />
           <Slider fx:id="ratingInputSlider" blockIncrement="1.0" majorTickUnit="5.0" max="10.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
           <Label fx:id="ratingLabel" text="Label" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-          <Label fx:id="errorRatingLabel" text="Rating should be between 0 and 10" style="-fx-text-fill: #ff4500;" GridPane.rowIndex="3" GridPane.columnSpan="3" />
+          <Label fx:id="errorRatingLabel" text="Rating should be between 0 and 10" styleClass="errorLabel" GridPane.rowIndex="3" GridPane.columnSpan="3" />
 
           <Label text="Difficulty" GridPane.rowIndex="4" />
           <Slider fx:id="difficultyInputSlider" blockIncrement="1.0" majorTickUnit="5.0" max="10.0" minorTickCount="5" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
           <Label fx:id="difficultyLabel" text="Label" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
-          <Label fx:id="errorDifficultyLabel" style="-fx-text-fill: #ff4500;" text="Difficulty should be between 0 and 10" GridPane.rowIndex="5" GridPane.columnSpan="3"  />
+          <Label fx:id="errorDifficultyLabel" styleClass="errorLabel" text="Difficulty should be between 0 and 10" GridPane.rowIndex="5" GridPane.columnSpan="3"  />
 
           <Label text="Time"  GridPane.rowIndex="6" />
           <HBox GridPane.columnIndex="1" GridPane.rowIndex="6" alignment="CENTER_LEFT">
@@ -55,11 +55,11 @@
                   <TextField fx:id="timePickerMinutesTextField" prefWidth="35.0" />
               </children>
           </HBox>
-          <Label fx:id="errorTimeLabel" text="Time should be a number" style="-fx-text-fill: #ff4500;" GridPane.rowIndex="7" GridPane.columnSpan="3"/>
+          <Label fx:id="errorTimeLabel" text="Time should be a number" styleClass="errorLabel" GridPane.rowIndex="7" GridPane.columnSpan="3"/>
 
           <Label text="Comment" GridPane.columnSpan="2" GridPane.rowIndex="8" />
           <TextArea fx:id="commentInput" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="9" />
-          <Label fx:id="errorCommentLabel" style="-fx-text-fill: #ff4500;" text="Comment should be between 5 and 500 characters long" GridPane.rowIndex="10" GridPane.columnSpan="3" />
+          <Label fx:id="errorCommentLabel" styleClass="errorLabel" text="Comment should be between 5 and 500 characters long" GridPane.rowIndex="10" GridPane.columnSpan="3" />
 
       </GridPane>
    </content>

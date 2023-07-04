@@ -67,6 +67,8 @@ public final class LeftPaneController implements TourPlannerController {
         toursSearchTextInput.textProperty().addListener((observable, oldValue, newValue) -> {
             performSearch(newValue);
         });
+
+        this.leftPaneViewModel.addApplyFilterChangeListener(this::reapplySearchIfNecessary);
     }
 
     private void performSearch(String searchString) {
@@ -80,7 +82,6 @@ public final class LeftPaneController implements TourPlannerController {
         if (tourItemOptional.isPresent()) {
             tourItem = tourItemOptional.get();
             leftPaneViewModel.addNewTour(tourItem);
-            reapplySearchIfNecessary();
         }
     }
 
@@ -88,6 +89,7 @@ public final class LeftPaneController implements TourPlannerController {
         if (!toursSearchTextInput.getText().isEmpty()) {
             performSearch(toursSearchTextInput.getText());
         }
+        this.toursListView.refresh();
     }
 
     public void onButtonEdit(ActionEvent actionEvent) {
@@ -99,14 +101,12 @@ public final class LeftPaneController implements TourPlannerController {
         if (tourItemOptional.isPresent()) {
             TourItem newItem = tourItemOptional.get();
             leftPaneViewModel.editTour(newItem, oldItem);
-            reapplySearchIfNecessary();
         }
     }
 
     public void onButtonDelete(ActionEvent actionEvent) {
         if (toursListView.getSelectionModel().getSelectedItem() != null) {
             leftPaneViewModel.deleteTour(toursListView.getSelectionModel().getSelectedItem());
-            reapplySearchIfNecessary();
         }
     }
 

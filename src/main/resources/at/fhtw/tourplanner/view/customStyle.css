@@ -1,0 +1,4 @@
+.errorLabel {
+    -fx-text-fill: #ff4500;
+    -fx-wrap-text: always;
+}

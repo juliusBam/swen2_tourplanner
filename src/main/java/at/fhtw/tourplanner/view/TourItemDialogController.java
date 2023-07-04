@@ -34,6 +34,30 @@ public class TourItemDialogController extends Dialog<TourItem> {
     private ButtonType submitButton;
     private Boolean locationFound = false;
 
+    @FXML
+    private Label errorNameLabel = new Label();
+
+    @FXML
+    private Label errorStartLabel = new Label();
+
+    @FXML
+    private Label errorToLabel = new Label();
+
+    @FXML
+    private Label errorTypeLabel = new Label();
+
+    @FXML
+    private Label errorDescriptionLabel = new Label();
+
+    @FXML
+    private Label errorDistanceLabel = new Label();
+
+    @FXML
+    private Label errorTimeLabel = new Label();
+
+    @FXML
+    private Label errorRouteInfoLabel = new Label();
+
     public TourItemDialogController(Window owner, TourItemDialogViewModel tourItemDialogViewModel, String title) {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/at/fhtw/tourplanner/view/TourItemDialog.fxml"));
@@ -70,29 +94,40 @@ public class TourItemDialogController extends Dialog<TourItem> {
         toTextField.textProperty().bindBidirectional(tourItemDialogViewModel.getToProperty());
         transportTypeComboBox.valueProperty().bindBidirectional(tourItemDialogViewModel.getTransportTypeProperty());
 
+        this.errorNameLabel.visibleProperty().bind(this.tourItemDialogViewModel.getNameValidity().not());
+        this.errorStartLabel.visibleProperty().bind(this.tourItemDialogViewModel.getFromValidity().not());
+        this.errorToLabel.visibleProperty().bind(this.tourItemDialogViewModel.getToValidity().not());
+        this.errorTypeLabel.visibleProperty().bind(this.tourItemDialogViewModel.getTransportTypeValidity().not());
+        this.errorDescriptionLabel.visibleProperty().bind(this.tourItemDialogViewModel.getDescriptionValidity().not());
+        this.errorDistanceLabel.visibleProperty().bind(this.tourItemDialogViewModel.getDistanceValidity().not());
+        this.errorTimeLabel.visibleProperty().bind(this.tourItemDialogViewModel.getTimeValidity().not());
+        this.errorRouteInfoLabel.visibleProperty().bind(this.tourItemDialogViewModel.getRouteInfoValidity().not());
 
     }
 
     private void onSearch(ActionEvent actionEvent) {
-        RouteResponse routeResponse = tourItemDialogViewModel.searchRoute();
-        if (routeResponse == null || routeResponse.getInfo().getStatusCode() != 0) {
-            locationFound = false;
-            System.out.println("No route found");
-        } else {
-            locationFound = true;
-            System.out.println("Route found");
-            String boundingBoxString = routeResponse.getRoute().getBoundingBox().toSearchString();
-            double distance = routeResponse.getRoute().getDistance();
-            long time = routeResponse.getRoute().getTime();
-            tourItemDialogViewModel.setRouteData(distance, time, boundingBoxString);
-            distanceLabel.setText(String.format("%.2f km", distance));
-            timeLabel.setText(String.format("%d:%02d:%02d", time / 3600, (time % 3600) / 60, (time % 60)));
+        if(this.tourItemDialogViewModel.validateSearch())  {
+            RouteResponse routeResponse = tourItemDialogViewModel.searchRoute();
+            if (routeResponse == null || routeResponse.getInfo().getStatusCode() != 0) {
+                locationFound = false;
+                System.out.println("No route found");
+            } else {
+                locationFound = true;
+                System.out.println("Route found");
+                String boundingBoxString = routeResponse.getRoute().getBoundingBox().toSearchString();
+                double distance = routeResponse.getRoute().getDistance();
+                long time = routeResponse.getRoute().getTime();
+                tourItemDialogViewModel.setRouteData(distance, time, boundingBoxString);
+                distanceLabel.setText(String.format("%.2f km", distance));
+                timeLabel.setText(String.format("%d:%02d:%02d", time / 3600, (time % 3600) / 60, (time % 60)));
+            }
         }
+
         actionEvent.consume();
     }
 
     private void onSubmit(ActionEvent actionEvent) {
-        if (!locationFound || !this.tourItemDialogViewModel.validate()) {
+        if (!this.tourItemDialogViewModel.validateSearch() || !this.tourItemDialogViewModel.validate() || !locationFound) {
             actionEvent.consume();
         }
     }

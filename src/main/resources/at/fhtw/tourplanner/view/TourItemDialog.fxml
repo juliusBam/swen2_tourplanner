@@ -1,22 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- fx:controller="at.fhtw.tourplanner.view.TourItemDialogController" -->
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<?import javafx.scene.control.ButtonType?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DialogPane?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
-<DialogPane prefHeight="360.0" prefWidth="399.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<DialogPane prefHeight="360.0" prefWidth="399.0" stylesheets="@customStyle.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1">
     <content>
-        <GridPane prefHeight="600.0" prefWidth="800.0">
+        <GridPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="360.0" prefWidth="399.0">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
@@ -25,36 +16,64 @@
                 <RowConstraints vgrow="ALWAYS" />
                 <RowConstraints vgrow="ALWAYS" />
                 <RowConstraints vgrow="ALWAYS" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
+                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS" />
+                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS" />
+                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS" />
+                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS" />
+                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS" />
+                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS" />
+                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS" />
+                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS" />
+                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS" />
+                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS" />
+                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS" />
+                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS" />
+                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS" />
+                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS" />
+                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="ALWAYS" />
+            <RowConstraints />
             </rowConstraints>
+
+            <Label text="Name" />
             <TextField fx:id="nameTextField" GridPane.columnIndex="1" />
-            <TextField fx:id="fromTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="toTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <ComboBox fx:id="transportTypeComboBox" prefHeight="25.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3">
+            <Label fx:id="errorNameLabel" styleClass="errorLabel" text="The tour name has to be between 1 and 50 characters long" GridPane.columnSpan="2" GridPane.hgrow="NEVER" GridPane.rowIndex="1" />
+
+            <Label text="Start" GridPane.rowIndex="3" />
+            <TextField fx:id="fromTextField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label fx:id="errorStartLabel" styleClass="errorLabel" text="The start location has to be between 1 and 50 characters long" GridPane.columnSpan="2" GridPane.hgrow="NEVER" GridPane.rowIndex="4" />
+
+            <Label text="End" GridPane.rowIndex="5" />
+            <TextField fx:id="toTextField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Label fx:id="errorToLabel" styleClass="errorLabel" text="The destination has to be between 1 and 50 characters long" GridPane.columnSpan="2" GridPane.rowIndex="6" />
+
+            <Label text="Type" GridPane.rowIndex="7" />
+            <ComboBox fx:id="transportTypeComboBox" prefHeight="25.0" styleClass="errorLabel" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="7">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="pedestrian"/>
-                        <String fx:value="bicycle"/>
-                        <String fx:value="car"/>
+                        <String fx:value="pedestrian" />
+                        <String fx:value="bicycle" />
+                        <String fx:value="car" />
                     </FXCollections>
                 </items>
             </ComboBox>
-            <TextArea fx:id="descriptionTextArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.rowSpan="3" />
-            <Label text="Name" />
-            <Label text="Start" GridPane.rowIndex="1" />
-            <Label text="End" GridPane.rowIndex="2" />
-            <Label text="Type" GridPane.rowIndex="3" />
-            <Label text="Description" GridPane.rowIndex="4" />
-            <Label text="Distance" GridPane.rowIndex="7" />
-            <Label text="Time" GridPane.rowIndex="8" />
-            <Label fx:id="distanceLabel" text="" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <Label fx:id="timeLabel" text="" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <Label fx:id="errorTypeLabel" styleClass="errorLabel" text="The tour type has to be set" GridPane.columnSpan="2" GridPane.rowIndex="8" />
+
+            <Label text="Description" GridPane.rowIndex="9" />
+            <TextArea fx:id="descriptionTextArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9" GridPane.rowSpan="3" />
+            <Label fx:id="errorDescriptionLabel" styleClass="errorLabel" text="The description must be between 1 and 500 characters long" GridPane.columnSpan="2" GridPane.rowIndex="12" />
+
+
+
+
+            <Label text="Distance" GridPane.rowIndex="13" />
+            <Label fx:id="distanceLabel" text="" GridPane.columnIndex="1" GridPane.rowIndex="13" />
+            <Label fx:id="errorDistanceLabel" styleClass="errorLabel" text="The distance has to be set, use the search button" GridPane.columnSpan="2" GridPane.rowIndex="14" />
+
+            <Label text="Time" GridPane.rowIndex="15" />
+            <Label fx:id="timeLabel" text="" GridPane.columnIndex="1" GridPane.rowIndex="15" />
+            <Label fx:id="errorTimeLabel" styleClass="errorLabel" text="The tour length has to be set, use the search button" GridPane.columnSpan="2" GridPane.rowIndex="16" />
+
+            <Label fx:id="errorRouteInfoLabel" styleClass="errorLabel" text="Invalid route info, use the search button" GridPane.columnSpan="2" GridPane.rowIndex="18" />
         </GridPane>
     </content>
 

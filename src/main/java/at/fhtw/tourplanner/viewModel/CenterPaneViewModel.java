@@ -156,9 +156,9 @@ public class CenterPaneViewModel {
 
     }
 
-    public void handleReqError(String msg) {
+    public void handleReqError(String title, String msg) {
         Alert alert = new Alert(Alert.AlertType.ERROR, msg);
-        alert.setHeaderText("Error loading tour stats for tour: " + tourItem.getName());
+        alert.setHeaderText(title);
         alert.showAndWait();
     }
 

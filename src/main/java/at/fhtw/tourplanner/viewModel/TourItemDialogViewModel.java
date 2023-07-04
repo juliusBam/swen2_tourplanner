@@ -96,11 +96,41 @@ public class TourItemDialogViewModel {
     }
 
     public RouteResponse searchRoute() {
-        return mapQuestService.searchRoute(tourItem);
+        RouteResponse routeResponse = mapQuestService.searchRoute(tourItem);
+        this.validateSearch();
+        return routeResponse;
     }
 
     public void setRouteData(double distance, long time, String boundingBoxString) {
         tourItem.setRouteData(distance, time, boundingBoxString);
+    }
+
+    public boolean validateSearch() {
+
+        boolean valid = true;
+
+        if (this.tourItem.getTo() == null || this.tourItem.getTo().isEmpty() || this.tourItem.getTo().length() > 50) {
+            valid = false;
+            this.toValidity.set(false);
+        } else {
+            this.toValidity.set(true);
+        }
+
+        if (this.tourItem.getFrom() == null || this.tourItem.getFrom().isEmpty() || this.tourItem.getFrom().length() > 50) {
+            valid = false;
+            this.fromValidity.set(false);
+        } else {
+            this.fromValidity.set(true);
+        }
+
+        if (this.tourItem.getTransportType() == null || this.tourItem.getTransportType().isEmpty()) {
+            valid = false;
+            this.transportTypeValidity.set(false);
+        } else {
+            this.transportTypeValidity.set(true);
+        }
+
+        return valid;
     }
 
     public boolean validate() {
@@ -117,50 +147,33 @@ public class TourItemDialogViewModel {
         if (this.tourItem.getDescription() == null || this.tourItem.getDescription().isEmpty() || this.tourItem.getDescription().length() > 500) {
             valid = false;
             this.descriptionValidity.set(false);
-        } {
+        } else {
             this.descriptionValidity.set(true);
-        }
-
-        if (this.tourItem.getTo() == null || this.tourItem.getTo().isEmpty() || this.tourItem.getTo().length() > 50) {
-            valid = false;
-            this.toValidity.set(false);
-        } {
-            this.toValidity.set(false);
-        }
-
-        if (this.tourItem.getFrom() == null || this.tourItem.getFrom().isEmpty() || this.tourItem.getFrom().length() > 50) {
-            valid = false;
-            this.fromValidity.set(false);
-        } {
-            this.fromValidity.set(false);
-        }
-
-        if (this.tourItem.getTransportType() == null || this.tourItem.getTransportType().isEmpty()) {
-            valid = false;
-            this.transportTypeValidity.set(false);
-        } {
-            this.transportTypeValidity.set(false);
-        }
-
-        if (this.tourItem.getBoundingBoxString() == null || this.tourItem.getBoundingBoxString().isEmpty() || this.tourItem.getBoundingBoxString().length() > 1000) {
-            valid = false;
-            this.routeInfoValidity.set(false);
-        } {
-            this.routeInfoValidity.set(false);
         }
 
         if (this.tourItem.getTourDistanceKilometers() == null || this.tourItem.getTourDistanceKilometers() < 0) {
             valid = false;
             this.distanceValidity.set(false);
-        } {
-            this.distanceValidity.set(false);
+        } else {
+            this.distanceValidity.set(true);
         }
 
         if (this.tourItem.getEstimatedTimeSeconds() == null || this.tourItem.getEstimatedTimeSeconds() < 0) {
             valid = false;
             this.timeValidity.set(false);
-        } {
-            this.timeValidity.set(false);
+        } else {
+            this.timeValidity.set(true);
+        }
+
+        if (this.tourItem.getBoundingBoxString() == null || this.tourItem.getBoundingBoxString().isEmpty() || this.tourItem.getBoundingBoxString().length() > 1000) {
+            valid = false;
+            this.routeInfoValidity.set(false);
+        } else {
+            this.routeInfoValidity.set(true);
+        }
+
+        if (!this.validateSearch()) {
+            valid = false;
         }
 
         return valid;

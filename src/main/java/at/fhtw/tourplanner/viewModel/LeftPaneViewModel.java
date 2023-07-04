@@ -22,6 +22,8 @@ public class LeftPaneViewModel {
     @Getter
     private final ImportExportService importExportService;
     private final List<SelectionChangedListener> listeners = new ArrayList<>();
+
+    private final List<ApplyFilterListener> filterListeners = new ArrayList<>();
     private final ObservableList<TourItem> observableTourItems = FXCollections.observableArrayList();
 
     public LeftPaneViewModel(TourItemService tourItemService, MapQuestService mapQuestService, ReportService reportService, ImportExportService importExportService, TourLogService tourLogService) {
@@ -41,6 +43,14 @@ public class LeftPaneViewModel {
         return (observableValue, oldValue, newValue) -> notifyListeners(newValue);
     }
 
+    public void addApplyFilterChangeListener(ApplyFilterListener listener) {
+        this.filterListeners.add(listener);
+    }
+
+    public void removeFilterChangeListener(ApplyFilterListener listener) {
+        this.filterListeners.remove(listener);
+    }
+
     public void addSelectionChangedListener(SelectionChangedListener listener) {
         listeners.add(listener);
     }
@@ -55,45 +65,56 @@ public class LeftPaneViewModel {
         }
     }
 
+    private void notifyFilterChangeListeners() {
+        for (var listener : this.filterListeners) {
+            listener.filterTours();
+        }
+    }
+
     public void setTours(List<TourItem> tourItems) {
         observableTourItems.clear();
         observableTourItems.addAll(tourItems);
     }
 
     public void addNewTour(TourItem tourItem) {
-        this.tourItemService.createTourAsync(tourItem, observableTourItems::add, this::handleCreateTourErr);
-
-        //TourItem savedItem = tourItemService.create(tourItem);
-        //observableTourItems.add(savedItem);
+        this.tourItemService.createTourAsync(tourItem, this::handleTourAdded, this::handleTourReqError);
     }
 
     public void handleTourAdded(TourItem tourItem) {
         observableTourItems.add(tourItem);
         //manipulate property
-    }
-
-    public void handleCreateTourErr(String msg) {
-        Alert alert = new Alert(Alert.AlertType.ERROR, msg);
-        alert.setHeaderText("Error saving the new tour");
-        alert.showAndWait();
-    }
-
-    public void handleUpdateTourErr(String msg) {
-        Alert alert = new Alert(Alert.AlertType.ERROR, msg);
-        alert.setHeaderText("Error saving the updated tour");
-        alert.showAndWait();
+        this.notifyFilterChangeListeners();
     }
 
     public void editTour(TourItem newItem, TourItem oldItem) {
-        // TODO use returned saved item and store it in memory (as done in addNewTour)
-        tourItemService.update(newItem);
+        //tourItemService.update(newItem);
+
+        tourItemService.updateTourAsync(newItem, oldItem, this::handleEditTour, this::handleTourReqError);
+
+    }
+
+    public void handleEditTour(TourItem newItem, TourItem oldItem) {
         observableTourItems.remove(oldItem);
         observableTourItems.add(newItem);
+
+        this.notifyFilterChangeListeners();
+    }
+
+    public void handleTourReqError(String title, String msg) {
+        Alert alert = new Alert(Alert.AlertType.ERROR, msg);
+        alert.setHeaderText(title);
+        alert.showAndWait();
     }
 
     public void deleteTour(TourItem tourItem) {
-        tourItemService.delete(tourItem);
+
+        this.tourItemService.deleteAsync(tourItem, this::handleDeleteTour, this::handleTourReqError);
+
+    }
+
+    public void handleDeleteTour(TourItem tourItem) {
         observableTourItems.remove(tourItem);
+        this.notifyFilterChangeListeners();
     }
 
     public void importTour(TourItem tourItem) {
@@ -135,5 +156,9 @@ public class LeftPaneViewModel {
 
     public interface SelectionChangedListener {
         void changeSelection(TourItem tourItem);
+    }
+
+    public interface ApplyFilterListener {
+        void filterTours();
     }
 }

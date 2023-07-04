@@ -25,11 +25,19 @@ public class TourItemService implements Service<TourItem> {
     }
 
     public interface ErrorListener {
-        void onError(String errorMsg);
+        void onError(String title, String msg);
     }
 
-    public interface TourItemCreationListener {
+    public interface TourCreationListener {
         void addTour(TourItem tourItem);
+    }
+
+    public interface TourUpdateListener {
+        void handleEditTour(TourItem newTourItem, TourItem oldTourItem);
+    }
+
+    public interface TourDeleteListener {
+        void handleDeleteTour(TourItem tourItem);
     }
 
     public TourItemService(TourItemRepository tourItemRepository) {
@@ -50,7 +58,7 @@ public class TourItemService implements Service<TourItem> {
         return this.modelConverter.tourItemDtoToModel(tourItemDto);
     }
 
-    public void createTourAsync(TourItem tourItem, TourItemCreationListener tourItemCreationListener, ErrorListener errorListener) {
+    public void createTourAsync(TourItem tourItem, TourCreationListener tourCreationListener, ErrorListener errorListener) {
 
         Call<TourItemDto> tourItemDtoCall = tourItemRepository.createAsync(this.modelConverter.tourItemModelToDto(tourItem));
 
@@ -63,7 +71,7 @@ public class TourItemService implements Service<TourItem> {
                     Platform.runLater(() -> {
                         //update application thread
                         try {
-                            errorListener.onError(response.errorBody().string());
+                            errorListener.onError("Error creating tour", response.errorBody().string());
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -76,7 +84,7 @@ public class TourItemService implements Service<TourItem> {
 
                     Platform.runLater(() -> {
                         //update application thread
-                        tourItemCreationListener.addTour(createdTourItem);
+                        tourCreationListener.addTour(createdTourItem);
 
                     });
 
@@ -88,7 +96,7 @@ public class TourItemService implements Service<TourItem> {
             public void onFailure(Call<TourItemDto> call, Throwable throwable) {
                 Platform.runLater(() -> {
                     //update application thread
-                        errorListener.onError(throwable.getMessage());
+                        errorListener.onError("Error creating tour", throwable.getMessage());
                 });
             }
         });
@@ -99,9 +107,80 @@ public class TourItemService implements Service<TourItem> {
         tourItemRepository.delete(this.modelConverter.tourItemModelToDto(tourItem));
     }
 
+    public void deleteAsync(TourItem tourItem, TourDeleteListener tourDeleteListener, ErrorListener errorListener) {
+
+        Call<Void> apiCall = tourItemRepository.deleteAsync(this.modelConverter.tourItemModelToDto(tourItem));
+
+        apiCall.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                //response body is always null, no need to check it
+                Platform.runLater(() -> {
+                    //update application thread
+                    tourDeleteListener.handleDeleteTour(tourItem);
+
+                });
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable throwable) {
+                Platform.runLater(() -> {
+                    //update application thread
+                    errorListener.onError("Error deleting the tour", throwable.getMessage());
+                });
+            }
+        });
+
+    }
+
     @Override
     public void update(TourItem tourItem) {
         tourItemRepository.save(this.modelConverter.tourItemModelToDto(tourItem));
+    }
+
+    public void updateTourAsync(TourItem newItem, TourItem oldItem, TourUpdateListener handleEditTour, ErrorListener handleUpdateTourErr) {
+
+        Call<TourItemDto> tourItemDtoCall = tourItemRepository.updateAsync(this.modelConverter.tourItemModelToDto(newItem));
+
+        tourItemDtoCall.enqueue(new Callback<TourItemDto>() {
+            @Override
+            public void onResponse(Call<TourItemDto> call, Response<TourItemDto> response) {
+
+                if (response.body() == null) {
+
+                    Platform.runLater(() -> {
+                        //update application thread
+                        try {
+                            handleUpdateTourErr.onError("Error updating the tour", response.errorBody().string());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                    });
+
+                } else {
+
+                    TourItem createdTourItem = modelConverter.tourItemDtoToModel(response.body());
+
+                    Platform.runLater(() -> {
+                        //update application thread
+                        handleEditTour.handleEditTour(createdTourItem, oldItem);
+
+                    });
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<TourItemDto> call, Throwable throwable) {
+                Platform.runLater(() -> {
+                    //update application thread
+                    handleUpdateTourErr.onError("Error updating the tour", throwable.getMessage());
+                });
+            }
+        });
+
     }
 
     @Override
@@ -134,7 +213,7 @@ public class TourItemService implements Service<TourItem> {
                     Platform.runLater(() -> {
                         //update application thread
                         try {
-                            errorListener.onError(response.errorBody().string());
+                            errorListener.onError("Error fetching the tour stats", response.errorBody().string());
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -149,7 +228,7 @@ public class TourItemService implements Service<TourItem> {
                 //todo print error
                 Platform.runLater(() -> {
                     //update application thread
-                    errorListener.onError(throwable.getMessage());
+                    errorListener.onError("Error fetching the tour stats",throwable.getMessage());
 
                 });
 
