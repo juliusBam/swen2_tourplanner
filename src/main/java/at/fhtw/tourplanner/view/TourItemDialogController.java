@@ -120,9 +120,12 @@ public class TourItemDialogController extends Dialog<TourItem> {
     public void handleRouteResponse(RouteResponse routeResponse) {
         if (routeResponse == null || routeResponse.getInfo().getStatusCode() != 0) {
             locationFound = false;
-            Alert alert = new Alert(Alert.AlertType.WARNING, "No route could be found for the chosen locations");
-            alert.setHeaderText("No route");
-            alert.showAndWait();
+
+            //set the values to invalid
+            tourItemDialogViewModel.setRouteData(-1, -1, "");
+            distanceLabel.setText(String.format(""));
+            timeLabel.setText(String.format(""));
+
         } else {
             locationFound = true;
             String boundingBoxString = routeResponse.getRoute().getBoundingBox().toSearchString();

@@ -59,7 +59,7 @@ public class MapQuestService {
                 @Override
                 public void onResponse(Call<RouteResponse> call, Response<RouteResponse> response) {
 
-                    if (response.body() != null) {
+                    if (response.body() != null && response.body().getInfo().getStatusCode() == 0) {
                         Platform.runLater(() -> {
 
                             routeListener.setRoute(response.body());
@@ -70,7 +70,12 @@ public class MapQuestService {
                         Platform.runLater(() -> {
                             //update application thread
                             try {
-                                errorListener.onError("Error fetching the route", response.errorBody().string());
+                                if (response.errorBody() != null) {
+                                    errorListener.onError("Error fetching the route", response.errorBody().string());
+                                } else {
+                                    errorListener.onError("Error fetching the route", response.message());
+                                }
+
                             } catch (IOException | NullPointerException e) {
                                 errorListener.onError("Unknown error", e.getMessage());
                             }

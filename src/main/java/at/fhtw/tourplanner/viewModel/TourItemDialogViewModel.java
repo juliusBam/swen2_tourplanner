@@ -72,12 +72,15 @@ public class TourItemDialogViewModel {
         });
         fromProperty.addListener((arg, oldVal, newVal) -> {
             updateTourModel();
+            resetRoute();
         });
         toProperty.addListener((arg, oldVal, newVal) -> {
             updateTourModel();
+            resetRoute();
         });
         transportTypeProperty.addListener((arg, oldVal, newVal) -> {
             updateTourModel();
+            resetRoute();
         });
         descriptionProperty.addListener((arg, oldVal, newVal) -> {
             updateTourModel();
@@ -86,6 +89,10 @@ public class TourItemDialogViewModel {
 
     private void updateTourModel() {
         tourItem.updateFields(nameProperty.getValue(), fromProperty.getValue(), toProperty.getValue(), descriptionProperty.getValue(), processChoice(transportTypeProperty.getValue()));
+    }
+
+    private void resetRoute() {
+        tourItem.setRouteData(0,0,"");
     }
 
     private String processChoice(String value) {
@@ -113,6 +120,7 @@ public class TourItemDialogViewModel {
     }
 
     public void handleReqError(String title, String msg) {
+        this.notifyListeners(null);
         Alert alert = new Alert(Alert.AlertType.ERROR, msg);
         alert.setHeaderText(title);
         alert.showAndWait();
