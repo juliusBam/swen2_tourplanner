@@ -172,14 +172,14 @@ public class TourItemDialogViewModel {
 
         boolean valid = true;
 
-        if (this.tourItem.getName() == null || this.tourItem.getName().isEmpty() || this.tourItem.getName().length() > 50) {
+        if (this.tourItem.getName() == null || this.tourItem.getName().isEmpty() || this.tourItem.getName().length() > 50 || this.tourItem.getName().contains("@")) {
             valid = false;
             this.nameValidity.set(false);
         } else {
             this.nameValidity.set(true);
         }
 
-        if (this.tourItem.getDescription() == null || this.tourItem.getDescription().isEmpty() || this.tourItem.getDescription().length() > 500) {
+        if (this.tourItem.getDescription() == null || this.tourItem.getDescription().isEmpty() || this.tourItem.getDescription().length() > 500 || this.tourItem.getDescription().contains("@")) {
             valid = false;
             this.descriptionValidity.set(false);
         } else {

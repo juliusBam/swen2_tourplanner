@@ -36,7 +36,10 @@
 
             <Label text="Name" />
             <TextField fx:id="nameTextField" GridPane.columnIndex="1" />
-            <Label fx:id="errorNameLabel" styleClass="errorLabel" text="The tour name has to be between 1 and 50 characters long" GridPane.columnSpan="2" GridPane.hgrow="NEVER" GridPane.rowIndex="1" />
+            <Label fx:id="errorNameLabel" styleClass="errorLabel" wrapText="true" GridPane.columnSpan="2" GridPane.hgrow="NEVER" GridPane.rowIndex="1">
+                The tour name has to be between 1 and 50 characters long.
+                It cannot contain the symbol '@'
+            </Label>
 
             <Label text="Start" GridPane.rowIndex="3" />
             <TextField fx:id="fromTextField" GridPane.columnIndex="1" GridPane.rowIndex="3" />

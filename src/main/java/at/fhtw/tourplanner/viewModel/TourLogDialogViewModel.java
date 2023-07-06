@@ -157,7 +157,7 @@ public class TourLogDialogViewModel {
         }
 
         //validate if comment length is between 5 and 500
-        if (this.tourLog.getComment() == null || this.tourLog.getComment().length() > 500 || this.tourLog.getComment().length() < 5) {
+        if (this.tourLog.getComment() == null || this.tourLog.getComment().length() > 500 || this.tourLog.getComment().length() < 5 || this.tourLog.getComment().contains("@")) {
             valid = false;
             this.commentValidity.set(false);
         } else {
