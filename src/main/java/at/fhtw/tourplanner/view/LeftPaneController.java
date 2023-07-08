@@ -79,7 +79,7 @@ public final class LeftPaneController implements TourPlannerController {
             System.out.println(e);
         } catch (Exception e) {
             //todo open alert
-            System.out.println("unknwon error");
+            System.out.println("unknown error");
         }
 
     }

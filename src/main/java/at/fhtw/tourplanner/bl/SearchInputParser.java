@@ -374,11 +374,7 @@ public class SearchInputParser {
             throw new IllegalArgumentException("Parameter value for parameter '" + paramName + "' cannot be blank");
         }
 
-        if (stringFilter == null) {
-
-            noStringFilter = true;
-
-        } else {
+        if (stringFilter != null) {
 
             return this.filterListString(paramValue, stringFilter, fullTextResult);
 
@@ -388,17 +384,13 @@ public class SearchInputParser {
 
         NumericFilter numericFilter = this.tourNumericFields.get(paramName);
 
-        if (numericFilter == null) {
-
-            noNumericFilter = true;
-
-        } else {
+        if (numericFilter != null) {
 
             return this.filterListNumeric(paramName, symbol, paramValue, numericFilter, fullTextResult);
 
         }
 
-        if (!noNumericFilter && !noStringFilter) {
+        if (numericFilter == null && stringFilter == null) {
             throw new IllegalArgumentException("Parameter: '" + paramName + "' is invalid");
         }
 

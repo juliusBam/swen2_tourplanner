@@ -3,7 +3,6 @@ package at.fhtw.tourplanner;
 import at.fhtw.tourplanner.bl.SearchInputParser;
 import at.fhtw.tourplanner.bl.model.SearchInputParserOutput;
 import at.fhtw.tourplanner.bl.model.TourItem;
-import at.fhtw.tourplanner.bl.model.TourLog;
 import at.fhtw.tourplanner.bl.model.TourStats;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -125,6 +124,30 @@ public class SearchTest {
         assertEquals(2, filteredTours.size());
         assertTrue(filteredTours.contains(this.tourItem2));
         assertTrue(filteredTours.contains(this.tourItem1));
+    }
+
+    @Test
+    public void testIllegalParamName() {
+
+        //arrange
+        final String searchInput = "@startPoint=sTart loCation";
+
+        final SearchInputParserOutput parserOutput = this.searchInputParser.parseSearchInput(searchInput);
+
+        //act - assert
+        assertThrows(IllegalArgumentException.class, () -> searchInputParser.applyFilterParams(parserOutput.params(), this.tourDataset));
+
+    }
+
+    @Test
+    public void testIllegalParamValue() {
+        //act - assert
+        final String searchInput = "@distance=b21ab";
+
+        final SearchInputParserOutput parserOutput = this.searchInputParser.parseSearchInput(searchInput);
+
+        //act - assert
+        assertThrows(IllegalArgumentException.class, () -> searchInputParser.applyFilterParams(parserOutput.params(), this.tourDataset));
     }
 
 }
