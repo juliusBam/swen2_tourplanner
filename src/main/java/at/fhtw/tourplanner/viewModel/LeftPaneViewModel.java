@@ -1,5 +1,7 @@
 package at.fhtw.tourplanner.viewModel;
 
+import at.fhtw.tourplanner.bl.SearchInputParser;
+import at.fhtw.tourplanner.bl.model.SearchInputParserOutput;
 import at.fhtw.tourplanner.bl.model.TourItem;
 import at.fhtw.tourplanner.bl.model.TourLog;
 import at.fhtw.tourplanner.bl.model.TourStats;
@@ -11,6 +13,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import lombok.Getter;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -127,10 +130,29 @@ public class LeftPaneViewModel {
         observableTourItems.add(savedItem);
     }
 
-    public ObservableList<TourItem> handleSearch(String searchString) {
+    public ObservableList<TourItem> handleSearch(String searchString) throws IllegalArgumentException  {
         List<TourItem> tourItems = tourItemService.getAll();
         Platform.runLater(() -> setTours(tourItems));
-        return FXCollections.observableList(tourItems.stream().filter(tourItem -> searchInTour(tourItem, searchString)).toList());
+
+        //return FXCollections.observableList(tourItems.stream().filter(tourItem -> searchInTour(tourItem, searchString)).toList());
+
+        SearchInputParser searchInputParser = new SearchInputParser();
+
+        SearchInputParserOutput parserOutput = searchInputParser.parseSearchInput(searchString);
+
+        String searchText = parserOutput.searchInput();
+
+        // TODO: also search computed attributes
+
+        ObservableList<TourItem> fullTextResult = FXCollections.observableList(observableTourItems.stream().filter(tourItem -> searchInTour(tourItem, searchText)).toList());
+
+        if (!fullTextResult.isEmpty() && parserOutput.params() != null && !parserOutput.params().isEmpty())) {
+
+            fullTextResult = searchInputParser.applyFilterParams(parserOutput.params(), fullTextResult);
+
+        }
+
+        return fullTextResult;
     }
 
 

@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Window;
 import lombok.Getter;
@@ -64,7 +65,7 @@ public class TourLogDialogController extends Dialog<TourLog> {
     private Label errorTimeLabel = new Label();
 
     @FXML
-    private Label errorCommentLabel = new Label();
+    private VBox errorCommentLabel = new VBox();
     //endregion
 
     public TourLogDialogController(TourLog tourLog, Window owner, TourLogDialogViewModel tourLogDialogViewModel, String title) {

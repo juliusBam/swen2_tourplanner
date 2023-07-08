@@ -1,5 +1,6 @@
 package at.fhtw.tourplanner.bl.service;
 
+import at.fhtw.tourplanner.bl.MessageExtractor;
 import at.fhtw.tourplanner.bl.ModelConverter;
 import at.fhtw.tourplanner.bl.model.TourLog;
 import at.fhtw.tourplanner.bl.model.TourLogManipulationOutput;
@@ -19,6 +20,8 @@ public class TourLogService {
     private final ModelConverter modelConverter;
 
     private final TourLogRepository tourLogRepository;
+
+    private final MessageExtractor messageExtractor = new MessageExtractor();
 
     public interface TourLogsListener {
         void setTourLogs(List<TourLog> tourLogs);
@@ -89,7 +92,13 @@ public class TourLogService {
                     Platform.runLater(() -> {
                         //update application thread
                         try {
-                            reqErrorListener.reactToError(errorBoxTitle, response.errorBody().string());
+
+                            //todo log
+                            String msg = messageExtractor.extractMessageTemplate(response.errorBody().string());
+
+                            reqErrorListener.reactToError(errorBoxTitle,
+                                    msg.isBlank() ? "Unknown error" : msg
+                            );
                         } catch (IOException | NullPointerException e) {
                             reqErrorListener.reactToError(errorBoxTitle, "Unknown error");
                         }
@@ -146,7 +155,13 @@ public class TourLogService {
                     Platform.runLater(() -> {
                         //update application thread
                         try {
-                            reqErrorListener.reactToError(this.errorBoxTitle, response.errorBody().string());
+
+                            //todo log
+                            String msg = messageExtractor.extractMessageTemplate(response.errorBody().string());
+
+                            reqErrorListener.reactToError(this.errorBoxTitle,
+                                    msg.isBlank() ? "Unknown error" : msg
+                            );
                         } catch (IOException | NullPointerException e) {
                             reqErrorListener.reactToError(this.errorBoxTitle, "Unknown error");
                         }
@@ -186,7 +201,13 @@ public class TourLogService {
                     Platform.runLater(() -> {
                         //update application thread
                         try {
-                            reqErrorListener.reactToError(this.errorBoxTitle, response.errorBody().string());
+
+                            //todo log
+                            String msg = messageExtractor.extractMessageTemplate(response.errorBody().string());
+
+                            reqErrorListener.reactToError(this.errorBoxTitle,
+                                    msg.isBlank() ? "Unknown error" : msg
+                            );
                         } catch (IOException | NullPointerException e) {
                             reqErrorListener.reactToError(this.errorBoxTitle, "Unknown error");
                         }

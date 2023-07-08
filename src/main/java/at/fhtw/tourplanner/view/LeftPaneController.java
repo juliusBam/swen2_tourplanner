@@ -50,8 +50,8 @@ public final class LeftPaneController implements TourPlannerController {
     @FXML
     public TextField toursSearchTextInput;
 
-
     private FileChooser pdfFileChooser;
+
     private FileChooser jsonFileChooser;
 
     public LeftPaneController(LeftPaneViewModel leftPaneViewModel) {

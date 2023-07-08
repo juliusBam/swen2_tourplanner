@@ -149,7 +149,7 @@ public class TourLogDialogViewModel {
 
         boolean valid = true;
         //todo validate if date is in the past
-        if (this.tourLog.getTimeStamp() == null) {
+        if (this.tourLog.getTimeStamp() == null || Long.valueOf(this.tourLog.getTimeStamp()) * 1000L > System.currentTimeMillis()) {
             valid = false;
             this.dateValidity.set(false);
         } else {
@@ -157,7 +157,7 @@ public class TourLogDialogViewModel {
         }
 
         //validate if comment length is between 5 and 500
-        if (this.tourLog.getComment() == null || this.tourLog.getComment().length() > 500 || this.tourLog.getComment().length() < 5) {
+        if (this.tourLog.getComment() == null || this.tourLog.getComment().length() > 500 || this.tourLog.getComment().length() < 5 || this.tourLog.getComment().contains("@")) {
             valid = false;
             this.commentValidity.set(false);
         } else {

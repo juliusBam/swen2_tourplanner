@@ -1,6 +1,7 @@
 package at.fhtw.tourplanner.bl.service;
 
 
+import at.fhtw.tourplanner.bl.MessageExtractor;
 import at.fhtw.tourplanner.bl.ModelConverter;
 import at.fhtw.tourplanner.bl.model.TourItem;
 import at.fhtw.tourplanner.bl.model.TourStats;
@@ -19,6 +20,8 @@ public class TourItemService implements Service<TourItem> {
     private final TourItemRepository tourItemRepository;
 
     private final ModelConverter modelConverter;
+
+    private final MessageExtractor messageExtractor = new MessageExtractor();
 
     public interface TourStatsListener {
         void updateStats(TourStats tourStats);
@@ -71,7 +74,10 @@ public class TourItemService implements Service<TourItem> {
                     Platform.runLater(() -> {
                         //update application thread
                         try {
-                            errorListener.onError("Error creating tour", response.errorBody().string());
+                            String msg = messageExtractor.extractMessageTemplate(response.errorBody().string());
+                            errorListener.onError("Error creating tour",
+                                    msg.isBlank() ? "Unknown error" : msg
+                            );
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -80,6 +86,7 @@ public class TourItemService implements Service<TourItem> {
 
                 } else {
 
+                    //todo log
                     TourItem createdTourItem = modelConverter.tourItemDtoToModel(response.body());
 
                     Platform.runLater(() -> {
@@ -151,7 +158,10 @@ public class TourItemService implements Service<TourItem> {
                     Platform.runLater(() -> {
                         //update application thread
                         try {
-                            handleUpdateTourErr.onError("Error updating the tour", response.errorBody().string());
+                            String msg = messageExtractor.extractMessageTemplate(response.errorBody().string());
+                            handleUpdateTourErr.onError("Error updating the tour",
+                                    msg.isBlank() ? "Unknown error" : msg
+                                    );
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -160,6 +170,7 @@ public class TourItemService implements Service<TourItem> {
 
                 } else {
 
+                    //todo log
                     TourItem createdTourItem = modelConverter.tourItemDtoToModel(response.body());
 
                     Platform.runLater(() -> {
@@ -213,7 +224,10 @@ public class TourItemService implements Service<TourItem> {
                     Platform.runLater(() -> {
                         //update application thread
                         try {
-                            errorListener.onError("Error fetching the tour stats", response.errorBody().string());
+                            String msg = messageExtractor.extractMessageTemplate(response.errorBody().string());
+                            errorListener.onError("Error fetching the tour stats",
+                                    msg.isBlank() ? "Unknown error" : msg
+                            );
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }

@@ -59,7 +59,15 @@
 
           <Label text="Comment" GridPane.columnSpan="2" GridPane.rowIndex="8" />
           <TextArea fx:id="commentInput" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="9" wrapText="true"/>
-          <Label fx:id="errorCommentLabel" styleClass="errorLabel" text="Comment should be between 5 and 500 characters long" GridPane.rowIndex="10" GridPane.columnSpan="3" />
+          <VBox fx:id="errorCommentLabel" GridPane.rowIndex="10" GridPane.columnSpan="3">
+              <Label styleClass="errorLabel">
+                  Comment should be between 5 and 500 characters long.
+              </Label>
+              <Label styleClass="errorLabel">
+                  It cannot contain the symbol '@'
+              </Label>
+          </VBox>
+
 
       </GridPane>
    </content>

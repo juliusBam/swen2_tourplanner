@@ -36,7 +36,15 @@
 
             <Label text="Name" />
             <TextField fx:id="nameTextField" GridPane.columnIndex="1" />
-            <Label fx:id="errorNameLabel" styleClass="errorLabel" text="The tour name has to be between 1 and 50 characters long" GridPane.columnSpan="2" GridPane.hgrow="NEVER" GridPane.rowIndex="1" />
+            <VBox fx:id="errorNameLabel" GridPane.columnSpan="2" GridPane.hgrow="NEVER" GridPane.rowIndex="1">
+                <Label styleClass="errorLabel">
+                    The tour name has to be between 1 and 50 characters long.
+                </Label>
+                <Label styleClass="errorLabel">
+                    It cannot contain the symbol '@'
+                </Label>
+            </VBox>
+
 
             <Label text="Start" GridPane.rowIndex="3" />
             <TextField fx:id="fromTextField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
@@ -60,10 +68,14 @@
 
             <Label text="Description" GridPane.rowIndex="9" />
             <TextArea fx:id="descriptionTextArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9" GridPane.rowSpan="3" />
-            <Label fx:id="errorDescriptionLabel" styleClass="errorLabel" text="The description must be between 1 and 500 characters long" GridPane.columnSpan="2" GridPane.rowIndex="12" />
-
-
-
+            <VBox GridPane.columnSpan="2" GridPane.rowIndex="12" fx:id="errorDescriptionLabel">
+                <Label  styleClass="errorLabel">
+                    The description must be between 1 and 500 characters long
+                </Label>
+                <Label styleClass="errorLabel">
+                    It cannot contain the symbol '@'
+                </Label>
+            </VBox>
 
             <Label text="Distance" GridPane.rowIndex="13" />
             <Label fx:id="distanceLabel" text="" GridPane.columnIndex="1" GridPane.rowIndex="13" />
