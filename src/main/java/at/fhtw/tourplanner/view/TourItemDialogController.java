@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Window;
 
@@ -36,7 +37,7 @@ public class TourItemDialogController extends Dialog<TourItem> {
     private Boolean locationFound = false;
 
     @FXML
-    private Label errorNameLabel = new Label();
+    private VBox errorNameLabel = new VBox();
 
     @FXML
     private Label errorStartLabel = new Label();
@@ -48,7 +49,7 @@ public class TourItemDialogController extends Dialog<TourItem> {
     private Label errorTypeLabel = new Label();
 
     @FXML
-    private Label errorDescriptionLabel = new Label();
+    private VBox errorDescriptionLabel = new VBox();
 
     @FXML
     private Label errorDistanceLabel = new Label();
