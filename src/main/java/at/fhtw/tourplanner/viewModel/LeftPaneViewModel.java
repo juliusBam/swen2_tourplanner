@@ -1,5 +1,7 @@
 package at.fhtw.tourplanner.viewModel;
 
+import at.fhtw.tourplanner.bl.SearchInputParser;
+import at.fhtw.tourplanner.bl.model.SearchInputParserOutput;
 import at.fhtw.tourplanner.bl.model.TourItem;
 import at.fhtw.tourplanner.bl.model.TourLog;
 import at.fhtw.tourplanner.bl.service.*;
@@ -9,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import lombok.Getter;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -125,12 +128,33 @@ public class LeftPaneViewModel {
         observableTourItems.add(savedItem);
     }
 
-    public ObservableList<TourItem> handleSearch(String searchString) {
-        return FXCollections.observableList(observableTourItems.stream().filter(tourItem -> searchInTour(tourItem, searchString)).toList());
+    public ObservableList<TourItem> handleSearch(String searchString) throws IllegalArgumentException {
+
+        SearchInputParser searchInputParser = new SearchInputParser();
+
+        SearchInputParserOutput parserOutput = searchInputParser.parseSearchInput(searchString);
+
+        String searchText = parserOutput.searchInput();
+
+        // TODO: also search computed attributes
+
+        ObservableList<TourItem> fullTextResult = FXCollections.observableList(observableTourItems.stream().filter(tourItem -> searchInTour(tourItem, searchText)).toList());
+
+        if (fullTextResult.isEmpty()) {
+            return fullTextResult;
+        }
+
+        if (parserOutput.params() == null || parserOutput.params().isEmpty()) {
+            return fullTextResult;
+        }
+
+        return searchInputParser.applyFilterParams(parserOutput.params(), fullTextResult);
+
     }
 
 
     private boolean searchInTour(TourItem tourItem, String searchText) {
+
         boolean foundInTour = tourItem.getName().toLowerCase().contains(searchText.toLowerCase()) ||
                               tourItem.getFrom().toLowerCase().contains(searchText.toLowerCase()) ||
                               tourItem.getTo().toLowerCase().contains(searchText.toLowerCase()) ||
@@ -142,7 +166,7 @@ public class LeftPaneViewModel {
             return true;
         }
         boolean foundInLogs = tourItem.getTourLogs().stream().anyMatch(tourLog -> searchInTourLog(tourLog, searchText));
-        // TODO: also search computed attributes
+
         return foundInLogs;
     }
 

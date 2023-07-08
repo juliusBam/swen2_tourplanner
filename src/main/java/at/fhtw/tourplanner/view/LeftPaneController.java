@@ -72,7 +72,16 @@ public final class LeftPaneController implements TourPlannerController {
     }
 
     private void performSearch(String searchString) {
-        toursListView.setItems(leftPaneViewModel.handleSearch(searchString));
+        try {
+            toursListView.setItems(leftPaneViewModel.handleSearch(searchString));
+        } catch (IllegalArgumentException e) {
+            //todo open alert
+            System.out.println(e);
+        } catch (Exception e) {
+            //todo open alert
+            System.out.println("unknwon error");
+        }
+
     }
 
     //todo check with peter how we can execute the reapply search if necessary
