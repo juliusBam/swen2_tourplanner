@@ -150,13 +150,13 @@ public class TourLogsTabViewModel {
             this.timeProperty.set("");
         } else {
             this.dateProperty.set(
-                    TimeConverter.convertTimeStampToString("dd-MM-yyyy HH:mm", tourLog.getTimeStamp())
+                    TimeConverter.convertTimeStampToString("dd/MM/yyyy", tourLog.getTimeStamp())
             );
             this.tourLogSelected.set(true);
             this.commentProperty.set(tourLog.getComment());
             this.difficultyProperty.set(tourLog.getDifficulty());
             this.ratingProperty.set(tourLog.getRating());
-            this.timeProperty.set(tourLog.getTotalTimeMinutes().toString());
+            this.timeProperty.set(String.format("%d:%02d (H:MM)",tourLog.getTotalTimeMinutes() / 60, tourLog.getTotalTimeMinutes() % 60));
             System.out.println("Tour log changed, clicked");
             System.out.println("New tour log is: " + tourLog.getComment());
         }

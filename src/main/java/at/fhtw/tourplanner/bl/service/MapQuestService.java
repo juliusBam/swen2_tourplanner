@@ -178,6 +178,10 @@ public class MapQuestService {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable throwable) {
+                        if(throwable.getMessage().contains("Canceled"))
+                        {
+                            return;
+                        }
                         Platform.runLater(() -> {
                             //update application thread
                             errorListener.onError("Error loading route information for tour: ", throwable.getMessage());
@@ -189,6 +193,10 @@ public class MapQuestService {
 
             @Override
             public void onFailure(Call<RouteResponse> call, Throwable throwable) {
+                if(throwable.getMessage().contains("Canceled"))
+                {
+                    return;
+                }
                 Platform.runLater(() -> {
                     //update application thread
                     errorListener.onError("Error loading route information for tour: ", throwable.getMessage());

@@ -3,6 +3,8 @@ package at.fhtw.tourplanner.view;
 import at.fhtw.tourplanner.bl.model.TourItem;
 import at.fhtw.tourplanner.viewModel.LeftPaneViewModel;
 import at.fhtw.tourplanner.viewModel.TourItemDialogViewModel;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -36,6 +38,10 @@ public final class LeftPaneController implements TourPlannerController {
     @FXML
     public Button exportTourBtn;
     @FXML
+    public Button searchBtn;
+    @FXML
+    public Button refreshBtn;
+    @FXML
     public MenuItem cMenuNew;
     @FXML
     public MenuItem cMenuDelete;
@@ -43,6 +49,8 @@ public final class LeftPaneController implements TourPlannerController {
     public MenuItem cMenuEdit;
     @FXML
     public TextField toursSearchTextInput;
+
+
     private FileChooser pdfFileChooser;
     private FileChooser jsonFileChooser;
 
@@ -61,18 +69,20 @@ public final class LeftPaneController implements TourPlannerController {
         jsonFileChooser = new FileChooser();
         jsonFileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         jsonFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JavaScript Object Notation files (*.json)", "*.json"));
-        // use button action instead of listener
-        // fetch all tours from BE before search
-        // performSearch()
-        toursSearchTextInput.textProperty().addListener((observable, oldValue, newValue) -> {
-            performSearch(newValue);
-        });
-
         this.leftPaneViewModel.addApplyFilterChangeListener(this::reapplySearchIfNecessary);
     }
 
     private void performSearch(String searchString) {
-        toursListView.setItems(leftPaneViewModel.handleSearch(searchString));
+        Task<ObservableList<TourItem>> task = new Task<>() {
+            @Override
+            protected ObservableList<TourItem> call() {
+                return leftPaneViewModel.handleSearch(searchString);
+            }
+        };
+        task.setOnSucceeded(t -> {
+            toursListView.setItems(task.getValue());
+        });
+        new Thread(task).start();
     }
 
     //todo check with peter how we can execute the reapply search if necessary
@@ -168,5 +178,26 @@ public final class LeftPaneController implements TourPlannerController {
         if (selectedFile != null) {
             leftPaneViewModel.getImportExportService().exportTour(tourItem, selectedFile.getAbsolutePath());
         }
+    }
+
+    public void onButtonSearch(ActionEvent actionEvent) {
+        performSearch(toursSearchTextInput.getText());
+    }
+
+    private void refreshTourList() {
+        Task<ObservableList<TourItem>> task = new Task<>() {
+            @Override
+            protected ObservableList<TourItem> call() {
+                return leftPaneViewModel.refreshTours();
+            }
+        };
+        task.setOnSucceeded(t -> {
+            toursListView.setItems(task.getValue());
+        });
+        new Thread(task).start();
+    }
+
+    public void onButtonRefresh(ActionEvent actionEvent) {
+        refreshTourList();
     }
 }

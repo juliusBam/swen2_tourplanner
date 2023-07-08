@@ -2,7 +2,9 @@ package at.fhtw.tourplanner.viewModel;
 
 import at.fhtw.tourplanner.bl.model.TourItem;
 import at.fhtw.tourplanner.bl.model.TourLog;
+import at.fhtw.tourplanner.bl.model.TourStats;
 import at.fhtw.tourplanner.bl.service.*;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -126,7 +128,9 @@ public class LeftPaneViewModel {
     }
 
     public ObservableList<TourItem> handleSearch(String searchString) {
-        return FXCollections.observableList(observableTourItems.stream().filter(tourItem -> searchInTour(tourItem, searchString)).toList());
+        List<TourItem> tourItems = tourItemService.getAll();
+        Platform.runLater(() -> setTours(tourItems));
+        return FXCollections.observableList(tourItems.stream().filter(tourItem -> searchInTour(tourItem, searchString)).toList());
     }
 
 
@@ -142,8 +146,15 @@ public class LeftPaneViewModel {
             return true;
         }
         boolean foundInLogs = tourItem.getTourLogs().stream().anyMatch(tourLog -> searchInTourLog(tourLog, searchText));
-        // TODO: also search computed attributes
-        return foundInLogs;
+        if (foundInLogs) {
+            return true;
+        }
+        TourStats stats = tourItem.getTourStats();
+        return String.valueOf(stats.getPopularity()).contains(searchText.toLowerCase()) ||
+               String.valueOf(stats.getAverageTime()).contains(searchText.toLowerCase()) ||
+               String.valueOf(stats.getChildFriendliness()).contains(searchText.toLowerCase()) ||
+               String.valueOf(stats.getAverageRating()).contains(searchText.toLowerCase()) ||
+               String.valueOf(stats.getAverageDifficulty()).contains(searchText.toLowerCase());
     }
 
     private boolean searchInTourLog(TourLog tourLog, String searchText) {
@@ -152,6 +163,12 @@ public class LeftPaneViewModel {
                String.valueOf(tourLog.getDifficulty()).contains(searchText.toLowerCase()) ||
                String.valueOf(tourLog.getTotalTimeMinutes()).contains(searchText.toLowerCase()) ||
                String.valueOf(tourLog.getTimeStamp()).contains(searchText.toLowerCase());
+    }
+
+    public ObservableList<TourItem> refreshTours() {
+        List<TourItem> tourItems = tourItemService.getAll();
+        Platform.runLater(() -> setTours(tourItems));
+        return FXCollections.observableList(tourItems);
     }
 
     public interface SelectionChangedListener {

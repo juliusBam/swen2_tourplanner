@@ -88,7 +88,7 @@ public class CenterPaneViewModel {
         toProperty.setValue(tourItem.getTo());
         transportTypeProperty.setValue(tourItem.getTransportType());
         tourDistanceProperty.setValue(String.format("%.2f km", tourItem.getTourDistanceKilometers()));
-        estimatedTimeProperty.setValue(String.format("%d:%02d:%02d", tourItem.getEstimatedTimeSeconds() / 3600, (tourItem.getEstimatedTimeSeconds() % 3600) / 60, (tourItem.getEstimatedTimeSeconds() % 60)));
+        estimatedTimeProperty.setValue(String.format("%d:%02d:%02d (H:MM:SS)", tourItem.getEstimatedTimeSeconds() / 3600, (tourItem.getEstimatedTimeSeconds() % 3600) / 60, (tourItem.getEstimatedTimeSeconds() % 60)));
 //      this.loadingLabelProperty.set("Loading....");
         this.updateTourStatsProps();
 //        this.loadingLabelProperty.set("Loading....");
@@ -121,8 +121,7 @@ public class CenterPaneViewModel {
         requestingImage.set(false);
         if (routeImage == null) {
             showImage.set(false);
-        }
-        else {
+        } else {
             imageProperty.setValue(routeImage);
             showImage.set(true);
             requestingImage.set(false);
@@ -148,8 +147,9 @@ public class CenterPaneViewModel {
 
     public void setTourStats(TourStats tourStats) {
 
-        popularityProperty.set(String.format("%d", tourStats.getPopularity()));
-        avgTimeProperty.set(String.format("%,.2f", tourStats.getAverageTime()));
+        popularityProperty.set(String.format("#%d", tourStats.getPopularity()));
+        long avgTimeSeconds = Math.round(tourStats.getAverageTime() * 60);
+        avgTimeProperty.set(String.format("%d:%02d:%02d (H:MM:SS)", avgTimeSeconds / 3600, avgTimeSeconds % 3600 / 60, avgTimeSeconds % 60));
         avgRatingProperty.set(String.format("%,.2f", tourStats.getAverageRating()));
         avgDifficultyProperty.set(String.format("%,.2f", tourStats.getAverageDifficulty()));
         childFriendlinessProperty.set(String.format("%,.2f", tourStats.getChildFriendliness()));

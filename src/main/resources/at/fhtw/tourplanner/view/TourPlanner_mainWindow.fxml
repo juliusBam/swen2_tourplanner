@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fhtw.tourplanner.view.TourPlannerApplicationController">
-    <bottom>
-        <fx:include fx:id="bottomPane" source="BottomPane.fxml" />
-    </bottom>
-    <top>
-        <fx:include fx:id="topMenu" source="TopMenu.fxml" />
-    </top>
-    <left>
-        <fx:include fx:id="leftPane" source="LeftPane.fxml" />
-    </left>
-    <center>
-        <fx:include fx:id="centerPane" source="CenterPane.fxml" BorderPane.alignment="TOP_LEFT" />
-    </center>
-</BorderPane>
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fhtw.tourplanner.view.TourPlannerApplicationController">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="270.0" />
+        <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
+    </columnConstraints>
+        <fx:include source="LeftPane.fxml" />
+        <fx:include source="CenterPane.fxml" GridPane.columnIndex="1" GridPane.valignment="TOP" />
+   <rowConstraints>
+      <RowConstraints vgrow="ALWAYS" />
+   </rowConstraints>
+</GridPane>

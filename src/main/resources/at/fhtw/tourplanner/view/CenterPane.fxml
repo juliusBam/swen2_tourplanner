@@ -1,105 +1,110 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-
-<TabPane fx:id="centerPaneTabs" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="825.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fhtw.tourplanner.view.CenterPaneController">
+<TabPane stylesheets="@customStyle.css" fx:id="centerPaneTabs" prefHeight="650.0" prefWidth="825.0"
+         tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="at.fhtw.tourplanner.view.CenterPaneController">
     <tabs>
         <Tab fx:id="overviewTab" text="Overview">
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
-                              <GridPane prefHeight="393.0" prefWidth="756.0">
-                                  <columnConstraints>
-                                      <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="500.0" minWidth="10.0" prefWidth="230.0" />
-                                      <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="661.0" minWidth="10.0" prefWidth="230.0" />
-                                  </columnConstraints>
-                                  <rowConstraints>
-                                      <RowConstraints maxHeight="60.0" minHeight="0.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                                      <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                                      <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
-                                      <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                                      <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                                      <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                                      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                                  </rowConstraints>
-                                  <children>
-                                      <Label text="Name" />
-                                      <Label text="Tour Description" GridPane.rowIndex="6" GridPane.valignment="TOP">
-                                 <GridPane.margin>
-                                    <Insets top="25.0" />
-                                 </GridPane.margin>
-                              </Label>
-                                      <Label text="From" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
-                                      <Label text="To" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
-                                      <Label text="Transport Type" GridPane.rowIndex="3" />
-                                      <Label text="Tour Distance" GridPane.rowIndex="4" />
-                                      <Label text="Estimated Time" GridPane.halignment="LEFT" GridPane.rowIndex="5" />
-                                      <Label fx:id="nameLabel" text="name" GridPane.columnIndex="1" />
-                                      <Label fx:id="tourDescriptionLabel" text="desc" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="6" GridPane.valignment="TOP">
-                                 <GridPane.margin>
-                                    <Insets top="25.0" />
-                                 </GridPane.margin>
-                              </Label>
-                                      <Label fx:id="fromLabel" text="from" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                      <Label fx:id="toLabel" text="to" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                      <Label fx:id="transportTypeLabel" text="type" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                      <Label fx:id="distanceLabel" text="distance" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                      <Label fx:id="estimatedTimeLabel" text="time" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                                  </children>
-                                  <padding>
-                                      <Insets left="10.0" right="10.0" />
-                                  </padding>
-                              </GridPane>
+                        <GridPane prefHeight="393.0">
+                            <columnConstraints>
+                                <ColumnConstraints halignment="LEFT" hgrow="NEVER" maxWidth="500.0" minWidth="10.0"
+                                                   prefWidth="175.0"/>
+                                <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="661.0" minWidth="10.0"
+                                                   prefWidth="561.0"/>
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints maxHeight="60.0" minHeight="0.0" prefHeight="60.0" vgrow="SOMETIMES"/>
+                                <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES"/>
+                                <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES"/>
+                                <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES"/>
+                                <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES"/>
+                                <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES"/>
+                            </rowConstraints>
+                            <children>
+                                <Label styleClass="boldLabel" text="Name"/>
+                                <Label styleClass="boldLabel" text="Tour Description" GridPane.rowIndex="6"/>
+                                <Label styleClass="boldLabel" text="From" GridPane.halignment="LEFT"
+                                       GridPane.rowIndex="1"/>
+                                <Label styleClass="boldLabel" text="To" GridPane.halignment="LEFT"
+                                       GridPane.rowIndex="2"/>
+                                <Label styleClass="boldLabel" text="Transport Type" GridPane.rowIndex="3"/>
+                                <Label styleClass="boldLabel" text="Tour Distance" GridPane.rowIndex="4"/>
+                                <Label styleClass="boldLabel" text="Estimated Time" GridPane.halignment="LEFT"
+                                       GridPane.rowIndex="5"/>
+                                <Label fx:id="nameLabel" text="name" GridPane.columnIndex="1"/>
+                                <Label fx:id="tourDescriptionLabel" text="desc" wrapText="true" GridPane.columnIndex="1"
+                                       GridPane.halignment="LEFT" GridPane.valignment="TOP" GridPane.rowIndex="6">
+                                </Label>
+                                <Label fx:id="fromLabel" text="from" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                <Label fx:id="toLabel" text="to" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                                <Label fx:id="transportTypeLabel" text="type" GridPane.columnIndex="1"
+                                       GridPane.rowIndex="3"/>
+                                <Label fx:id="distanceLabel" text="distance" GridPane.columnIndex="1"
+                                       GridPane.rowIndex="4"/>
+                                <Label fx:id="estimatedTimeLabel" text="time" GridPane.columnIndex="1"
+                                       GridPane.rowIndex="5"/>
+                            </children>
+                        </GridPane>
                     </children>
                 </AnchorPane>
             </content>
         </Tab>
-      <Tab fx:id="routeTab" text="Route">
-        <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="671.0" prefWidth="833.0">
-               <children>
-                  <ImageView fx:id="routeImageView" fitHeight="600.0" fitWidth="800.0" layoutX="13.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" />
-                  <Label fx:id="loadingLabel" layoutX="396.0" layoutY="301.0" text="No tour selected" />
-               </children>
-            </AnchorPane>
-        </content>
-      </Tab>
+        <Tab fx:id="routeTab" text="Route">
+            <content>
+                <AnchorPane fx:id="routeImagePane" minHeight="0.0" minWidth="0.0" prefHeight="671.0" prefWidth="833.0">
+                    <children>
+                        <ImageView fx:id="routeImageView" pickOnBounds="true" preserveRatio="true"/>
+                        <Label fx:id="loadingLabel" text="No tour selected"/>
+                    </children>
+                </AnchorPane>
+            </content>
+        </Tab>
         <Tab fx:id="tourLogsTab" text="Tour Logs">
             <content>
-                <fx:include fx:id="tourLogsTabContent" source="TourLogsTab.fxml" />
+                <AnchorPane fx:id="tourLogsTabPane" minHeight="0.0" minWidth="0.0" prefHeight="671.0" prefWidth="833.0">
+                    <children>
+                        <fx:include fx:id="tourLogsTabContent" source="TourLogsTab.fxml"/>
+                    </children>
+                </AnchorPane>
             </content>
         </Tab>
         <Tab fx:id="statisticsTab" text="Statistics">
             <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="390.0" prefWidth="611.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+                <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="390.0"
+                          prefWidth="611.0">
                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
                     </columnConstraints>
                     <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="196.0" vgrow="ALWAYS" />
+                        <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="196.0"
+                                        vgrow="ALWAYS"/>
                     </rowConstraints>
                     <children>
-                        <Label text="Popularity" />
-                        <Label text="Average Time in minutes" GridPane.columnIndex="1" />
-                        <Label text="Average rating" GridPane.rowIndex="2" />
-                        <Label text="Average difficulty" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Label text="Child friendliness" GridPane.rowIndex="4" />
-                        <Label fx:id="popularityLabel" text="" GridPane.rowIndex="1" />
-                        <Label fx:id="avgTimeLabel" text="" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label fx:id="avgRatingLabel" text="" GridPane.rowIndex="3" />
-                        <Label fx:id="avgDifficultyLabel" text="" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <Label fx:id="childFriendlinessLabel" text="" GridPane.rowIndex="5" />
+                        <Label styleClass="boldLabel" text="Popularity" />
+                        <Label styleClass="boldLabel" text="Average rating" GridPane.rowIndex="1"/>
+                        <Label styleClass="boldLabel" text="Average time" GridPane.rowIndex="2"/>
+                        <Label styleClass="boldLabel" text="Average difficulty" GridPane.rowIndex="3"/>
+                        <Label styleClass="boldLabel" text="Child friendliness" GridPane.rowIndex="4"/>
+                        <Label fx:id="popularityLabel" GridPane.columnIndex="1"/>
+                        <Label fx:id="avgRatingLabel" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                        <Label fx:id="avgTimeLabel"  GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        <Label fx:id="avgDifficultyLabel" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                        <Label fx:id="childFriendlinessLabel" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
                     </children>
                 </GridPane>
             </content>

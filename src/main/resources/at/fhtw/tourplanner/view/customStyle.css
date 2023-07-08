@@ -2,3 +2,61 @@
     -fx-text-fill: #ff4500;
     -fx-wrap-text: always;
 }
+
+.iconBtn {
+    -fx-background-size: 20 20;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-min-width: 25;
+    -fx-min-height: 25;
+}
+
+#addTourBtn {
+    -fx-background-image: url("icons/plus.png");
+}
+
+#deleteTourBtn {
+    -fx-background-image: url("icons/minus.png");
+}
+
+#editBtn {
+    -fx-background-image: url("icons/edit.png");
+}
+
+#newBtn {
+    -fx-background-image: url("icons/plus.png");
+}
+
+#deleteBtn {
+    -fx-background-image: url("icons/minus.png");
+}
+
+#editTourBtn {
+    -fx-background-image: url("icons/edit.png");
+}
+
+#searchBtn {
+    -fx-background-image: url("icons/search.png");
+}
+
+#refreshBtn {
+    -fx-background-image: url("icons/refresh.png");
+}
+
+#routeImageView {
+    -fx-alignment: center;
+}
+
+.boldLabel {
+    -fx-font-weight: bold;
+    -fx-padding: 10;
+}
+
+#tourDescriptionLabel {
+    -fx-wrap-text: true;
+    -fx-padding: 20 0 0 0;
+}
+
+#commentLabel {
+    -fx-wrap-text: always;
+}
