@@ -7,10 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -82,10 +79,14 @@ public final class LeftPaneController implements TourPlannerController {
         task.setOnSucceeded(t -> {
             toursListView.setItems(task.getValue());
         });
+        task.setOnFailed(e -> {
+            Alert alert = new Alert(Alert.AlertType.ERROR, e.getSource().getException().getMessage());
+            alert.setHeaderText("Error performing the search");
+            alert.showAndWait();
+        });
         new Thread(task).start();
     }
 
-    //todo check with peter how we can execute the reapply search if necessary
     public void onButtonAdd(ActionEvent actionEvent) {
         TourItem tourItem = new TourItem();
         Optional<TourItem> tourItemOptional = editTourDialog(tourItem, "Add Tour");

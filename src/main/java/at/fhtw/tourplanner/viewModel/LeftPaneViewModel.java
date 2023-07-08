@@ -131,10 +131,6 @@ public class LeftPaneViewModel {
     }
 
     public ObservableList<TourItem> handleSearch(String searchString) throws IllegalArgumentException  {
-        List<TourItem> tourItems = tourItemService.getAll();
-        Platform.runLater(() -> setTours(tourItems));
-
-        //return FXCollections.observableList(tourItems.stream().filter(tourItem -> searchInTour(tourItem, searchString)).toList());
 
         SearchInputParser searchInputParser = new SearchInputParser();
 
@@ -142,11 +138,9 @@ public class LeftPaneViewModel {
 
         String searchText = parserOutput.searchInput();
 
-        // TODO: also search computed attributes
-
         ObservableList<TourItem> fullTextResult = FXCollections.observableList(observableTourItems.stream().filter(tourItem -> searchInTour(tourItem, searchText)).toList());
 
-        if (!fullTextResult.isEmpty() && parserOutput.params() != null && !parserOutput.params().isEmpty())) {
+        if (!fullTextResult.isEmpty() && parserOutput.params() != null && !parserOutput.params().isEmpty()) {
 
             fullTextResult = searchInputParser.applyFilterParams(parserOutput.params(), fullTextResult);
 
