@@ -4,6 +4,7 @@ import at.fhtw.tourplanner.bl.model.TourItem;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import javafx.scene.control.Alert;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,8 +24,13 @@ public class ImportExportService {
     public void exportTour(TourItem tourItem, String path) {
         try {
             objectMapper.writeValue(new File(path), tourItem);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "The selected tour has been exported.");
+            alert.setHeaderText("Export complete");
+            alert.showAndWait();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Message: " + e.getMessage());
+            alert.setHeaderText("Export failed");
+            alert.showAndWait();
         }
     }
 
@@ -32,7 +38,10 @@ public class ImportExportService {
         try {
             return objectMapper.readValue(new File(path), TourItem.class);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Message: " + e.getMessage());
+            alert.setHeaderText("Export failed");
+            alert.showAndWait();
+            return null;
         }
     }
 }

@@ -52,7 +52,6 @@ public class TourLogService {
                 this.modelConverter.tourLogDtoToModel(tourLogManipulationResult.getTourLog()),
                 this.modelConverter.tourStatsDtoToModel(tourLogManipulationResult.getTourStats())
         );
-        //return this.modelConverter.tourItemDtoToModel(tourItemDto);
     }
 
     public TourLogManipulationOutput update(TourLog newTourLog, Long tourItemId) {
@@ -63,7 +62,6 @@ public class TourLogService {
                 this.modelConverter.tourLogDtoToModel(tourLogManipulationResult.getTourLog()),
                         this.modelConverter.tourStatsDtoToModel(tourLogManipulationResult.getTourStats())
         );
-        //return this.modelConverter.tourItemDtoToModel(tourItemDto);
     }
 
     public void saveAsync(TourLog updatedTourLog, Long tourItemId, String errorBoxTitle, TourLogManipulationListener tourLogManipulationListener, ReqErrorListener reqErrorListener) {
@@ -92,8 +90,6 @@ public class TourLogService {
                     Platform.runLater(() -> {
                         //update application thread
                         try {
-
-                            //todo log
                             String msg = messageExtractor.extractMessageTemplate(response.errorBody().string());
 
                             reqErrorListener.reactToError(errorBoxTitle,
@@ -155,8 +151,6 @@ public class TourLogService {
                     Platform.runLater(() -> {
                         //update application thread
                         try {
-
-                            //todo log
                             String msg = messageExtractor.extractMessageTemplate(response.errorBody().string());
 
                             reqErrorListener.reactToError(this.errorBoxTitle,
@@ -201,8 +195,6 @@ public class TourLogService {
                     Platform.runLater(() -> {
                         //update application thread
                         try {
-
-                            //todo log
                             String msg = messageExtractor.extractMessageTemplate(response.errorBody().string());
 
                             reqErrorListener.reactToError(this.errorBoxTitle,

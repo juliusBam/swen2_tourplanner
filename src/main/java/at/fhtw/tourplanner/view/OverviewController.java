@@ -1,7 +1,7 @@
 package at.fhtw.tourplanner.view;
 
 import at.fhtw.tourplanner.bl.model.TourItem;
-import at.fhtw.tourplanner.viewModel.LeftPaneViewModel;
+import at.fhtw.tourplanner.viewModel.OverviewViewModel;
 import at.fhtw.tourplanner.viewModel.TourItemDialogViewModel;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -15,9 +15,9 @@ import javafx.stage.Window;
 import java.io.File;
 import java.util.Optional;
 
-public final class LeftPaneController implements TourPlannerController {
+public final class OverviewController implements TourPlannerController {
 
-    private final LeftPaneViewModel leftPaneViewModel;
+    private final OverviewViewModel overviewViewModel;
     @FXML
     public ListView<TourItem> toursListView;
     @FXML
@@ -51,29 +51,35 @@ public final class LeftPaneController implements TourPlannerController {
 
     private FileChooser jsonFileChooser;
 
-    public LeftPaneController(LeftPaneViewModel leftPaneViewModel) {
-        this.leftPaneViewModel = leftPaneViewModel;
+    public OverviewController(OverviewViewModel overviewViewModel) {
+        this.overviewViewModel = overviewViewModel;
     }
 
     @Override
     @FXML
     public void initialize() {
-        toursListView.setItems(leftPaneViewModel.getObservableTours());
-        toursListView.getSelectionModel().selectedItemProperty().addListener(leftPaneViewModel.getChangeListener());
+        toursListView.setItems(overviewViewModel.getObservableTours());
+        toursListView.getSelectionModel().selectedItemProperty().addListener(overviewViewModel.getChangeListener());
         pdfFileChooser = new FileChooser();
         pdfFileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         pdfFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF documents (*.pdf)", "*.pdf"));
         jsonFileChooser = new FileChooser();
         jsonFileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         jsonFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JavaScript Object Notation files (*.json)", "*.json"));
-        this.leftPaneViewModel.addApplyFilterChangeListener(this::reapplySearchIfNecessary);
+        overviewViewModel.addApplyFilterChangeListener(this::reapplySearchIfNecessary);
+        overviewViewModel.refreshRequested.addListener((arg, oldVal, newVal) -> {
+            if (newVal) {
+                refreshTourList();
+            }
+            overviewViewModel.resetRefreshRequest();
+        });
     }
 
     private void performSearch(String searchString) {
         Task<ObservableList<TourItem>> task = new Task<>() {
             @Override
             protected ObservableList<TourItem> call() {
-                return leftPaneViewModel.handleSearch(searchString);
+                return overviewViewModel.handleSearch(searchString);
             }
         };
         task.setOnSucceeded(t -> {
@@ -92,7 +98,7 @@ public final class LeftPaneController implements TourPlannerController {
         Optional<TourItem> tourItemOptional = editTourDialog(tourItem, "Add Tour");
         if (tourItemOptional.isPresent()) {
             tourItem = tourItemOptional.get();
-            leftPaneViewModel.addNewTour(tourItem);
+            overviewViewModel.addNewTour(tourItem);
         }
     }
 
@@ -100,7 +106,7 @@ public final class LeftPaneController implements TourPlannerController {
         if (!toursSearchTextInput.getText().isEmpty()) {
             performSearch(toursSearchTextInput.getText());
         }
-        this.toursListView.refresh();
+        refreshTourList();
     }
 
     public void onButtonEdit(ActionEvent actionEvent) {
@@ -111,31 +117,34 @@ public final class LeftPaneController implements TourPlannerController {
         Optional<TourItem> tourItemOptional = editTourDialog(oldItem, "Edit Tour");
         if (tourItemOptional.isPresent()) {
             TourItem newItem = tourItemOptional.get();
-            leftPaneViewModel.editTour(newItem, oldItem);
+            overviewViewModel.editTour(newItem, oldItem);
         }
     }
 
     public void onButtonDelete(ActionEvent actionEvent) {
         if (toursListView.getSelectionModel().getSelectedItem() != null) {
-            leftPaneViewModel.deleteTour(toursListView.getSelectionModel().getSelectedItem());
+            overviewViewModel.deleteTour(toursListView.getSelectionModel().getSelectedItem());
         }
     }
 
     private Optional<TourItem> editTourDialog(TourItem tourItem, String title) {
         Window window = toursListView.getScene().getWindow();
         Stage stage = (Stage) window;
-        TourItemDialogViewModel tourItemDialogViewModel = new TourItemDialogViewModel(tourItem, leftPaneViewModel.getMapQuestService());
+        TourItemDialogViewModel tourItemDialogViewModel = new TourItemDialogViewModel(tourItem, overviewViewModel.getMapQuestService());
         TourItemDialogController dialog = new TourItemDialogController(stage, tourItemDialogViewModel, title);
         return dialog.showAndWait();
     }
 
     public void onButtonSummaryReport(ActionEvent actionEvent) {
+        if (overviewViewModel.getObservableTours().isEmpty()) {
+            return;
+        }
         Window window = toursListView.getScene().getWindow();
         Stage stage = (Stage) window;
         pdfFileChooser.setInitialFileName("summary");
         File selectedFile = pdfFileChooser.showSaveDialog(stage);
         if (selectedFile != null) {
-            leftPaneViewModel.getReportService().downloadSummaryReport(selectedFile.getAbsolutePath());
+            overviewViewModel.getReportService().downloadSummaryReport(selectedFile.getAbsolutePath());
         }
     }
 
@@ -149,8 +158,8 @@ public final class LeftPaneController implements TourPlannerController {
         pdfFileChooser.setInitialFileName(tourItem.getName().replace(" ", "-") + "_report");
         File selectedFile = pdfFileChooser.showSaveDialog(stage);
         if (selectedFile != null) {
-            String sessionId = leftPaneViewModel.getMapQuestService().getSessionId(tourItem);
-            leftPaneViewModel.getReportService().downloadDetailReport(tourItem, sessionId, selectedFile.getAbsolutePath());
+            String sessionId = overviewViewModel.getMapQuestService().getSessionId(tourItem);
+            overviewViewModel.getReportService().downloadDetailReport(tourItem, sessionId, selectedFile.getAbsolutePath());
         }
     }
 
@@ -161,8 +170,10 @@ public final class LeftPaneController implements TourPlannerController {
         jsonFileChooser.setInitialFileName("");
         File selectedFile = jsonFileChooser.showOpenDialog(stage);
         if (selectedFile != null) {
-            TourItem tourItem = leftPaneViewModel.getImportExportService().importTour(selectedFile.getAbsolutePath());
-            leftPaneViewModel.importTour(tourItem);
+            TourItem tourItem = overviewViewModel.getImportExportService().importTour(selectedFile.getAbsolutePath());
+            if (tourItem != null) {
+                overviewViewModel.importTour(tourItem);
+            }
         }
     }
 
@@ -177,7 +188,7 @@ public final class LeftPaneController implements TourPlannerController {
         jsonFileChooser.setInitialFileName(tourItem.getName().replace(" ", "-") + "_export");
         File selectedFile = jsonFileChooser.showSaveDialog(stage);
         if (selectedFile != null) {
-            leftPaneViewModel.getImportExportService().exportTour(tourItem, selectedFile.getAbsolutePath());
+            overviewViewModel.getImportExportService().exportTour(tourItem, selectedFile.getAbsolutePath());
         }
     }
 
@@ -189,7 +200,7 @@ public final class LeftPaneController implements TourPlannerController {
         Task<ObservableList<TourItem>> task = new Task<>() {
             @Override
             protected ObservableList<TourItem> call() {
-                return leftPaneViewModel.refreshTours();
+                return overviewViewModel.refreshTours();
             }
         };
         task.setOnSucceeded(t -> {

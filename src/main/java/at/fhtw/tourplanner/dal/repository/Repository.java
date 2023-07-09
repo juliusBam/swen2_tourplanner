@@ -1,6 +1,5 @@
 package at.fhtw.tourplanner.dal.repository;
 
-import at.fhtw.tourplanner.bl.model.TourItem;
 import at.fhtw.tourplanner.dal.dto.TourItemDto;
 import retrofit2.Call;
 

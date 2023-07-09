@@ -85,8 +85,6 @@ public class TourItemService implements Service<TourItem> {
                     });
 
                 } else {
-
-                    //todo log
                     TourItem createdTourItem = modelConverter.tourItemDtoToModel(response.body());
 
                     Platform.runLater(() -> {
@@ -169,8 +167,6 @@ public class TourItemService implements Service<TourItem> {
                     });
 
                 } else {
-
-                    //todo log
                     TourItem createdTourItem = modelConverter.tourItemDtoToModel(response.body());
 
                     Platform.runLater(() -> {
@@ -239,7 +235,6 @@ public class TourItemService implements Service<TourItem> {
 
             @Override
             public void onFailure(Call<TourItemDto> call, Throwable throwable) {
-                //todo print error
                 Platform.runLater(() -> {
                     //update application thread
                     errorListener.onError("Error fetching the tour stats",throwable.getMessage());

@@ -1,36 +1,46 @@
 package at.fhtw.tourplanner.view;
 
-import at.fhtw.tourplanner.bl.service.ImportExportService;
-import at.fhtw.tourplanner.bl.service.MapQuestService;
-import at.fhtw.tourplanner.bl.service.ReportService;
-import at.fhtw.tourplanner.bl.service.TourItemService;
-import at.fhtw.tourplanner.bl.service.TourLogService;
+import at.fhtw.tourplanner.bl.service.*;
+import at.fhtw.tourplanner.dal.api.MapQuestAPI;
 import at.fhtw.tourplanner.dal.api.TourPlannerAPI;
 import at.fhtw.tourplanner.dal.repository.ReportRepository;
 import at.fhtw.tourplanner.dal.repository.TourItemRepository;
 import at.fhtw.tourplanner.dal.repository.TourLogRepository;
-import at.fhtw.tourplanner.viewModel.*;
+import at.fhtw.tourplanner.viewModel.DetailsViewModel;
+import at.fhtw.tourplanner.viewModel.OverviewViewModel;
+import at.fhtw.tourplanner.viewModel.TourLogsTabViewModel;
+import at.fhtw.tourplanner.viewModel.TourPlannerApplicationViewModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 public class ControllerFactory {
 
     private static final ControllerFactory instance = new ControllerFactory();
-    private final BottomPaneViewModel bottomPaneViewModel;
-    private final CenterPaneViewModel centerPaneViewModel;
-    private final LeftPaneViewModel leftPaneViewModel;
-    private final TopMenuViewModel topMenuViewModel;
+    private final DetailsViewModel detailsViewModel;
+    private final OverviewViewModel overviewViewModel;
 
     private final TourLogsTabViewModel tourLogsTabViewModel;
 
     private final TourPlannerApplicationViewModel tourPlannerApplicationViewModel;
 
     public ControllerFactory() {
+        Properties properties = new Properties();
+        try (InputStream input = new FileInputStream("src/main/resources/at/fhtw/tourplanner/config/config.properties")) {
+            properties.load(input);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
         TourPlannerAPI tourPlannerAPI =
                 new Retrofit
                         .Builder()
-                        .baseUrl("http://localhost:8080/")
+                        .baseUrl(properties.getProperty("tourPlannerServer.url"))
                         .addConverterFactory(JacksonConverterFactory.create())
                         .build()
                         .create(TourPlannerAPI.class);
@@ -43,17 +53,20 @@ public class ControllerFactory {
         TourLogRepository tourLogRepository = new TourLogRepository(tourPlannerAPI);
         TourLogService tourLogService = new TourLogService(tourLogRepository);
 
-        MapQuestService mapQuestService = new MapQuestService();
+        MapQuestAPI mapQuestAPI = new Retrofit
+                .Builder()
+                .baseUrl(properties.getProperty("mapquest.url"))
+                .addConverterFactory(JacksonConverterFactory.create())
+                .build().create(MapQuestAPI.class);
+        MapQuestService mapQuestService = new MapQuestService(mapQuestAPI, properties);
         ReportService reportService = new ReportService(reportRepository);
         ImportExportService importExportService = new ImportExportService(new ObjectMapper());
 
-        this.bottomPaneViewModel = new BottomPaneViewModel();
-        this.centerPaneViewModel = new CenterPaneViewModel(tourItemService, mapQuestService);
-        this.leftPaneViewModel = new LeftPaneViewModel(tourItemService, mapQuestService, reportService, importExportService, tourLogService);
-        this.topMenuViewModel = new TopMenuViewModel();
+        this.detailsViewModel = new DetailsViewModel(tourItemService, mapQuestService);
+        this.overviewViewModel = new OverviewViewModel(tourItemService, mapQuestService, reportService, importExportService, tourLogService);
         this.tourLogsTabViewModel = new TourLogsTabViewModel(tourLogService);
-        this.tourPlannerApplicationViewModel = new TourPlannerApplicationViewModel(this.bottomPaneViewModel, this.centerPaneViewModel, this.leftPaneViewModel,
-                                                                                    this.topMenuViewModel, this.tourLogsTabViewModel);
+        this.tourPlannerApplicationViewModel = new TourPlannerApplicationViewModel(this.detailsViewModel, this.overviewViewModel,
+                this.tourLogsTabViewModel);
     }
 
     public static ControllerFactory getInstance() {
@@ -68,21 +81,13 @@ public class ControllerFactory {
 
             return new TourPlannerApplicationController(this.tourPlannerApplicationViewModel);
 
-        } else if (controllerClass == BottomPaneController.class) {
+        } else if (controllerClass == DetailsController.class) {
 
-            return new BottomPaneController(this.bottomPaneViewModel);
+            return new DetailsController(this.detailsViewModel);
 
-        } else if (controllerClass == CenterPaneController.class) {
+        } else if (controllerClass == OverviewController.class) {
 
-            return new CenterPaneController(this.centerPaneViewModel);
-
-        } else if (controllerClass == LeftPaneController.class) {
-
-            return new LeftPaneController(this.leftPaneViewModel);
-
-        } else if (controllerClass == TopMenuController.class) {
-
-            return new TopMenuController(this.topMenuViewModel);
+            return new OverviewController(this.overviewViewModel);
 
         } else if (controllerClass == TourLogsTabController.class) {
 

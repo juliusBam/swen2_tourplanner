@@ -5,29 +5,23 @@ import at.fhtw.tourplanner.bl.model.TourItem;
 public class TourPlannerApplicationViewModel {
 
 
-    private final BottomPaneViewModel bottomPaneViewModel;
+    private final DetailsViewModel detailsViewModel;
 
-    private final CenterPaneViewModel centerPaneViewModel;
-
-    private final LeftPaneViewModel leftPaneViewModel;
-
-    private final TopMenuViewModel topMenuViewModel;
+    private final OverviewViewModel overviewViewModel;
 
     private final TourLogsTabViewModel tourLogsTabViewModel;
 
 
-    public TourPlannerApplicationViewModel(BottomPaneViewModel bottomPaneViewModel, CenterPaneViewModel centerPaneViewModel,
-                                           LeftPaneViewModel leftPaneViewModel, TopMenuViewModel topMenuViewModel, TourLogsTabViewModel tourLogsTabViewModel) {
-        this.bottomPaneViewModel = bottomPaneViewModel;
-        this.centerPaneViewModel = centerPaneViewModel;
-        this.leftPaneViewModel = leftPaneViewModel;
-        this.topMenuViewModel = topMenuViewModel;
+    public TourPlannerApplicationViewModel(DetailsViewModel detailsViewModel,
+                                           OverviewViewModel overviewViewModel, TourLogsTabViewModel tourLogsTabViewModel) {
+        this.detailsViewModel = detailsViewModel;
+        this.overviewViewModel = overviewViewModel;
         this.tourLogsTabViewModel = tourLogsTabViewModel;
-        this.leftPaneViewModel.addSelectionChangedListener(this::selectTour);
+        this.overviewViewModel.addSelectionChangedListener(this::selectTour);
     }
 
     private void selectTour(TourItem selectedTourItem) {
-        this.centerPaneViewModel.updateOverviewTab(selectedTourItem);
+        this.detailsViewModel.updateOverviewTab(selectedTourItem);
         this.tourLogsTabViewModel.setTourModel(selectedTourItem);
     }
 

@@ -1,11 +1,8 @@
 package at.fhtw.tourplanner.view;
 
-import at.fhtw.tourplanner.bl.model.TourItem;
 import at.fhtw.tourplanner.bl.model.TourLog;
-import at.fhtw.tourplanner.viewModel.TourItemDialogViewModel;
 import at.fhtw.tourplanner.viewModel.TourLogDialogViewModel;
 import at.fhtw.tourplanner.viewModel.TourLogsTabViewModel;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 import javafx.scene.control.*;
@@ -97,7 +94,6 @@ public class TourLogsTabController implements TourPlannerController {
         if (dialogResult.isPresent()) {
             TourLog newTourLog = dialogResult.get();
             this.tourLogsTabViewModel.updateTourLog(newTourLog);
-            //this.updateTourLogSelection(newTourLog); //todo move it to a listener on finished update
         }
     }
 
@@ -128,7 +124,6 @@ public class TourLogsTabController implements TourPlannerController {
         }
         TourLog newTourLog = new TourLog();
         Optional<TourLog> dialogResult = this.editTourLogDialog(newTourLog, "Create new Tour Log");
-        System.out.println(dialogResult);
         if (dialogResult.isPresent()) {
             newTourLog = dialogResult.get();
             this.tourLogsTabViewModel.addNewTourLog(newTourLog);

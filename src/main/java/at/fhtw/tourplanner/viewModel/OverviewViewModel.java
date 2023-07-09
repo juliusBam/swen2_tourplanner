@@ -7,17 +7,18 @@ import at.fhtw.tourplanner.bl.model.TourLog;
 import at.fhtw.tourplanner.bl.model.TourStats;
 import at.fhtw.tourplanner.bl.service.*;
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import lombok.Getter;
 
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LeftPaneViewModel {
+public class OverviewViewModel {
     private final TourItemService tourItemService;
     private final TourLogService tourLogService;
     @Getter
@@ -31,13 +32,16 @@ public class LeftPaneViewModel {
     private final List<ApplyFilterListener> filterListeners = new ArrayList<>();
     private final ObservableList<TourItem> observableTourItems = FXCollections.observableArrayList();
 
-    public LeftPaneViewModel(TourItemService tourItemService, MapQuestService mapQuestService, ReportService reportService, ImportExportService importExportService, TourLogService tourLogService) {
+    public BooleanProperty refreshRequested = new SimpleBooleanProperty();
+
+    public OverviewViewModel(TourItemService tourItemService, MapQuestService mapQuestService, ReportService reportService, ImportExportService importExportService, TourLogService tourLogService) {
         this.tourItemService = tourItemService;
         this.mapQuestService = mapQuestService;
         this.reportService = reportService;
         this.importExportService = importExportService;
         this.tourLogService = tourLogService;
         setTours(this.tourItemService.getAll());
+        refreshRequested.set(false);
     }
 
     public ObservableList<TourItem> getObservableTours() {
@@ -128,6 +132,7 @@ public class LeftPaneViewModel {
             tourLogService.create(log, savedItem.getId());
         }
         observableTourItems.add(savedItem);
+        refreshRequested.set(true);
     }
 
     public ObservableList<TourItem> handleSearch(String searchString) throws IllegalArgumentException  {
@@ -185,6 +190,10 @@ public class LeftPaneViewModel {
         List<TourItem> tourItems = tourItemService.getAll();
         Platform.runLater(() -> setTours(tourItems));
         return FXCollections.observableList(tourItems);
+    }
+
+    public void resetRefreshRequest() {
+        refreshRequested.set(false);
     }
 
     public interface SelectionChangedListener {

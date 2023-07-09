@@ -2,7 +2,6 @@ package at.fhtw.tourplanner.bl.service;
 
 import at.fhtw.tourplanner.bl.model.TourItem;
 import at.fhtw.tourplanner.dal.api.MapQuestAPI;
-import at.fhtw.tourplanner.dal.api.response.Route;
 import at.fhtw.tourplanner.dal.api.response.RouteResponse;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
@@ -10,18 +9,16 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 public class MapQuestService {
     private final MapQuestAPI api;
-    private final String key = "Vg5MvjVijd5lRe6xqUXDdJR1SKcuce0h";
     private final Map<String, Image> imageCache = new HashMap<>();
     private final Map<String, RouteResponse> routeCache = new HashMap<>();
     private final Map<String, String> constantsMap = new HashMap<>();
@@ -39,12 +36,11 @@ public class MapQuestService {
         void setRoute(RouteResponse routeResponse);
     }
 
-    public MapQuestService() {
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://www.mapquestapi.com/").addConverterFactory(JacksonConverterFactory.create()).build();
-        api = retrofit.create(MapQuestAPI.class);
-        constantsMap.put("key", key);
-        constantsMap.put("unit", "k");
-        constantsMap.put("size", "600,400@2x");
+    public MapQuestService(MapQuestAPI api, Properties properties) {
+        constantsMap.put("key", properties.getProperty("mapquest.key"));
+        constantsMap.put("unit", properties.getProperty("mapquest.lengthUnit"));
+        constantsMap.put("size", properties.getProperty("mapquest.imageSize"));
+        this.api = api;
     }
 
     public void searchRoute(TourItem tourItem, RouteListener routeListener, ErrorListener errorListener) {
@@ -61,9 +57,9 @@ public class MapQuestService {
 
                     if (response.body() != null && response.body().getInfo().getStatusCode() == 0) {
                         Platform.runLater(() -> {
-
-                            routeListener.setRoute(response.body());
-
+                            RouteResponse routeResponse = response.body();
+                            routeListener.setRoute(routeResponse);
+                            putRouteInCache(tourItem, routeResponse);
                         });
                     } else {
 
@@ -114,13 +110,11 @@ public class MapQuestService {
     }
 
     public void setRouteImage(TourItem tourItem, MapListener mapListener, ErrorListener errorListener) {
-        System.out.println("Setting image for tour " + tourItem.getName());
         Image cachedImage = getImageFromCache(tourItem);
         if (cachedImage != null) {
             mapListener.updateMap(cachedImage);
             return;
         }
-        System.out.println("Image not found in cache, requesting");
 
         setImageCall = searchRouteAsync(tourItem.getFrom(), tourItem.getTo(), tourItem.getTransportType());
         setImageCall.enqueue(new Callback<>() {
@@ -178,7 +172,7 @@ public class MapQuestService {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable throwable) {
-                        if(throwable.getMessage().contains("Canceled"))
+                        if(throwable.getMessage().toLowerCase().contains("cancel"))
                         {
                             return;
                         }
@@ -193,7 +187,7 @@ public class MapQuestService {
 
             @Override
             public void onFailure(Call<RouteResponse> call, Throwable throwable) {
-                if(throwable.getMessage().contains("Canceled"))
+                if(throwable.getMessage().toLowerCase().contains("cancel"))
                 {
                     return;
                 }

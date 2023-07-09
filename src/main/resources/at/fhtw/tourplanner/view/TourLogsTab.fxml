@@ -10,49 +10,41 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<SplitPane stylesheets="@customStyle.css" fx:id="tourLogsSplitPane" dividerPositions="0.29797979797979796" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fhtw.tourplanner.view.TourLogsTabController">
-   <items>
-      <VBox prefHeight="200.0" prefWidth="100.0">
-         <children>
-            <ToolBar prefHeight="40.0" prefWidth="200.0">
-               <items>
-                  <Button fx:id="newBtn" styleClass="iconBtn" onAction="#onButtonAdd"/>
-                  <Button fx:id="deleteBtn" styleClass="iconBtn" onAction="#onButtonDelete"/>
-                  <Button fx:id="editBtn" styleClass="iconBtn" onAction="#onButtonEdit"/>
-               </items>
-            </ToolBar>
-            <ListView fx:id="tourLogsListView" prefWidth="242.0" VBox.vgrow="ALWAYS" />
-         </children>
-      </VBox>
-      <VBox fx:id="tourLogDetailsContainer" prefWidth="100.0">
-         <children>
-            <GridPane>
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <Label fx:id="dateLabel" GridPane.columnIndex="1" />
-                  <Label fx:id="ratingLabel" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Label fx:id="difficultyLabel" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <Label fx:id="timeLabel" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <Label styleClass="boldLabel" text="Date" />
-                  <Label styleClass="boldLabel" text="Rating" GridPane.rowIndex="1" />
-                  <Label styleClass="boldLabel" text="Difficulty" GridPane.rowIndex="2" />
-                  <Label styleClass="boldLabel" text="Time taken" GridPane.rowIndex="3" />
-                  <Label styleClass="boldLabel" text="Comment" GridPane.rowIndex="4" />
-                  <Label fx:id="commentLabel" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-               </children>
-            </GridPane>
-            <Label fx:id="loadingLabel" text="Loading.." />
-         </children>
-      </VBox>
-   </items>
+<SplitPane stylesheets="@customStyle.css" fx:id="tourLogsSplitPane" dividerPositions="0.29797979797979796"
+           xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="at.fhtw.tourplanner.view.TourLogsTabController">
+   <VBox prefHeight="200.0" prefWidth="100.0">
+      <ToolBar prefHeight="40.0" prefWidth="200.0">
+         <Button fx:id="newBtn" styleClass="iconBtn" onAction="#onButtonAdd"/>
+         <Button fx:id="deleteBtn" styleClass="iconBtn" onAction="#onButtonDelete"/>
+         <Button fx:id="editBtn" styleClass="iconBtn" onAction="#onButtonEdit"/>
+      </ToolBar>
+      <ListView fx:id="tourLogsListView" prefWidth="242.0" VBox.vgrow="ALWAYS"/>
+   </VBox>
+   <VBox fx:id="tourLogDetailsContainer" prefWidth="100.0">
+      <GridPane>
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+         </rowConstraints>
+         <Label fx:id="dateLabel" GridPane.columnIndex="1"/>
+         <Label fx:id="ratingLabel" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+         <Label fx:id="difficultyLabel" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+         <Label fx:id="timeLabel" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+         <Label styleClass="boldLabel" text="Date"/>
+         <Label styleClass="boldLabel" text="Rating" GridPane.rowIndex="1"/>
+         <Label styleClass="boldLabel" text="Difficulty" GridPane.rowIndex="2"/>
+         <Label styleClass="boldLabel" text="Time taken" GridPane.rowIndex="3"/>
+         <Label styleClass="boldLabel" text="Comment" GridPane.rowIndex="4"/>
+         <Label fx:id="commentLabel" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+      </GridPane>
+      <Label fx:id="loadingLabel" text="Loading.."/>
+   </VBox>
 </SplitPane>

@@ -49,10 +49,10 @@ public class SearchInputParser {
     //region numeric filter functions
     public boolean filterDistance(String paramName, TourItem tourItem, String paramValue, char filterSymbol) throws IllegalArgumentException {
 
-        Double paramValueDouble;
+        double paramValueDouble;
 
         try {
-            paramValueDouble = Double.valueOf(paramValue);
+            paramValueDouble = Double.parseDouble(paramValue);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("The parameter value for '" + paramName + "' is invalid");
         }
@@ -67,10 +67,10 @@ public class SearchInputParser {
     //filterTime
     public boolean filterTime(String paramName, TourItem tourItem, String paramValue, char filterSymbol) throws IllegalArgumentException {
         //tourItem.getEstimatedTimeSeconds();
-        Long paramValueLong;
+        long paramValueLong;
 
         try {
-            paramValueLong = Long.valueOf(paramValue);
+            paramValueLong = Long.parseLong(paramValue);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("The parameter value for '" + paramName + "' is invalid");
         }
@@ -81,10 +81,10 @@ public class SearchInputParser {
 
     public boolean filterPopularity(String paramName, TourItem tourItem, String paramValue, char filterSymbol) throws IllegalArgumentException {
 
-        Integer paramValueInt;
+        int paramValueInt;
 
         try {
-            paramValueInt = Integer.valueOf(paramValue);
+            paramValueInt = Integer.parseInt(paramValue);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("The parameter value for '" + paramName + "' is invalid");
         }
@@ -95,10 +95,10 @@ public class SearchInputParser {
 
     public boolean filterChildFriendliness(String paramName, TourItem tourItem, String paramValue, char filterSymbol) throws IllegalArgumentException {
 
-        Double paramValueDouble;
+        double paramValueDouble;
 
         try {
-            paramValueDouble = Double.valueOf(paramValue);
+            paramValueDouble = Double.parseDouble(paramValue);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("The parameter value for '" + paramName + "' is invalid");
         }
@@ -112,10 +112,10 @@ public class SearchInputParser {
 
     public boolean filterAverageTime(String paramName, TourItem tourItem, String paramValue, char filterSymbol) throws IllegalArgumentException {
 
-        Double paramValueDouble;
+        double paramValueDouble;
 
         try {
-            paramValueDouble = Double.valueOf(paramValue);
+            paramValueDouble = Double.parseDouble(paramValue);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("The parameter value for '" + paramName + "' is invalid");
         }
@@ -129,10 +129,10 @@ public class SearchInputParser {
 
     public boolean filterAverageRating(String paramName, TourItem tourItem, String paramValue, char filterSymbol) throws IllegalArgumentException {
 
-        Double paramValueDouble;
+        double paramValueDouble;
 
         try {
-            paramValueDouble = Double.valueOf(paramValue);
+            paramValueDouble = Double.parseDouble(paramValue);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("The parameter value for '" + paramName + "' is invalid");
         }
@@ -146,10 +146,10 @@ public class SearchInputParser {
 
     public boolean filterAverageDifficulty(String paramName, TourItem tourItem, String paramValue, char filterSymbol) throws IllegalArgumentException {
 
-        Double paramValueDouble;
+        double paramValueDouble;
 
         try {
-            paramValueDouble = Double.valueOf(paramValue);
+            paramValueDouble = Double.parseDouble(paramValue);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("The parameter value for '" + paramName + "' is invalid");
         }

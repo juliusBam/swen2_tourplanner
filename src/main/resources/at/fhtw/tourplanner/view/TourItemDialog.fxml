@@ -78,11 +78,11 @@
             </VBox>
 
             <Label text="Distance" GridPane.rowIndex="13" />
-            <Label fx:id="distanceLabel" text="" GridPane.columnIndex="1" GridPane.rowIndex="13" />
+            <Label fx:id="distanceLabel" GridPane.columnIndex="1" GridPane.rowIndex="13" />
             <Label fx:id="errorDistanceLabel" styleClass="errorLabel" text="The distance has to be set, use the search button" GridPane.columnSpan="2" GridPane.rowIndex="14" />
 
             <Label text="Time" GridPane.rowIndex="15" />
-            <Label fx:id="timeLabel" text="" GridPane.columnIndex="1" GridPane.rowIndex="15" />
+            <Label fx:id="timeLabel" GridPane.columnIndex="1" GridPane.rowIndex="15" />
             <Label fx:id="errorTimeLabel" styleClass="errorLabel" text="The tour length has to be set, use the search button" GridPane.columnSpan="2" GridPane.rowIndex="16" />
             <Label fx:id="errorRouteInfoLabel" styleClass="errorLabel" text="Invalid route info, use the search button" GridPane.columnSpan="2" GridPane.rowIndex="18" />
         </GridPane>

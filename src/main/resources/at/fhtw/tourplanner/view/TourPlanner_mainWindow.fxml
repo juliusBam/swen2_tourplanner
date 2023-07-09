@@ -11,8 +11,8 @@
         <ColumnConstraints hgrow="SOMETIMES" minWidth="270.0" />
         <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
     </columnConstraints>
-        <fx:include source="LeftPane.fxml" />
-        <fx:include source="CenterPane.fxml" GridPane.columnIndex="1" GridPane.valignment="TOP" />
+        <fx:include source="OverviewGridPane.fxml" />
+        <fx:include source="DetailsTabPane.fxml" GridPane.columnIndex="1" GridPane.valignment="TOP" />
    <rowConstraints>
       <RowConstraints vgrow="ALWAYS" />
    </rowConstraints>

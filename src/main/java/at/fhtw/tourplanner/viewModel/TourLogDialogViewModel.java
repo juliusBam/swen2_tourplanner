@@ -1,13 +1,8 @@
 package at.fhtw.tourplanner.viewModel;
 
 import at.fhtw.tourplanner.bl.model.TourLog;
-import at.fhtw.tourplanner.view.TourLogDialogController;
-import javafx.beans.property.*;
 import javafx.beans.property.*;
 import lombok.Getter;
-
-import java.sql.Timestamp;
-import java.time.LocalDate;
 
 import java.sql.Timestamp;
 import java.time.Duration;
@@ -148,7 +143,6 @@ public class TourLogDialogViewModel {
     public boolean validate() {
 
         boolean valid = true;
-        //todo validate if date is in the past
         if (this.tourLog.getTimeStamp() == null || Long.valueOf(this.tourLog.getTimeStamp()) * 1000L > System.currentTimeMillis()) {
             valid = false;
             this.dateValidity.set(false);

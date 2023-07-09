@@ -1,14 +1,8 @@
 package at.fhtw.tourplanner.dal.repository;
 
 import at.fhtw.tourplanner.dal.api.TourPlannerAPI;
-import javafx.scene.image.Image;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Response;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 public class ReportRepository {
 

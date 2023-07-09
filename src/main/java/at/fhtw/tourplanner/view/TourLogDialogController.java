@@ -42,7 +42,7 @@ public class TourLogDialogController extends Dialog<TourLog> {
     @FXML
     private Label ratingLabel;
     @FXML
-    private DatePicker tourLogDateInput = new DatePicker();
+    private final DatePicker tourLogDateInput = new DatePicker();
 
     @FXML
     private Label difficultyLabel;
@@ -167,9 +167,5 @@ public class TourLogDialogController extends Dialog<TourLog> {
             return false;
         }
         return true;
-        //todo add validation
-        //if (invalid) {
-        //    actionEvent.consume();
-        //}
     }
 }

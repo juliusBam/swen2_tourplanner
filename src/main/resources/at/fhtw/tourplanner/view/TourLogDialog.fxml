@@ -49,11 +49,9 @@
 
           <Label text="Time taken"  GridPane.rowIndex="6" />
           <HBox GridPane.columnIndex="1" GridPane.rowIndex="6" alignment="CENTER_LEFT">
-              <children>
-                  <TextField fx:id="timePickerHoursTextField" prefWidth="35.0" />
-                  <Label text=":" />
-                  <TextField fx:id="timePickerMinutesTextField" prefWidth="35.0" />
-              </children>
+              <TextField fx:id="timePickerHoursTextField" prefWidth="35.0"/>
+              <Label text=":"/>
+              <TextField fx:id="timePickerMinutesTextField" prefWidth="35.0"/>
           </HBox>
           <Label fx:id="errorTimeLabel" text="Time should be a number" styleClass="errorLabel" GridPane.rowIndex="7" GridPane.columnSpan="3"/>
 

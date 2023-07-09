@@ -1,10 +1,8 @@
 package at.fhtw.tourplanner.bl.model;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.List;
@@ -27,15 +25,6 @@ public class TourItem implements Serializable {
     private List<TourLog> tourLogs;
 
     private TourStats tourStats;
-    //todo convert field into tour stats
-    /*
-    private Integer popularity;
-    private Double childFriendliness;
-    private Double averageTime;
-    private Double averageRating;
-    private Double averageDifficulty;
-    */
-
 
     public TourItem() {
     }
@@ -74,11 +63,6 @@ public class TourItem implements Serializable {
 
     public void setTourStats(TourStats tourStats) {
         this.tourStats = tourStats;
-        /*this.popularity = tourStats.getPopularity();
-        this.childFriendliness = tourStats.getChildFriendliness();
-        this.averageDifficulty = tourStats.getAverageDifficulty();
-        this.averageRating = tourStats.getAverageRating();
-        this.averageTime = tourStats.getAverageTime();*/
     }
 
     public void addNewTourLog(TourLog tourLog) {

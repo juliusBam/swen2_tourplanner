@@ -11,7 +11,6 @@ import java.util.Map;
 
 public interface MapQuestAPI {
 
-    // TODO: use query map here!!!
     @GET("directions/v2/route")
     Call<RouteResponse> getRoute(@QueryMap Map<String, String> constantValues, @Query("from") String from, @Query("to") String to, @Query("routeType") String transportType);
 

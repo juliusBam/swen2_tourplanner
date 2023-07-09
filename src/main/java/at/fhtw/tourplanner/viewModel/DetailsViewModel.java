@@ -9,7 +9,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import lombok.Getter;
 
-public class CenterPaneViewModel {
+public class DetailsViewModel {
 
     private final TourItemService tourItemService;
 
@@ -30,9 +30,6 @@ public class CenterPaneViewModel {
     private final StringProperty estimatedTimeProperty = new SimpleStringProperty();
     @Getter
     private final ObjectProperty<Image> imageProperty = new SimpleObjectProperty<>();
-
-    @Getter
-    private final StringProperty loadingLabelProperty = new SimpleStringProperty();
 
     @Getter
     private final BooleanProperty showImage = new SimpleBooleanProperty();
@@ -59,10 +56,9 @@ public class CenterPaneViewModel {
     @Getter
     private final StringProperty childFriendlinessProperty = new SimpleStringProperty();
 
-    public CenterPaneViewModel(TourItemService tourItemService, MapQuestService mapQuestService) {
+    public DetailsViewModel(TourItemService tourItemService, MapQuestService mapQuestService) {
         this.tourItemService = tourItemService;
         this.mapQuestService = mapQuestService;
-        loadingLabelProperty.set("No record available");
         showImage.set(false);
     }
 
@@ -78,7 +74,6 @@ public class CenterPaneViewModel {
             transportTypeProperty.set("");
             tourDistanceProperty.set("");
             estimatedTimeProperty.set("");
-            loadingLabelProperty.set("No record available");
             return;
         }
         this.tourItem = tourItem;
@@ -86,14 +81,11 @@ public class CenterPaneViewModel {
         tourDescriptionProperty.setValue(tourItem.getDescription());
         fromProperty.setValue(tourItem.getFrom());
         toProperty.setValue(tourItem.getTo());
-        transportTypeProperty.setValue(tourItem.getTransportType());
+        transportTypeProperty.setValue(formatTransportType(tourItem.getTransportType()));
         tourDistanceProperty.setValue(String.format("%.2f km", tourItem.getTourDistanceKilometers()));
         estimatedTimeProperty.setValue(String.format("%d:%02d:%02d (H:MM:SS)", tourItem.getEstimatedTimeSeconds() / 3600, (tourItem.getEstimatedTimeSeconds() % 3600) / 60, (tourItem.getEstimatedTimeSeconds() % 60)));
-//      this.loadingLabelProperty.set("Loading....");
         this.updateTourStatsProps();
-//        this.loadingLabelProperty.set("Loading....");
         if (requestingImage.get()) {
-            System.out.println("Cancelling current call");
             mapQuestService.cancelSetRouteImage();
             requestingImage.set(false);
         }
@@ -102,9 +94,25 @@ public class CenterPaneViewModel {
         isInitValue = false;
     }
 
+    private String formatTransportType(String transportType) {
+        switch (transportType) {
+            case "car" -> {
+                return "Car tour";
+            }
+            case "pedestrian" -> {
+                return "Hiking tour";
+            }
+            case "bicycle" -> {
+                return "Bicycle tour";
+            }
+            default -> {
+                return "Unknown tour type";
+            }
+        }
+    }
+
     public void setImage() {
         if (requestingImage.get()) {
-            System.out.println("Image request cancelled; request already in progress");
             return;
         }
         requestingImage.set(true);

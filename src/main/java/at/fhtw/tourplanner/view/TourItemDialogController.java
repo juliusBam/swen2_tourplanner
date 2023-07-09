@@ -12,7 +12,6 @@ import javafx.stage.Modality;
 import javafx.stage.Window;
 
 import java.io.IOException;
-import java.util.Calendar;
 
 public class TourItemDialogController extends Dialog<TourItem> {
     private final TourItemDialogViewModel tourItemDialogViewModel;
@@ -124,8 +123,8 @@ public class TourItemDialogController extends Dialog<TourItem> {
 
             //set the values to invalid
             tourItemDialogViewModel.setRouteData(-1, -1, "");
-            distanceLabel.setText(String.format(""));
-            timeLabel.setText(String.format(""));
+            distanceLabel.setText("");
+            timeLabel.setText("");
 
         } else {
             locationFound = true;

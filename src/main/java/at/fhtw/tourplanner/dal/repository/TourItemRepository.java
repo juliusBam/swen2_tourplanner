@@ -1,6 +1,5 @@
 package at.fhtw.tourplanner.dal.repository;
 
-import at.fhtw.tourplanner.bl.model.TourItem;
 import at.fhtw.tourplanner.dal.api.TourPlannerAPI;
 import at.fhtw.tourplanner.dal.dto.TourItemDto;
 import retrofit2.Call;
@@ -19,7 +18,6 @@ public class TourItemRepository implements Repository<TourItemDto, Long> {
 
     @Override
     public TourItemDto save(TourItemDto entity) {
-        System.out.println("help");
         if (entity.getId() == null) {
             try {
                 Response<TourItemDto> response = api.postTour(entity).execute();

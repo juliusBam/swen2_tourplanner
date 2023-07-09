@@ -7,9 +7,7 @@ import at.fhtw.tourplanner.dal.dto.TourLogDto;
 import retrofit2.Call;
 import retrofit2.http.*;
 
-import java.io.File;
 import java.util.List;
-import java.util.concurrent.Executor;
 
 public interface TourPlannerAPI {
 

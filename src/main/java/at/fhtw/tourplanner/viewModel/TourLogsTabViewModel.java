@@ -28,7 +28,7 @@ public class TourLogsTabViewModel {
 
     private TourLog selectedTourLog;
 
-    private List<UpdateSelectedTourLogListener> listeners = new ArrayList<>();
+    private final List<UpdateSelectedTourLogListener> listeners = new ArrayList<>();
     //region properties
     @Getter
     private final StringProperty dateProperty = new SimpleStringProperty();
@@ -115,11 +115,7 @@ public class TourLogsTabViewModel {
         }
         this.selectedTourItem.updateTourLog(manipulationResponse.tourLog());
 
-        //triggers the listener in the controller
-        /*this.toggleTourLogSelection.set(manipulationResponse.tourLog());
-        this.toggleTourLogSelection.notifyAll();*/
         this.notifyUpdateSelectionListeners(manipulationResponse.tourLog());
-
     }
 
 
@@ -157,8 +153,6 @@ public class TourLogsTabViewModel {
             this.difficultyProperty.set(tourLog.getDifficulty());
             this.ratingProperty.set(tourLog.getRating());
             this.timeProperty.set(String.format("%d:%02d (H:MM)",tourLog.getTotalTimeMinutes() / 60, tourLog.getTotalTimeMinutes() % 60));
-            System.out.println("Tour log changed, clicked");
-            System.out.println("New tour log is: " + tourLog.getComment());
         }
     }
 

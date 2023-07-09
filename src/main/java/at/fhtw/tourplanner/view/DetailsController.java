@@ -1,6 +1,6 @@
 package at.fhtw.tourplanner.view;
 
-import at.fhtw.tourplanner.viewModel.CenterPaneViewModel;
+import at.fhtw.tourplanner.viewModel.DetailsViewModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
@@ -8,9 +8,9 @@ import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
-public final class CenterPaneController implements TourPlannerController {
+public final class DetailsController implements TourPlannerController {
 
-    private final CenterPaneViewModel centerPaneViewModel;
+    private final DetailsViewModel detailsViewModel;
     @FXML
     public Label nameLabel;
     @FXML
@@ -35,8 +35,6 @@ public final class CenterPaneController implements TourPlannerController {
     public TabPane centerPaneTabs;
 
     @FXML
-    public Label loadingLabel;
-    @FXML
     public Label popularityLabel;
     @FXML
     public Label avgTimeLabel;
@@ -52,8 +50,8 @@ public final class CenterPaneController implements TourPlannerController {
     @FXML
     public SplitPane tourLogsTabContent;
 
-    public CenterPaneController(CenterPaneViewModel centerPaneViewModel) {
-        this.centerPaneViewModel = centerPaneViewModel;
+    public DetailsController(DetailsViewModel detailsViewModel) {
+        this.detailsViewModel = detailsViewModel;
     }
 
     @Override
@@ -62,29 +60,29 @@ public final class CenterPaneController implements TourPlannerController {
 
         centerPaneTabs.getSelectionModel().selectedItemProperty().addListener(
                 (ov, t, t1) -> {
-                    if (this.centerPaneViewModel.isInitValue()) {
+                    if (this.detailsViewModel.isInitValue()) {
                         return;
                     }
                     if (ov.getValue().getId().equals("routeTab")) {
-                        this.centerPaneViewModel.setImage();
+                        this.detailsViewModel.setImage();
                     }
                     if (ov.getValue().getId().equals("statisticsTab")) {
-                        this.centerPaneViewModel.updateTourStatsProps();
+                        this.detailsViewModel.updateTourStatsProps();
                     }
                 });
 
-        nameLabel.textProperty().bind(centerPaneViewModel.getNameProperty());
-        tourDescriptionLabel.textProperty().bind(centerPaneViewModel.getTourDescriptionProperty());
-        fromLabel.textProperty().bind(centerPaneViewModel.getFromProperty());
-        toLabel.textProperty().bind(centerPaneViewModel.getToProperty());
-        transportTypeLabel.textProperty().bind(centerPaneViewModel.getTransportTypeProperty());
-        distanceLabel.textProperty().bind(centerPaneViewModel.getTourDistanceProperty());
-        estimatedTimeLabel.textProperty().bind(centerPaneViewModel.getEstimatedTimeProperty());
+        nameLabel.textProperty().bind(detailsViewModel.getNameProperty());
+        tourDescriptionLabel.textProperty().bind(detailsViewModel.getTourDescriptionProperty());
+        fromLabel.textProperty().bind(detailsViewModel.getFromProperty());
+        toLabel.textProperty().bind(detailsViewModel.getToProperty());
+        transportTypeLabel.textProperty().bind(detailsViewModel.getTransportTypeProperty());
+        distanceLabel.textProperty().bind(detailsViewModel.getTourDistanceProperty());
+        estimatedTimeLabel.textProperty().bind(detailsViewModel.getEstimatedTimeProperty());
 
         //binds the content of the image to the image "value"
-        routeImageView.imageProperty().bind(centerPaneViewModel.getImageProperty());
+        routeImageView.imageProperty().bind(detailsViewModel.getImageProperty());
         //binds the visibility of the image to the showImageProp
-        routeImageView.visibleProperty().bind(this.centerPaneViewModel.getShowImage());
+        routeImageView.visibleProperty().bind(this.detailsViewModel.getShowImage());
 
         routeImageView.imageProperty().addListener((arg, oldValue, newValue) -> {
             centerImageView();
@@ -103,15 +101,11 @@ public final class CenterPaneController implements TourPlannerController {
         tourLogsTabContent.prefWidthProperty().bind(tourLogsTabPane.widthProperty());
         tourLogsTabContent.prefHeightProperty().bind(tourLogsTabPane.heightProperty());
 
-        loadingLabel.textProperty().bind(this.centerPaneViewModel.getLoadingLabelProperty());
-        //binds the visibility of the loading label to the negation of the showImageProp
-        loadingLabel.visibleProperty().bind(this.centerPaneViewModel.getShowImage().not());
-
-        this.popularityLabel.textProperty().bind(this.centerPaneViewModel.getPopularityProperty());
-        this.avgTimeLabel.textProperty().bind(this.centerPaneViewModel.getAvgTimeProperty());
-        this.avgRatingLabel.textProperty().bind(this.centerPaneViewModel.getAvgRatingProperty());
-        this.avgDifficultyLabel.textProperty().bind(this.centerPaneViewModel.getAvgDifficultyProperty());
-        this.childFriendlinessLabel.textProperty().bind(this.centerPaneViewModel.getChildFriendlinessProperty());
+        this.popularityLabel.textProperty().bind(this.detailsViewModel.getPopularityProperty());
+        this.avgTimeLabel.textProperty().bind(this.detailsViewModel.getAvgTimeProperty());
+        this.avgRatingLabel.textProperty().bind(this.detailsViewModel.getAvgRatingProperty());
+        this.avgDifficultyLabel.textProperty().bind(this.detailsViewModel.getAvgDifficultyProperty());
+        this.childFriendlinessLabel.textProperty().bind(this.detailsViewModel.getChildFriendlinessProperty());
     }
 
     private void centerImageView() {
