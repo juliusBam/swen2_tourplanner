@@ -1,6 +1,5 @@
-package at.fhtw.tourplanner;
+package at.fhtw.tourplanner.bl;
 
-import at.fhtw.tourplanner.bl.SearchInputParser;
 import at.fhtw.tourplanner.bl.model.SearchInputParserOutput;
 import at.fhtw.tourplanner.bl.model.TourItem;
 import at.fhtw.tourplanner.bl.model.TourStats;
@@ -12,11 +11,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SearchTest {
+class SearchInputParserTest {
 
-
-    private final SearchInputParser searchInputParser = new SearchInputParser();
-
+    SearchInputParser searchInputParser;
     private final ObservableList<TourItem> tourDataset;
 
     private final TourItem tourItem1;
@@ -25,8 +22,9 @@ public class SearchTest {
 
     private final TourItem tourItem3;
 
-    public SearchTest() {
+    public SearchInputParserTest() {
         //arrange
+        searchInputParser = new SearchInputParser();
         this.tourItem1 = new TourItem(
                 1L, "Tour 1 name", "Tour 1 description", "start location", "destination location",
                 "bicycle", 150.54D, 3600L, "Bounding box", null
@@ -85,7 +83,7 @@ public class SearchTest {
         final String searchInput = fullTextSearchString + nameFilterParam + nameFilterValue + descriptionFilterParam + descriptionFilterValue;
 
         //act
-        SearchInputParserOutput parsingOutput = this.searchInputParser.parseSearchInput(searchInput);
+        SearchInputParserOutput parsingOutput = searchInputParser.parseSearchInput(searchInput);
 
         //assert
         assertEquals(fullTextSearchString, parsingOutput.searchInput());
@@ -98,7 +96,7 @@ public class SearchTest {
 
         final String searchInput = "@description=Tour 3 description";
 
-        final SearchInputParserOutput parserOutput = this.searchInputParser.parseSearchInput(searchInput);
+        final SearchInputParserOutput parserOutput = searchInputParser.parseSearchInput(searchInput);
 
 
         ObservableList<TourItem> filteredTours = searchInputParser.applyFilterParams(parserOutput.params(), this.tourDataset);

@@ -1,11 +1,10 @@
-package at.fhtw.tourplanner;
+package at.fhtw.tourplanner.bl;
 
-import at.fhtw.tourplanner.bl.MessageExtractor;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class MessageExtractorTest {
+class MessageExtractorTest {
 
     private final MessageExtractor messageExtractor;
 
