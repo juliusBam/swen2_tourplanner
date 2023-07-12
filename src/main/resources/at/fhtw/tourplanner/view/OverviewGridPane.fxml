@@ -47,15 +47,5 @@
             <Insets top="5.0"/>
         </GridPane.margin>
     </ToolBar>
-    <ListView fx:id="toursListView" minHeight="40.0" GridPane.rowIndex="2">
-        <contextMenu>
-            <ContextMenu>
-                <items>
-                    <MenuItem fx:id="cMenuNew" mnemonicParsing="false" text="New"/>
-                    <MenuItem fx:id="cMenuDelete" mnemonicParsing="false" text="Delete"/>
-                    <MenuItem fx:id="cMenuEdit" mnemonicParsing="false" text="Edit"/>
-                </items>
-            </ContextMenu>
-        </contextMenu>
-    </ListView>
+    <ListView fx:id="toursListView" minHeight="40.0" GridPane.rowIndex="2"/>
 </GridPane>

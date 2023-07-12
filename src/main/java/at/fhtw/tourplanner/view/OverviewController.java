@@ -39,12 +39,6 @@ public final class OverviewController implements TourPlannerController {
     @FXML
     public Button refreshBtn;
     @FXML
-    public MenuItem cMenuNew;
-    @FXML
-    public MenuItem cMenuDelete;
-    @FXML
-    public MenuItem cMenuEdit;
-    @FXML
     public TextField toursSearchTextInput;
 
     private FileChooser pdfFileChooser;
@@ -144,7 +138,7 @@ public final class OverviewController implements TourPlannerController {
         pdfFileChooser.setInitialFileName("summary");
         File selectedFile = pdfFileChooser.showSaveDialog(stage);
         if (selectedFile != null) {
-            overviewViewModel.getReportService().downloadSummaryReport(selectedFile.getAbsolutePath());
+            overviewViewModel.downloadSummaryReport(selectedFile.getAbsolutePath());
         }
     }
 
@@ -158,8 +152,8 @@ public final class OverviewController implements TourPlannerController {
         pdfFileChooser.setInitialFileName(tourItem.getName().replace(" ", "-") + "_report");
         File selectedFile = pdfFileChooser.showSaveDialog(stage);
         if (selectedFile != null) {
-            String sessionId = overviewViewModel.getMapQuestService().getSessionId(tourItem);
-            overviewViewModel.getReportService().downloadDetailReport(tourItem, sessionId, selectedFile.getAbsolutePath());
+            String sessionId = overviewViewModel.getSessionId(tourItem);
+            overviewViewModel.downloadDetailReport(tourItem, sessionId, selectedFile.getAbsolutePath());
         }
     }
 
@@ -170,7 +164,7 @@ public final class OverviewController implements TourPlannerController {
         jsonFileChooser.setInitialFileName("");
         File selectedFile = jsonFileChooser.showOpenDialog(stage);
         if (selectedFile != null) {
-            TourItem tourItem = overviewViewModel.getImportExportService().importTour(selectedFile.getAbsolutePath());
+            TourItem tourItem = overviewViewModel.handleImportTour(selectedFile.getAbsolutePath());
             if (tourItem != null) {
                 overviewViewModel.importTour(tourItem);
             }
@@ -188,7 +182,7 @@ public final class OverviewController implements TourPlannerController {
         jsonFileChooser.setInitialFileName(tourItem.getName().replace(" ", "-") + "_export");
         File selectedFile = jsonFileChooser.showSaveDialog(stage);
         if (selectedFile != null) {
-            overviewViewModel.getImportExportService().exportTour(tourItem, selectedFile.getAbsolutePath());
+            overviewViewModel.handleExportTour(tourItem, selectedFile.getAbsolutePath());
         }
     }
 

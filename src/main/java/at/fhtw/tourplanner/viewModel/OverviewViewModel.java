@@ -23,9 +23,7 @@ public class OverviewViewModel {
     private final TourLogService tourLogService;
     @Getter
     private final MapQuestService mapQuestService;
-    @Getter
     private final ReportService reportService;
-    @Getter
     private final ImportExportService importExportService;
     private final List<SelectionChangedListener> listeners = new ArrayList<>();
 
@@ -194,6 +192,26 @@ public class OverviewViewModel {
 
     public void resetRefreshRequest() {
         refreshRequested.set(false);
+    }
+
+    public void downloadSummaryReport(String absolutePath) {
+        reportService.downloadSummaryReport(absolutePath);
+    }
+
+    public String getSessionId(TourItem tourItem) {
+        return mapQuestService.getSessionId(tourItem);
+    }
+
+    public void downloadDetailReport(TourItem tourItem, String sessionId, String absolutePath) {
+        reportService.downloadDetailReport(tourItem, sessionId, absolutePath);
+    }
+
+    public TourItem handleImportTour(String absolutePath) {
+        return importExportService.importTour(absolutePath);
+    }
+
+    public void handleExportTour(TourItem tourItem, String absolutePath) {
+        importExportService.exportTour(tourItem, absolutePath, true);
     }
 
     public interface SelectionChangedListener {

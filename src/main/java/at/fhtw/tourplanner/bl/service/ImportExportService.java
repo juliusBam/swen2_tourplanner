@@ -21,12 +21,14 @@ public class ImportExportService {
         objectMapper.setFilterProvider(filter);
     }
 
-    public void exportTour(TourItem tourItem, String path) {
+    public void exportTour(TourItem tourItem, String path, boolean showAlert) {
         try {
             objectMapper.writeValue(new File(path), tourItem);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "The selected tour has been exported.");
-            alert.setHeaderText("Export complete");
-            alert.showAndWait();
+            if (showAlert) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "The selected tour has been exported.");
+                alert.setHeaderText("Export complete");
+                alert.showAndWait();
+            }
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Message: " + e.getMessage());
             alert.setHeaderText("Export failed");

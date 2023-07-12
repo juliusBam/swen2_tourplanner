@@ -64,7 +64,7 @@ public class ModelConverter {
         if (type == null) {
             return "";
         }
-        if (type.equals("fastest")) {
+        if (type.equals("fastest") || type.equals("car")) {
             return "CAR";
         }
         if (type.equals("bicycle")) {
